@@ -6,6 +6,8 @@ set -xv
 
 ## VARIAVEIS
 
+VERSION="9.2.2"
+TIMEZONE=America/Fortaleza
 FQDN="glpi.eftech.com.br"
 ADMINEMAIL="suporte@eftech.com.br"
 ORGANIZATION="EF-TECH"
@@ -116,6 +118,32 @@ session.use_trans_sid = 0 ;
 EOF
 
 
-sed -i s/';date.timezone'/'date.timezone = America/Fortaleza ;'/ /etc/php.ini
+cat <<EOF > /etc/php.d/timezone.ini
+[Date]
+date.timezone = $TIMEZONE ; 
+EOF
+
+
+## DOWNLOAD AND INSTALL GLPI
+
+yum -y install wget
+
+wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz
+
+tar -zxvf glpi-$VERSION.tgz -C /var/www/html/
+
+chown -R apache:apache /var/www/html/glpi
+
+
+cat <<EOF > /etc/httpd/conf.d/glpi.conf
+    <Directory /var/www/html/glpi/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+EOF
+
+
+systemctl restart httpd
 
 
