@@ -154,4 +154,6 @@ systemctl restart httpd
 #    setsebool -P httpd_can_sendmail 1
 #    setenforce 1
 
+php /var/www/html/glpi/scripts/cliinstall.php --host=$DBHOST --db=$DBNAME --user=$DBUSER --pass=$DBPASS --lang=pt_BR
+
 
