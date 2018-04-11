@@ -181,6 +181,8 @@ systemctl restart httpd
 #    setenforce 1
 
 php /var/www/html/glpi/scripts/cliinstall.php --host=$DBHOST --db=$DBNAME --user=$DBUSER --pass=$DBPASS --lang=pt_BR
-
+if [ $? -eq 0 ]; then
+  rm -rf /var/www/html/glpi/install/install.php
+fi
 
 
