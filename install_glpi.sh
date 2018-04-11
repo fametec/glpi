@@ -135,7 +135,7 @@ then
 
 fi
 
-tar -zxvf glpi-$VERSION.tgz -C /var/www/html/
+tar -zxvf package/glpi-$VERSION.tgz -C /var/www/html/
 
 chown -R apache:apache /var/www/html/glpi
 
