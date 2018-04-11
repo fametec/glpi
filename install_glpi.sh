@@ -128,7 +128,12 @@ EOF
 
 yum -y install wget
 
-wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz
+if [ ! -e packages/$VERSION/glpi-$VERSION.tgz ]
+then
+
+  wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
+
+fi
 
 tar -zxvf glpi-$VERSION.tgz -C /var/www/html/
 
