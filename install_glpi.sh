@@ -25,17 +25,10 @@ MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"
 CURL=`which curl`
 
 
-## SELINUX
+## DESATIVAR SELINUX
 
 sed -i s/enforcing/permissive/g /etc/selinux/config
 setenforce 0
-
-#    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
-#    setsebool -P httpd_can_network_connect 1
-#    setsebool -P httpd_can_network_connect_db 1
-#    setsebool -P httpd_can_sendmail 1
-#    setenforce 1
-
 
 
 ## INSTALL MARIADB-SERVER
@@ -151,5 +144,14 @@ EOF
 
 
 systemctl restart httpd
+
+
+## ATIVAR SELINUX
+
+#    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
+#    setsebool -P httpd_can_network_connect 1
+#    setsebool -P httpd_can_network_connect_db 1
+#    setsebool -P httpd_can_sendmail 1
+#    setenforce 1
 
 
