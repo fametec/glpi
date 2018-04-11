@@ -24,6 +24,32 @@ MYSQL_NEW_ROOT_PASSWORD="qaz123"
 MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"
 CURL=`which curl`
 
+cat <<EOF > ~/install_glpi.log
+
+====================================================
+## VARIAVEIS
+
+VERSION=$VERSION
+TIMEZONE=$TIMEZONE
+FQDN=$FQDN
+ADMINEMAIL=$ADMINEMAIL
+ORGANIZATION=$ORGANIZATION
+MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+DBUSER=$DBUSER
+DBHOST=$DBHOST
+DBNAME=$DBNAME
+DBPASS=$DBPASS
+MYSQL_NEW_ROOT_PASSWORD=$MYSQL_NEW_ROOT_PASSWORD
+
+
+MYSQL=$MYSQL
+CURL=$CURL
+
+====================================================
+
+
+
+EOF
 
 ## DESATIVAR SELINUX
 
@@ -155,5 +181,6 @@ systemctl restart httpd
 #    setenforce 1
 
 php /var/www/html/glpi/scripts/cliinstall.php --host=$DBHOST --db=$DBNAME --user=$DBUSER --pass=$DBPASS --lang=pt_BR
+
 
 
