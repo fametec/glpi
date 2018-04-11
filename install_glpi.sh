@@ -130,7 +130,8 @@ yum -y install wget
 
 if [ ! -e packages/$VERSION/glpi-$VERSION.tgz ]
 then
-
+  
+  mkdir -p packages
   wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
 
 fi
