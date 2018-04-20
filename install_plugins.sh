@@ -28,6 +28,11 @@ fi
 tar -zxf glpi-reports-1.11.2.tar.gz
 
 
+if [ ! -e glpi-racks-1.8.0.tar.gz ]; then
+  wget -c https://github.com/InfotelGLPI/racks/releases/download/1.8.0/glpi-racks-1.8.0.tar.gz
+fi
+tar -zxf glpi-racks-1.8.0.tar.gz
+
 chown -R apache:apache /var/www/html/glpi/plugins
 
 
