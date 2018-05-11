@@ -57,6 +57,13 @@ sed -i s/enforcing/permissive/g /etc/selinux/config
 setenforce 0
 
 
+## LIBERAR PORTAS NO FIREWALLD
+
+firewall-cmd --zone=public --add-service=http
+firewall-cmd --zone=public --add-service=https
+
+
+
 ## INSTALL MARIADB-SERVER
 
 yum -y install mariadb-server expect epel-release
