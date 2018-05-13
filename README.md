@@ -30,7 +30,7 @@ Dentro do script existem algumas variaveis que podem ser alteraradas antes da in
 
 # Instalação 
 
-  sh install_glpi.sh
+    sh install_glpi.sh
 
 
 Após a instalação será gerado um arquivo ~/install_glpi.log com as credenciais do banco e demais variaveis que foram utilizada pelo sistema. 
