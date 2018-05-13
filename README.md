@@ -1,6 +1,17 @@
-# install_glpish
+# install_glpi.sh
+
+Este script irá instalar o glpi em um sistema operacional CentOS 7 Minimal. 
+
+
+# Download
+
+    curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
+
 
 # Variaveis disponíveis
+
+Dentro do script existem algumas variaveis que podem ser alteraradas antes da instalação.
+
 
     VERSION="9.2.2"                      # Versão que deseja instalar
     TIMEZONE=America/Fortaleza           # Fuso horário
@@ -16,9 +27,13 @@
     MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`" 
     
     
-# Download
 
-    curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
+# Instalação 
+
+  sh install_glpi.sh
+
+
+Após a instalação será gerado um arquivo ~/install_glpi.log com as credenciais do banco e demais variaveis que foram utilizada pelo sistema. 
 
 
 
