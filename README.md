@@ -18,10 +18,14 @@
     
 # Download
 
-curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
+    curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
 
 
 
+# Referencia
 
-
-
+    https://www.fametreinamentos.com.br
+    https://www.fameconsultoria.com.br
+    https://www.fametec.com.br
+    
+    
