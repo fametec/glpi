@@ -1,8 +1,10 @@
 #!/bin/bash
 
+###############################################################################
+
 # Debug
 
-set -xv
+# set -xv
 
 ## VARIAVEIS
 
@@ -15,10 +17,10 @@ MYSQL_ROOT_PASSWORD=''
 DBUSER="glpi"
 DBHOST="localhost"
 DBNAME="glpi"
-#DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
-DBPASS="qaz123"
-MYSQL_NEW_ROOT_PASSWORD="qaz123"
-#MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
+DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
+# DBPASS="qaz123"
+# MYSQL_NEW_ROOT_PASSWORD="qaz123"
+MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
 
 
 MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"
@@ -51,20 +53,21 @@ CURL=$CURL
 
 EOF
 
-## DESATIVAR SELINUX
+## SELINUX
 
 sed -i s/enforcing/permissive/g /etc/selinux/config
+
 setenforce 0
 
 
-## LIBERAR PORTAS NO FIREWALLD
+## FIREWALLD
 
 firewall-cmd --zone=public --add-service=http
 firewall-cmd --zone=public --add-service=https
 
 
 
-## INSTALL MARIADB-SERVER
+## MARIADB-SERVER
 
 yum -y install mariadb-server expect epel-release
 
