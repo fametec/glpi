@@ -10,7 +10,7 @@ Este script irá instalar o glpi em um sistema operacional CentOS 7 Minimal.
 
 # VARIÁVEIS
 
-Dentro do script existem algumas variaveis que podem ser alteraradas antes da instalação.
+Dentro do script existem algumas variaveis que podem ser alteradas antes da instalação.
 
 
     VERSION="9.2.2"                      # Versão que deseja instalar
@@ -48,7 +48,7 @@ https://www.fameconsultoria.com.br
 
 https://www.fametec.com.br
     
-contato@fameconsultoria.com.br
+[mailto:contato@fameconsultoria.com.br] contato@fameconsultoria.com.br
 
 
 
