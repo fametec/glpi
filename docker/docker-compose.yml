@@ -1,0 +1,17 @@
+version: "3"
+services: 
+    mariadb: 
+        image: fameconsultoria/mariadb-glpi
+        # build: mariadb/.
+        expose: 
+            - "3306"
+    glpi: 
+        image: fameconsultoria/apache-glpi
+        # build: apache-php/.
+        depends_on: 
+            - mariadb
+        links: 
+            - mariadb
+        expose: 
+            - "443"
+            - "80"
