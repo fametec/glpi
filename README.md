@@ -3,12 +3,12 @@
 Este script irá instalar o glpi em um sistema operacional CentOS 7 Minimal. 
 
 
-# DOWNLOAD
+## DOWNLOAD
 
     curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
 
 
-# VARIÁVEIS
+## VARIÁVEIS
 
 Dentro do script existem algumas variaveis que podem ser alteradas antes da instalação.
 
@@ -28,7 +28,7 @@ Dentro do script existem algumas variaveis que podem ser alteradas antes da inst
     
     
 
-# INSTALAÇÃO
+## INSTALAÇÃO
 
     sh install_glpi.sh
 
@@ -37,12 +37,12 @@ Após a instalação será gerado um arquivo ~/install_glpi.log com as credencia
 
 
 
-# CURSOS
+## CURSOS
 
 https://www.fametreinamentos.com.br
 
 
-# CONSULTORIA E SUPORTE
+## CONSULTORIA E SUPORTE
 
 https://www.fameconsultoria.com.br
 
