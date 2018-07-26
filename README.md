@@ -48,7 +48,5 @@ https://www.fameconsultoria.com.br
 
 https://www.fametec.com.br
     
-[mailto:contato@fameconsultoria.com.br] contato@fameconsultoria.com.br
-
-
+contato@fameconsultoria.com.br
 
