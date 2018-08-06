@@ -15,3 +15,9 @@ services:
         expose: 
             - "443"
             - "80"
+        environment: 
+            - MYSQL_HOST=mariadb
+            - MYSQL_DB=glpi
+            - MYSQL_USER=glpi
+            - MYSQL_PASSWORD=glpi
+

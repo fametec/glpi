@@ -1,5 +1,11 @@
 FROM docker.io/centos
 
+ENV MYSQL_HOST mariadb
+ENV MYSQL_DB glpi
+ENV MYSQL_USER glpi
+ENV MYSQL_PASSWORD glpi
+ENV GLPI_LANG pt_BR
+
 RUN yum -y update \
 	&& yum -y install epel-release \
 	&& yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
@@ -75,7 +81,7 @@ RUN { \
 	echo '#!/bin/bash'; \
 	echo 'if [ -e /var/www/html/install/install.php ]; then'; \
 	echo '  echo "Deploy DB with cliinstall.php. This procedure delay 10 minutes. Please wait..." '; \
-	echo '  php /var/www/html/scripts/cliinstall.php --host=mariadb --db=glpi --user=glpi --pass=glpi --lang=pt_BR;';\
+	echo '  php /var/www/html/scripts/cliinstall.php --host=$MYSQL_HOST --db=$MYSQL_DB --user=$MYSQL_USER --pass=$MYSQL_PASSWORD --lang=pt_BR;';\
 	echo '  rm -rf /var/www/html/install/install.php'; \
 	echo 'fi'; \
 	echo ; \
