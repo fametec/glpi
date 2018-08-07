@@ -33,9 +33,12 @@ RUN yum -y install \
 	php70u-xmlrpc \
 	openssl \
 	php-pear-CAS \
+	openssh-server \
 	cronie
  
 RUN yum -y clean all && rm -rf /var/cache/yum
+
+RUN /usr/sbin/sshd-keygen
 
 RUN { \
 	echo 'memory_limit = 64M;'; \
@@ -85,26 +88,35 @@ RUN { \
 	echo '  rm -rf /var/www/html/install/install.php'; \
 	echo 'fi'; \
 	echo ; \
+	echo '/usr/sbin/sshd'; \
+	echo 'status=$?'; \
+	echo 'if [ $status -ne 0 ]; then'; \
+	echo '  echo "Failed to start sshd_process: $status"'; \
+	echo '  exit $status'; \
+	echo 'fi';  \
+	echo ; \
 	echo 'crond'; \
 	echo 'status=$?'; \
 	echo 'if [ $status -ne 0 ]; then'; \
-	echo '  echo "Failed to start my_first_process: $status"'; \
+	echo '  echo "Failed to start crond_process: $status"'; \
 	echo '  exit $status'; \
 	echo 'fi';  \
 	echo ; \
 	echo 'httpd -D FOREGROUND'; \
 	echo 'status=$?'; \
 	echo 'if [ $status -ne 0 ]; then'; \
-	echo '  echo "Failed to start my_second_process: $status"'; \
+	echo '  echo "Failed to start httpd_process: $status"'; \
 	echo '  exit $status'; \
 	echo 'fi'; \
 	echo ; \
 	echo 'while sleep 60; do'; \
-	echo '  ps aux |grep crond |grep -q -v grep'; \
+	echo '  ps aux |grep sshd |grep -q -v grep'; \
 	echo '  PROCESS_1_STATUS=$?'; \
-	echo '  ps aux |grep httpd |grep -q -v grep'; \
+	echo '  ps aux |grep crond |grep -q -v grep'; \
 	echo '  PROCESS_2_STATUS=$?'; \
-	echo '  if [ $PROCESS_1_STATUS -ne 0 -o $PROCESS_2_STATUS -ne 0 ]; then'; \
+	echo '  ps aux |grep httpd |grep -q -v grep'; \
+	echo '  PROCESS_3_STATUS=$?'; \
+	echo '  if [ $PROCESS_1_STATUS -ne 0 -o $PROCESS_2_STATUS -ne 0 -o $PROCESS_3_STATUS -ne 0 ]; then'; \
 	echo '    echo "One of the processes has already exited."'; \
 	echo '    exit 1'; \
 	echo '  fi'; \
