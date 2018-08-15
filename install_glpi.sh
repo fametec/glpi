@@ -84,19 +84,24 @@ curl 'https://setup.ius.io/' -o setup-ius.sh
 
 bash setup-ius.sh  
 
+yum -y install epel-release expect
+
 
 ## MARIADB-SERVER
 
 if [ "$VERSION" != "9.3" ]; then 
-	yum -y install mariadb-server expect epel-release
+	yum -y install mariadb-server
 else
-	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common expect epel-release
+	yum -y remove mariadb-server mariadb mariadb-config mariadb-libs mariadb-common 
+	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common
 fi
+
 
 ## Restart do mysql
 
-systemctl enable mariadb
-systemctl restart mariadb
+systemctl enable mariadb 
+
+systemctl start mariadb
 
 
 ## Configuração de segurança do banco
