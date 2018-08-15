@@ -8,7 +8,7 @@
 
 ## VARIAVEIS
 
-VERSION="9.2.2"
+VERSION="9.3"
 TIMEZONE=America/Fortaleza
 FQDN="glpi.eftech.com.br"
 ADMINEMAIL="suporte@eftech.com.br"
@@ -53,24 +53,45 @@ CURL=$CURL
 
 EOF
 
-## SELINUX
+## DESATIVAR SELINUX
 
 sed -i s/enforcing/permissive/g /etc/selinux/config
 
 setenforce 0
 
+## ATIVAR SELINUX
+
+#    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
+#    setsebool -P httpd_can_network_connect 1
+#    setsebool -P httpd_can_network_connect_db 1
+#    setsebool -P httpd_can_sendmail 1
+#    setenforce 1
+
+
 
 ## FIREWALLD
 
 firewall-cmd --zone=public --add-service=http
+
 firewall-cmd --zone=public --add-service=https
 
+
+## REPOSITORIO
+
+cd ~ 
+
+curl 'https://setup.ius.io/' -o setup-ius.sh 
+
+bash setup-ius.sh  
 
 
 ## MARIADB-SERVER
 
-yum -y install mariadb-server expect epel-release
-
+if [ "$VERSION" -ne "9.3" ]; then 
+	yum -y install mariadb-server expect epel-release
+else
+	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common expect epel-release
+fi
 
 ## Restart do mysql
 
@@ -112,28 +133,21 @@ $MYSQL -e "create user $DBUSER@localhost identified by '"$DBPASS"';"
 $MYSQL -e "grant all privileges on $DBNAME.* to $DBUSER@localhost;"
 
 
-## APACHE
+## APACHE E PHP7
 
 yum install -y httpd mod_ssl
+
+yum -y remove php-cli mod_php php-common 
+
+yum -y install mod_php70u php70u-cli php70u-mysqlnd 
+
+yum -y install wget php70u-json php70u-mbstring php70u-mysqli php70u-session php70u-gd php70u-curl php70u-domxml php70u-imap php70u-ldap php70u-openssl php70u-opcache php70u-apcu php70u-xmlrpc openssl 
+
+yum -y install php-pear-CAS
 
 systemctl enable httpd 
 
 systemctl start httpd
-
-
-## PHP 7
-
-cd ~ 
-
-curl 'https://setup.ius.io/' -o setup-ius.sh 
-
-bash setup-ius.sh  
-
-yum -y remove php-cli mod_php php-common -y 
-
-yum -y install mod_php70u php70u-cli php70u-mysqlnd 
-
-yum -y install php70u-json php70u-mbstring php70u-mysqli php70u-session php70u-gd php70u-curl php70u-domxml php70u-imap php70u-ldap php70u-openssl php70u-opcache php70u-apcu php70u-xmlrpc openssl 
 
 
 cat <<EOF > /etc/php.d/99-glpi.ini
@@ -180,15 +194,6 @@ EOF
 
 
 systemctl restart httpd
-
-
-## ATIVAR SELINUX
-
-#    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
-#    setsebool -P httpd_can_network_connect 1
-#    setsebool -P httpd_can_network_connect_db 1
-#    setsebool -P httpd_can_sendmail 1
-#    setenforce 1
 
 php /var/www/html/glpi/scripts/cliinstall.php --host=$DBHOST --db=$DBNAME --user=$DBUSER --pass=$DBPASS --lang=pt_BR
 if [ $? -eq 0 ]; then
