@@ -141,7 +141,7 @@ RUN tar -zxf /var/www/html/glpi-9.3.tgz -C /var/www/html/ \
 
 VOLUME ["/var/www/html"]
 
-EXPOSE 80/tcp 443/tcp
+EXPOSE 80/tcp 443/tcp 22/tcp
 
 ENTRYPOINT ["/entrypoint.sh"]
 
