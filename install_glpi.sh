@@ -87,7 +87,7 @@ bash setup-ius.sh
 
 ## MARIADB-SERVER
 
-if [ "$VERSION" -ne "9.3" ]; then 
+if [ "$VERSION" != "9.3" ]; then 
 	yum -y install mariadb-server expect epel-release
 else
 	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common expect epel-release
@@ -175,8 +175,13 @@ if [ ! -e packages/$VERSION/glpi-$VERSION.tgz ]
 then
   
   mkdir -p packages
-  wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
+  if [ "$VERSION" != "9.3" ] ; then
+	  wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
 
+  else
+
+	  wget -c https://github.com/glpi-project/glpi/releases/download/${VERSION}.0/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
+  fi
 fi
 
 tar -zxvf packages/glpi-$VERSION.tgz -C /var/www/html/
