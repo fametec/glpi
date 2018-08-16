@@ -1,41 +1,19 @@
-# INSTALL_GLPI.SH
+# GLPI DOCKER
 
-Este script irá instalar o glpi em um sistema operacional CentOS 7 Minimal. 
+Este script irá instalar o glpi e mysql dentro de containers Docker. Serão criados dois container: 
+ 
+ 1) Container com banco mariadb
+ 2) Container com apache e php
 
+# INSTALAÇÃO 
 
-# DOWNLOAD
+Baixar o conteúdo do diretório docker e executar o arquivo "build.sh", sendo um arquivo para cada container
 
-    curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
+    cd mariadb
+    sh build.sh
 
-
-# VARIÁVEIS
-
-Dentro do script existem algumas variaveis que podem ser alteraradas antes da instalação.
-
-
-    VERSION="9.2.2"                      # Versão que deseja instalar
-    TIMEZONE=America/Fortaleza           # Fuso horário
-    FQDN="glpi.eftech.com.br"            # Nome de host para criar um virtualhost
-    ADMINEMAIL="suporte@eftech.com.br"   # Email administrativo do virtualhost
-    ORGANIZATION="EF-TECH"               # Nome da organização
-    MYSQL_ROOT_PASSWORD=''               # Senha do usuário root do banco mysql
-    DBUSER="glpi"                        # Nome de usuário do banco mysql
-    DBHOST="localhost"                   # Endereço do banco mysql
-    DBNAME="glpi"                        # Nome do banco
-    # Cria senhas aleatórias
-    DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`" # Cria uma senha aleatória
-    MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`" 
-    
-    
-
-# INSTALAÇÃO
-
-    sh install_glpi.sh
-
-
-Após a instalação será gerado um arquivo ~/install_glpi.log com as credenciais do banco e demais variaveis que foram utilizada pelo sistema. 
-
-
+    cd apache-php
+    sh build.sh
 
 # CURSOS
 
