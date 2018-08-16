@@ -55,25 +55,25 @@ EOF
 
 ## DESATIVAR SELINUX
 
-sed -i s/enforcing/permissive/g /etc/selinux/config
+#sed -i s/enforcing/permissive/g /etc/selinux/config
 
-setenforce 0
+#setenforce 0
 
 ## ATIVAR SELINUX
 
-#    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
-#    setsebool -P httpd_can_network_connect 1
-#    setsebool -P httpd_can_network_connect_db 1
-#    setsebool -P httpd_can_sendmail 1
-#    setenforce 1
+    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
+    setsebool -P httpd_can_network_connect 1
+    setsebool -P httpd_can_network_connect_db 1
+    setsebool -P httpd_can_sendmail 1
+    setenforce 1
 
 
 
 ## FIREWALLD
 
-firewall-cmd --zone=public --add-service=http
+firewall-cmd --zone=public --add-service=http --permanent
 
-firewall-cmd --zone=public --add-service=https
+firewall-cmd --zone=public --add-service=https --permanent
 
 
 ## REPOSITORIO
@@ -146,9 +146,23 @@ yum -y remove php-cli mod_php php-common
 
 yum -y install mod_php70u php70u-cli php70u-mysqlnd 
 
-yum -y install wget php70u-json php70u-mbstring php70u-mysqli php70u-session php70u-gd php70u-curl php70u-domxml php70u-imap php70u-ldap php70u-openssl php70u-opcache php70u-apcu php70u-xmlrpc openssl 
-
-yum -y install php-pear-CAS
+yum -y install \
+php-pear-CAS \
+wget \
+php70u-json \
+php70u-mbstring \
+php70u-mysqli \
+php70u-session \
+php70u-gd \
+php70u-curl \
+php70u-domxml \
+php70u-imap \
+php70u-ldap \
+php70u-openssl \
+php70u-opcache \
+php70u-apcu \
+php70u-xmlrpc \
+openssl 
 
 systemctl enable httpd 
 
