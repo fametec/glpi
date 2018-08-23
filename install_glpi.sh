@@ -52,23 +52,6 @@ CURL=$CURL
 
 
 EOF
-
-## DESATIVAR SELINUX
-
-#sed -i s/enforcing/permissive/g /etc/selinux/config
-
-#setenforce 0
-
-## ATIVAR SELINUX
-
-    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
-    setsebool -P httpd_can_network_connect 1
-    setsebool -P httpd_can_network_connect_db 1
-    setsebool -P httpd_can_sendmail 1
-    setenforce 1
-
-
-
 ## FIREWALLD
 
 firewall-cmd --zone=public --add-service=http --permanent
@@ -215,6 +198,21 @@ cat <<EOF > /etc/httpd/conf.d/glpi.conf
         Require all granted
     </Directory>
 EOF
+
+## DESATIVAR SELINUX
+
+#sed -i s/enforcing/permissive/g /etc/selinux/config
+
+#setenforce 0
+
+## ATIVAR SELINUX
+
+    chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
+    setsebool -P httpd_can_network_connect 1
+    setsebool -P httpd_can_network_connect_db 1
+    setsebool -P httpd_can_sendmail 1
+    setenforce 1
+
 
 
 systemctl restart httpd
