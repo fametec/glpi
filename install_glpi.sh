@@ -72,12 +72,12 @@ yum -y install epel-release expect
 
 ## MARIADB-SERVER
 
-if [ "$VERSION" != "9.3" ]; then 
-	yum -y install mariadb-server
-else
+#if [ "$VERSION" != "9.3" ]; then 
+#	yum -y install mariadb-server
+#else
 	yum -y remove mariadb-server mariadb mariadb-config mariadb-libs mariadb-common 
 	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common
-fi
+#fi
 
 
 ## Restart do mysql
