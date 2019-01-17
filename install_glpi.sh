@@ -8,7 +8,7 @@
 
 ## VARIAVEIS
 
-VERSION="9.2"
+VERSION="9.2.1"
 TIMEZONE=America/Fortaleza
 FQDN="glpi.eftech.com.br"
 ADMINEMAIL="suporte@eftech.com.br"
