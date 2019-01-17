@@ -127,24 +127,24 @@ yum install -y httpd mod_ssl
 
 yum -y remove php-cli mod_php php-common 
 
-yum -y install mod_php70u php70u-cli php70u-mysqlnd 
+yum -y install mod_php72u php72u-cli php72u-mysqlnd 
 
 yum -y install \
 php-pear-CAS \
 wget \
-php70u-json \
-php70u-mbstring \
-php70u-mysqli \
-php70u-session \
-php70u-gd \
-php70u-curl \
-php70u-domxml \
-php70u-imap \
-php70u-ldap \
-php70u-openssl \
-php70u-opcache \
-php70u-apcu \
-php70u-xmlrpc \
+php72u-json \
+php72u-mbstring \
+php72u-mysqli \
+php72u-session \
+php72u-gd \
+php72u-curl \
+php72u-domxml \
+php72u-imap \
+php72u-ldap \
+php72u-openssl \
+php72u-opcache \
+php72u-apcu \
+php72u-xmlrpc \
 openssl 
 
 systemctl enable httpd 
