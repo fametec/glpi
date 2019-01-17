@@ -2,6 +2,10 @@
 
 Este script irá instalar o glpi em um sistema operacional CentOS 7 Minimal. 
 
+## INSTALAÇÃO SILENCIOSA
+
+    curl 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' | bash
+
 
 ## DOWNLOAD
 
