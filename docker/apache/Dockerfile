@@ -2,9 +2,10 @@ FROM docker.io/centos
 
 ENV GLPI_LANG pt_BR
 
-RUN yum -y install epel-release \
-	&& yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
-	&& rpm --import /etc/pki/rpm-gpg/IUS-COMMUNITY-GPG-KEY 
+RUN curl 'https://setup.ius.io/' | sh 
+#yum -y install epel-release \
+#	&& yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
+#	&& rpm --import /etc/pki/rpm-gpg/IUS-COMMUNITY-GPG-KEY 
 
 RUN yum -y install \
 		mod_php72u \
@@ -39,12 +40,14 @@ ADD installdb.sh /
 
 ADD entrypoint.sh /
 
+ADD config.db.php /tmp/
+
 RUN chmod 755 /entrypoint.sh /installdb.sh
 
 # wget -c https://github.com/glpi-project/glpi/releases/download/9.3.2/glpi-9.3.2.tgz
 # tar -zxvf glpi-9.3.2.tgz
 
-ADD glpi /var/www/html/glpi 
+ADD glpi /tmp/glpi 
 
 VOLUME ["/var/www/html"]
 
@@ -52,4 +55,4 @@ EXPOSE 80/tcp 443/tcp
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-#CMD ["httpd", "-D", "FOREGROUND"]
+CMD ["httpd", "-D", "FOREGROUND"]
