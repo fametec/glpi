@@ -55,4 +55,4 @@ EXPOSE 80/tcp 443/tcp
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["httpd", "-D", "FOREGROUND"]
+# CMD ["httpd", "-D", "FOREGROUND"]

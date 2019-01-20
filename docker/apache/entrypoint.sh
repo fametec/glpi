@@ -27,4 +27,4 @@ else
   chown -Rf apache:apache /var/www/html/glpi 
 fi
 
-
+httpd -D FOREGROUND

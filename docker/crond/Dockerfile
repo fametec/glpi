@@ -6,4 +6,4 @@ ADD crontab /etc/crontab
 
 VOLUME ["/var/www/html"]
 
-CMD [ "crond", "-s", "-x", "bit", "-n", "/etc/crontab" ]
+ENTRYPOINT [ "crond", "-s", "-x", "bit", "-n", "/etc/crontab" ]

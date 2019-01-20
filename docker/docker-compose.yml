@@ -5,75 +5,39 @@ services:
         build: 
           context: ./mariadb/.
           dockerfile: Dockerfile
-          #args: 
-          #  - MYSQL_ROOT_PASSWORD=qaz123
-          #  - MYSQL_DATABASE=glpi
-          #  - MYSQL_USER=glpi
-          #  - MYSQL_PASSWORD=glpi
-        #
-        environment: 
-          MYSQL_ROOT_PASSWORD: qaz123
-          MYSQL_DB: glpi
-          MYSQL_USER: glpi
-          MYSQL_PASSWORD: glpi
-        #  
         volumes: 
           - /home/volume/mariadb:/var/lib/mysql
-        #
         ports: 
           - "3306"
-        #
-        command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
-        #
-    apache: 
+    glpi: 
         image: fametec/apache
         build: 
           context: ./apache/.
           dockerfile: Dockerfile
-          # args: 
-          #  - MYSQL_HOST=mariadb
-          #  - MYSQL_DB=glpi
-          #  - MYSQL_USER=glpi
-          #  - MYSQL_PASSWORD=glpi
-        #
-        environment: 
-          MYSQL_HOST: mariadb
-          MYSQL_ROOT_HOST: mariadb
-          #MYSQL_DB: glpi
-          #MYSQL_USER: glpi
-          #MYSQL_PASSWORD: glpi
-
+       # environment: 
+          #  MARIADB_PORT_3306_TCP_ADDR: mariadb
+          #  MARIADB_ENV_MYSQL_USER: glpi
+          #  MARIADB_ENV_MYSQL_PASSWORD: glpi
+          #  MARIADB_ENV_MYSQL_DATABASE: glpi
         depends_on: 
           - mariadb
-        #
+        links: 
+          - mariadb
         ports: 
           - "443"
-          - "80"
-        #
         volumes:
-          - /home/volume/glpi:/var/www/html
+          - /home/volume/html:/var/www/html
 
     crond: 
         image: fametec/crond
         build: 
           context: ./crond/.
           dockerfile: Dockerfile
-          #args: 
-          #  - MYSQL_HOST=mariadb
-          #  - MYSQL_DB=glpi
-          #  - MYSQL_USER=glpi
-          #  - MYSQL_PASSWORD=glpi       
-        #
-        environment: 
-          MYSQL_HOST: mariadb
-          MYSQL_ROOT_HOST: mariadb
-          #MYSQL_DB: glpi
-          #MYSQL_USER: glpi
-          #MYSQL_PASSWORD: glpi
-
         depends_on: 
-          - apache
+          - glpi
+          - mariadb
+        links: 
           - mariadb
         volumes: 
-          - /home/volume/glpi:/var/www/html
+          - /home/volume/html:/var/www/html
 
