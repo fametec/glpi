@@ -1,23 +1,79 @@
 version: "3"
 services: 
     mariadb: 
-        image: fameconsultoria/mariadb-glpi
-        # build: mariadb/.
-        expose: 
-            - "3306"
-    glpi: 
-        image: fameconsultoria/apache-glpi
-        # build: apache-php/.
-        depends_on: 
-            - mariadb
-        links: 
-            - mariadb
-        expose: 
-            - "443"
-            - "80"
+        image: fametec/mariadb
+        build: 
+          context: ./mariadb/.
+          dockerfile: Dockerfile
+          #args: 
+          #  - MYSQL_ROOT_PASSWORD=qaz123
+          #  - MYSQL_DATABASE=glpi
+          #  - MYSQL_USER=glpi
+          #  - MYSQL_PASSWORD=glpi
+        #
         environment: 
-            - MYSQL_HOST=mariadb
-            - MYSQL_DB=glpi
-            - MYSQL_USER=glpi
-            - MYSQL_PASSWORD=glpi
+          MYSQL_ROOT_PASSWORD: qaz123
+          MYSQL_DB: glpi
+          MYSQL_USER: glpi
+          MYSQL_PASSWORD: glpi
+        #  
+        volumes: 
+          - /home/volume/mariadb:/var/lib/mysql
+        #
+        ports: 
+          - "3306"
+        #
+        command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+        #
+    apache: 
+        image: fametec/apache
+        build: 
+          context: ./apache/.
+          dockerfile: Dockerfile
+          # args: 
+          #  - MYSQL_HOST=mariadb
+          #  - MYSQL_DB=glpi
+          #  - MYSQL_USER=glpi
+          #  - MYSQL_PASSWORD=glpi
+        #
+        environment: 
+          MYSQL_HOST: mariadb
+          MYSQL_ROOT_HOST: mariadb
+          #MYSQL_DB: glpi
+          #MYSQL_USER: glpi
+          #MYSQL_PASSWORD: glpi
+
+        depends_on: 
+          - mariadb
+        #
+        ports: 
+          - "443"
+          - "80"
+        #
+        volumes:
+          - /home/volume/glpi:/var/www/html
+
+    crond: 
+        image: fametec/crond
+        build: 
+          context: ./crond/.
+          dockerfile: Dockerfile
+          #args: 
+          #  - MYSQL_HOST=mariadb
+          #  - MYSQL_DB=glpi
+          #  - MYSQL_USER=glpi
+          #  - MYSQL_PASSWORD=glpi       
+        #
+        environment: 
+          MYSQL_HOST: mariadb
+          MYSQL_ROOT_HOST: mariadb
+          #MYSQL_DB: glpi
+          #MYSQL_USER: glpi
+          #MYSQL_PASSWORD: glpi
+
+        depends_on: 
+          - apache
+          - mariadb
+        volumes: 
+          - /home/volume/glpi:/var/www/html
 
