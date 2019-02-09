@@ -242,7 +242,7 @@ chown apache.apache /var/www/html/glpi/files/_dumps/*.sql.gz
 # Backup completo para dentro de /backup/
 
 if [ ! -d /backup ]; then
-  mkdir -p /bacup
+  mkdir -p /backup
 fi
 tar -zcf /backup/backup-${VERSION}-\`date +%Y-%m-%d-%H-%M\`.tar.gz /var/www/html/glpi
 
