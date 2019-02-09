@@ -23,8 +23,9 @@ else
   if [ $? -eq 0 ]; then
    rm -rf /var/www/html/glpi/install/install.php; 
   fi
-  mv /tmp/config.db.php /var/www/html/glpi/config/
-  chown -Rf apache:apache /var/www/html/glpi 
 fi
+
+mv /tmp/config_db.php /var/www/html/glpi/config/
+chown -Rf apache:apache /var/www/html/glpi 
 
 httpd -D FOREGROUND

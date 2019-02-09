@@ -223,3 +223,46 @@ if [ $? -eq 0 ]; then
 fi
 
 
+## BACKUP 
+
+cat <<EOF > /etc/cron.daily/backup-glpi.sh
+#!/bin/sh
+
+# Backup Banco GLPI
+
+mysqldump -u ${DBUSER} -p${DBPASS} ${DBNAME} | gzip > /var/www/html/glpi/files/_dumps/glpi-${VERSION}-\`date +%Y-%m-%d-%H-%M\`.sql.gz 
+
+EXITVALUE=\$?
+if [ \$EXITVALUE != 0 ]; then
+    /usr/bin/logger -t GLPI "ALERT exited abnormally with [\$EXITVALUE]"
+fi
+
+chown apache.apache /var/www/html/glpi/files/_dumps/*.sql.gz
+
+# Backup completo para dentro de /backup/
+
+if [ ! -d /backup ]; then
+  mkdir -p /bacup
+fi
+tar -zcf /backup/backup-${VERSION}-\`date +%Y-%m-%d-%H-%M\`.tar.gz /var/www/html/glpi
+
+EXITVALUE=\$?
+if [ \$EXITVALUE != 0 ]; then
+    /usr/bin/logger -t GLPI "ALERT exited abnormally with [\$EXITVALUE]"
+fi
+
+
+# Apagar backup com mais de 30d
+
+find /var/www/html/glpi/files/_dumps/ -mtime +30 -delete
+EXITVALUE=\$?
+if [ \$EXITVALUE != 0 ]; then
+    /usr/bin/logger -t GLPI "ALERT exited abnormally with [\$EXITVALUE]"
+fi
+
+exit 0
+
+EOF
+
+chmod +x /etc/cron.daily/backup-glpi.sh
+
