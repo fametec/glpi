@@ -40,7 +40,7 @@ ADD installdb.sh /
 
 ADD entrypoint.sh /
 
-ADD config_db.php /tmp/
+# ADD config_db.php /tmp/
 
 RUN chmod 755 /entrypoint.sh /installdb.sh
 

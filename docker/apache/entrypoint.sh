@@ -1,5 +1,6 @@
-#!/bin/bash
+!/bin/bash
 #
+set -xv
 # 
 if [ -d /var/www/html/glpi ]; then
   echo "Directory found, not to do..."
@@ -12,6 +13,17 @@ fi
 #
 if [ -e /var/www/html/glpi/config/config_db.php ]; then
   echo "DB Already installed (see --force option)" 
+  cat < EOF >> /var/www/html/glpi/config/config_db.php
+'<?php
+class DB extends DBmysql {
+  public \$dbhost     = '$MARIADB_PORT_3306_TCP_ADDR';
+  public \$dbuser     = '$MARIADB_ENV_MYSQL_USER';
+  public \$dbpassword = '$MARIADB_ENV_MYSQL_PASSWORD';
+  public \$dbdefault  = '$MARIADB_ENV_MYSQL_DATABASE';
+}'
+EOF
+
+
 else
   echo "Deploy DB with cliinstall.php. This procedure delay 10 minutes. Please wait..." 
   cd /var/www/html/glpi/scripts && php cliinstall.php \
