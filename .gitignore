@@ -1,2 +1,3 @@
 docker/apache/glpi/
 docker/apache/glpi-*.tgz
+k8s/

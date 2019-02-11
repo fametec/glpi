@@ -23,19 +23,21 @@ if [ -e /var/www/html/glpi/config/config_db.php ]; then
     echo "}"; \
     echo ; 
   } > /var/www/html/glpi/config/config_db.php
+  rm -rf /var/www/html/glpi/install/install.php;
 #
 else
-  echo "Deploy DB with cliinstall.php. This procedure delay 10 minutes. Please wait..." 
+  echo "Deploy DB with cliinstall.php. Please wait..." 
   cd /var/www/html/glpi/scripts && php cliinstall.php \
 	--host=$MARIADB_HOST \
 	--db=$MARIADB_DATABASE \
 	--user=$MARIADB_USER \
 	--pass=$MARIADB_PASSWORD \
-	--lang=$GLPI_LANG
+	--lang=$GLPI_LANG 
   if [ $? -eq 0 ]; then
    rm -rf /var/www/html/glpi/install/install.php; 
   fi
 fi
+
 
 # mv /tmp/config_db.php /var/www/html/glpi/config/
 chown -Rf apache:apache /var/www/html/glpi 
