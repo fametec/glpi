@@ -1,6 +1,16 @@
 FROM docker.io/centos
 
+ENV VERSION 9.3.2
+
 ENV GLPI_LANG pt_BR
+
+ENV MARIADB_HOST ${MARIADB_ENV_MYSQL_DATABASE}
+
+ENV MARIADB_DATABASE ${MARIADB_ENV_MYSQL_DATABASE}
+
+ENV MARIADB_USER ${MARIADB_ENV_MYSQL_USER}
+
+ENV MARIADB_PASSWORD ${MARIADB_ENV_MYSQL_PASSWORD}
 
 RUN curl 'https://setup.ius.io/' | sh 
 #yum -y install epel-release \
@@ -36,18 +46,9 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD installdb.sh /
-
 ADD entrypoint.sh /
 
-# ADD config_db.php /tmp/
-
-RUN chmod 755 /entrypoint.sh /installdb.sh
-
-# wget -c https://github.com/glpi-project/glpi/releases/download/9.3.2/glpi-9.3.2.tgz
-# tar -zxvf glpi-9.3.2.tgz
-
-ADD glpi /tmp/glpi 
+RUN chmod 755 /entrypoint.sh
 
 VOLUME ["/var/www/html"]
 
@@ -55,4 +56,3 @@ EXPOSE 80/tcp 443/tcp
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-# CMD ["httpd", "-D", "FOREGROUND"]

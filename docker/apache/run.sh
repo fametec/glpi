@@ -1,6 +1,22 @@
 #!/bin/bash
-
+#
 docker rm -f glpi
+#
+# docker volume create glpi-volume
+#
 # docker run -d --name glpi --link mariadb:mariadb fametec/glpi:latest
-docker run -d --name glpi --link mariadb:mariadb --volume /home/volume/html:/var/www/html fametec/glpi
+#
+# docker run -d --name glpi --link mariadb:mariadb --volume glpi-volume:/var/www/html fametec-local/glpi
+#
+docker run -d \
+--name glpi \
+--link mariadb-glpi:mariadb-glpi \
+--volume glpi-volume:/var/www/html \
+-e GLPI_LANG=pt_BR \
+-e MARIADB_HOST=mariadb-glpi \
+-e MARIADB_DATABASE=glpi \
+-e MARIADB_USER=glpi \
+-e MARIADB_PASSWORD=glpi \
+fametec-local/glpi 
+
 docker logs -f glpi
