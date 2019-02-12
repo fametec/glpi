@@ -2,11 +2,17 @@
 #
 # 
 if [ -d /var/www/html/glpi ]; then
-  echo "Directory found, not to do..."
-  rm -rf /tmp/glpi
+  echo -n "Directory found, check version..."
+  if [ `grep -e ^##.*unreleased /var/www/html/glpi/CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1` -eq $VERSION ]; then
+    echo "not to do!"
+  else
+    echo "Upgrade version to $VERSION..."
+    curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
+    chown -Rf apache:apache /var/www/html/glpi
+  fi
 else
   echo "Directory not found, creating..." 
-  curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxvf - -C /var/www/html/
+  curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
   #mv /tmp/glpi /var/www/html/
   chown -Rf apache:apache /var/www/html/glpi 
 fi

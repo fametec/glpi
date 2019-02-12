@@ -2,7 +2,7 @@
 #
 docker rm -f glpi
 #
-# docker volume create glpi-volume
+docker volume create glpi-volume
 #
 # docker run -d --name glpi --link mariadb:mariadb fametec/glpi:latest
 #
@@ -17,6 +17,7 @@ docker run -d \
 -e MARIADB_DATABASE=glpi \
 -e MARIADB_USER=glpi \
 -e MARIADB_PASSWORD=glpi \
-fametec-local/glpi 
+-e VERSION=9.4.0 \
+fametec/glpi:9.3.2
 
 docker logs -f glpi
