@@ -18,6 +18,6 @@ docker run -d \
 -e MARIADB_USER=glpi \
 -e MARIADB_PASSWORD=glpi \
 -e VERSION=9.4.0 \
-fametec/glpi:9.3.2
+fametec/glpi
 
 docker logs -f glpi
