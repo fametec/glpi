@@ -19,52 +19,52 @@ The docker instalation is split with three containers:
 
 Create a volume to persistent data (optional) 
 
-   docker volume create mariadb-glpi-volume
+    docker volume create mariadb-glpi-volume
 
 Run a Container
 
-   docker run -d --name mariadb-glpi -v mariadb-glpi-volume:/var/lib/mysql fametec/mariadb-glpi
+    docker run -d --name mariadb-glpi -v mariadb-glpi-volume:/var/lib/mysql fametec/mariadb-glpi
 
 
 ### Deploy GLPI
 
 Create a volume to persistent data (optional)
 
-   docker volume create glpi-volume
+    docker volume create glpi-volume
 
 Run basic
 
-   docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume fametec/glpi
+    docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume fametec/glpi
 
 Run advanced
 
-docker run -d \
---name glpi \
---link mariadb-glpi:mariadb-glpi \
---volume glpi-volume:/var/www/html \
--e GLPI_LANG=pt_BR \
--e MARIADB_HOST=mariadb-glpi \
--e MARIADB_DATABASE=glpi \
--e MARIADB_USER=glpi \
--e MARIADB_PASSWORD=glpi \
--e VERSION=9.3.2 \
-fametec/glpi
+    docker run -d \
+    --name glpi \
+    --link mariadb-glpi:mariadb-glpi \
+    --volume glpi-volume:/var/www/html \
+    -e GLPI_LANG=pt_BR \
+    -e MARIADB_HOST=mariadb-glpi \
+    -e MARIADB_DATABASE=glpi \
+    -e MARIADB_USER=glpi \
+    -e MARIADB_PASSWORD=glpi \
+    -e VERSION=9.3.2 \
+    fametec/glpi
 
 
 ### Deploy Cron to Schedule jobs
 
 Required MariaDB and GLPI
 
-      docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi-volume:/var/www/html/glpi fametec/crond-glpi
+    docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi-volume:/var/www/html/glpi fametec/crond-glpi
 
 
 ## Upgrade GLPI on docker container
 
-To upgrade a existent GLPI volume, just change VERSION, example: 
+To upgrade, just change VERSION, example: 
 
 GLPI 9.3.2 to 9.4.0
 
-   docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume -e VERSION=9.4.0 fametec/glpi
+    docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume -e VERSION=9.4.0 fametec/glpi
 
 
 
