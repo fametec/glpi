@@ -1,43 +1,38 @@
-version: "3"
+version: "3.5"
 services: 
-    mariadb: 
-        image: fametec/mariadb
-        build: 
-          context: ./mariadb/.
-          dockerfile: Dockerfile
+    db: 
+        image: fametec/mariadb-glpi
         volumes: 
-          - /home/volume/mariadb:/var/lib/mysql
+          - mariadb-glpi-volume:/var/www/mysql
         ports: 
           - "3306"
+#
     glpi: 
-        image: fametec/apache
-        build: 
-          context: ./apache/.
-          dockerfile: Dockerfile
-       # environment: 
-          #  MARIADB_PORT_3306_TCP_ADDR: mariadb
-          #  MARIADB_ENV_MYSQL_USER: glpi
-          #  MARIADB_ENV_MYSQL_PASSWORD: glpi
-          #  MARIADB_ENV_MYSQL_DATABASE: glpi
+        image: fametec/glpi
+        volumes: 
+          - glpi-volume:/var/www/html
+        environment: 
+          GLPI_LANG: pt_BR
+          MARIADB_HOST: db
+          MARIADB_DATABASE: "glpi"
+          MARIADB_USER: "glpi"
+          MARIADB_PASSWORD: "glpi"
+          VERSION: "9.4.0"
         depends_on: 
-          - mariadb
-        links: 
-          - mariadb
+          - db
         ports: 
-          - "443"
-        volumes:
-          - /home/volume/html:/var/www/html
-
+          - "8080:80"
+#
     crond: 
-        image: fametec/crond
-        build: 
-          context: ./crond/.
-          dockerfile: Dockerfile
+        image: fametec/crond-glpi
         depends_on: 
           - glpi
-          - mariadb
-        links: 
-          - mariadb
+          - db
+        environment:
+          GLPI_LANG: pt_BR
+          MARIADB_HOST: db
         volumes: 
-          - /home/volume/html:/var/www/html
-
+          - glpi-volume:/var/www/html
+volumes: 
+  glpi-volume:
+  mariadb-glpi-volume: 

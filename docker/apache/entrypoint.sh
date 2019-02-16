@@ -3,14 +3,7 @@ set -xv
 #
 # 
 if [ -d /var/www/html/glpi ]; then
-  echo -n "Directory found, check version..."
-#  if [ `grep -e ^##.*unreleased /var/www/html/glpi/CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1` -eq $VERSION ]; then
-    echo "not to do!"
-#  else
-#    echo "Upgrade version to $VERSION..."
-#    curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
-#    chown -Rf apache:apache /var/www/html/glpi
-#  fi
+  echo -n "Directory found, not to do!"
 else
   echo "Directory not found, creating..." 
   curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
