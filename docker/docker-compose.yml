@@ -5,7 +5,7 @@ services:
         volumes: 
           - mariadb-glpi-volume:/var/www/mysql
         ports: 
-          - "3306"
+          - 3306
 #
     glpi: 
         image: fametec/glpi
@@ -14,14 +14,21 @@ services:
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: db
-          MARIADB_DATABASE: "glpi"
-          MARIADB_USER: "glpi"
-          MARIADB_PASSWORD: "glpi"
+          MARIADB_DATABASE: glpi
+          MARIADB_USER: glpi
+          MARIADB_PASSWORD: glpi
           VERSION: "9.4.0"
         depends_on: 
           - db
+        links: 
+          - db
         ports: 
-          - "8080:80"
+          - 8080:80
+        healthcheck:
+          test: ["CMD", "ping", "-c", "1", db]
+          interval: 30s
+          timeout: 10s
+          retries: 5
 #
     crond: 
         image: fametec/crond-glpi

@@ -38,7 +38,6 @@ else
   fi
 fi
 
-
 # mv /tmp/config_db.php /var/www/html/glpi/config/
 chown -Rf apache:apache /var/www/html/glpi 
 
