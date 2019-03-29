@@ -1,11 +1,18 @@
 version: "3.5"
 services: 
-    db: 
+    mariadb-glpi: 
         image: fametec/mariadb-glpi
         volumes: 
           - mariadb-glpi-volume:/var/www/mysql
+        environment: 
+          MYSQL_DATABASE: glpi
+          MYSQL_USER: glpi 
+          MYSQL_PASSWORD: glpi 
+          MYSQL_RANDOM_ROOT_PASSWORD: 1 
         ports: 
-          - 3306
+          - 3307
+        networks: 
+          - backend
 #
     glpi: 
         image: fametec/glpi
@@ -13,33 +20,36 @@ services:
           - glpi-volume:/var/www/html
         environment: 
           GLPI_LANG: pt_BR
-          MARIADB_HOST: db
+          MARIADB_HOST: mariadb-glpi:3307
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi
           MARIADB_PASSWORD: glpi
-          VERSION: "9.4.0"
+          VERSION: "9.2.2"
         depends_on: 
-          - db
-        links: 
-          - db
+          - mariadb-glpi
         ports: 
-          - 8080:80
-        healthcheck:
-          test: ["CMD", "ping", "-c", "1", db]
-          interval: 30s
-          timeout: 10s
-          retries: 5
+          - 30080:80
+          - 30443:443
+        networks: 
+          - frontend
+          - backend
 #
     crond: 
         image: fametec/crond-glpi
         depends_on: 
           - glpi
-          - db
+          - mariadb-glpi
         environment:
           GLPI_LANG: pt_BR
-          MARIADB_HOST: db
+          MARIADB_HOST: mariadb-glpi:3307
         volumes: 
           - glpi-volume:/var/www/html
+        networks: 
+          - backend
 volumes: 
   glpi-volume:
   mariadb-glpi-volume: 
+#
+networks: 
+  frontend: 
+  backend: 
