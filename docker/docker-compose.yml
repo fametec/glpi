@@ -2,8 +2,8 @@ version: "3.5"
 services: 
     mariadb-glpi: 
         image: fametec/mariadb-glpi
-#        volumes: 
-#          - mariadb-glpi-volume:/var/www/mysql:rw
+        volumes: 
+          - mariadb-glpi-volume:/var/www/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi 
@@ -16,8 +16,8 @@ services:
 #
     glpi: 
         image: fametec/glpi
-#        volumes: 
-#          - glpi-volume:/var/www/html:rw
+        volumes: 
+          - glpi-volume:/var/www/html:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
@@ -43,8 +43,9 @@ services:
         environment:
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
-#        volumes: 
-#          - glpi-volume:/var/www/html:rw
+          MARIADB_PORT: 3307
+        volumes: 
+          - glpi-volume:/var/www/html:rw
         networks: 
           - backend
 #

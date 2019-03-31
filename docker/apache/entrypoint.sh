@@ -3,6 +3,13 @@
 set -x
 # 
 
+functionSetSubVersion () {
+    local _version=$1
+    local _index=$2
+    local _out=`echo ${_version} | cut -d . -f${_index}`
+    return $_out
+}
+
 functionSetPermission () {
     chown -Rf apache:apache /var/www/html/glpi
 }
@@ -12,14 +19,24 @@ functionGetCurrentVersion () {
 }
 
 functionInstall () {
+    echo "Download and install GLPI $VERSION ..."
     curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
     functionSetPermission	
 }
 
 functionUpgrade () {
-   cd /var/www/html/glpi/scripts/
-   /usr/bin/php cliupdate.php
-   /usr/bin/php innodb_migration.php 
+    
+    functionSetSubVersion $VERSION 2
+
+    if [ $? -ge 4 ]; then
+      echo "Upgrade to $VERSION using bin/console..."
+      /usr/bin/php /var/www/html/glpi/bin/console glpi:database:update --no-interaction
+      /usr/bin/php /var/www/html/glpi/bin/console glpi:migration:myisam_to_innod --no-interaction
+    else
+      echo "Upgrade to $VERSION using cliupdate script..."
+      /usr/bin/php /var/www/html/glpi/scripts/cliupdate.php
+      /usr/bin/php /var/www/html/glpi/scripts/innodb_migration.php
+    fi
 }
 
 
@@ -42,8 +59,21 @@ functionConfigDataBase () {
 }
 
 functionDeployDataBase () {
-      echo "Deploy DB with cliinstall.php. Please wait..." 
-      sleep 5
+
+    functionSetSubVersion $VERSION 2
+
+    if [ $? -ge 4 ]; then
+      echo "Deploy DB using bin/console. Please wait..."
+      /usr/bin/php /var/www/html/glpi/bin/console glpi:database:install \
+	--no-interaction \
+	--db-host=${MARIADB_HOST} \
+	--db-port=${MARIADB_PORT} \
+	--db-name=$MARIADB_DATABASE \
+	--db-user=$MARIADB_USER \
+	--db-password=$MARIADB_PASSWORD \
+	--default-language=$GLPI_LANG
+    else 
+      echo "Deploy DB using cliinstall.php. Please wait..." 
       /usr/bin/php /var/www/html/glpi/scripts/cliinstall.php \
         --host=${MARIADB_HOST} \
         --hostport=${MARIADB_PORT} \
@@ -51,29 +81,21 @@ functionDeployDataBase () {
         --user=$MARIADB_USER \
         --pass=$MARIADB_PASSWORD \
         --lang=$GLPI_LANG 
-      if [ $? -eq 0 ]; then
-	functionRemoveInstall
-      fi
+   fi
 }
 
-if [ -d /var/www/html/glpi/ ]; then
-    echo -n "Directory found, not to do!"
-else
-    echo "Directory not found, creating..." 
+if [ ! -d /var/www/html/glpi/ ]; then
+    echo "Directory not found, go to install..." 
     functionInstall 
 fi
-#
+
 if [ -e /var/www/html/glpi/config/config_db.php ]; then
-    echo "DB Already installed (see --force option)" 
+    echo "DB Already installed. " 
     functionConfigDataBase
 else
-    echo "Deploy DB with cliinstall.php. Please wait..." 
     sleep 5
     functionDeployDataBase
     functionConfigDataBase
-    if [ $? -eq 0 ]; then
-      functionRemoveInstall 
-    fi
 fi
 #
 functionSetPermission
@@ -85,15 +107,16 @@ sleep 5
 
 CURRENTVERSION=`functionGetCurrentVersion`
 
-if [ ! "$CURRENTVERSION" == "$VERSION" ]; then
+if [ "$CURRENTVERSION" == "$VERSION" -o "$CURRENTVERSION" == "" ]; then
+  echo "Version $CURRENTVERSION = $VERSION"
+else
   echo "Upgrading from $CURRENTVERSION to $VERSION ..."
   functionInstall
   functionConfigDataBase
   functionUpgrade
-else
-  functionRemoveInstall
+#  functionRemoveInstall
 fi
 
-
+functionRemoveInstall
 
 while true; do sleep 1000; done

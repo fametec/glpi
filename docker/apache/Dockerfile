@@ -1,6 +1,6 @@
 FROM docker.io/centos
 
-ENV VERSION 9.2.2
+ENV VERSION 9.4.1.1
 
 ENV GLPI_LANG pt_BR
 
