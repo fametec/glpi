@@ -40,6 +40,7 @@ RUN yum -y install \
 		php72u-apcu \
 		php72u-xmlrpc \
 		openssl \
+		jq \
 		php-pear-CAS \
 	&& yum -y clean all \
 	&& rm -rf /var/cache/yum
