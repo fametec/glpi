@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-set -x
+# set -x
 # 
 if [ -d /var/www/html/glpi/ ]; then
   echo -n "Directory found, not to do!"
@@ -28,9 +28,15 @@ if [ -e /var/www/html/glpi/config/config_db.php ]; then
 #
 else
   echo "Deploy DB with cliinstall.php. Please wait..." 
+  for s in `seq 5 -1 1`; do
+    echo -n "|$s"
+    sleep 1
+  done
+  echo ""
   /usr/bin/php /var/www/html/glpi/scripts/cliinstall.php \
-	--host=$MARIADB_HOST \
-	--db=${MARIADB_DATABASE}:${MARIADB_PORT} \
+	--host=${MARIADB_HOST} \
+	--hostport=${MARIADB_PORT} \
+	--db=$MARIADB_DATABASE \
 	--user=$MARIADB_USER \
 	--pass=$MARIADB_PASSWORD \
 	--lang=$GLPI_LANG 
