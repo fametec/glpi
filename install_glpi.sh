@@ -4,18 +4,21 @@
 
 # Debug
 
-# set -xv
+set -xv
 
-## VARIAVEIS
+## VARIABLES
 
-VERSION="9.3.2"
+LOGS="~/install_glpi.log"
+GLPI_LANG="pt_BR"
+VERSION="9.4.1.1"
 TIMEZONE=America/Fortaleza
-FQDN="glpi.eftech.com.br"
-ADMINEMAIL="suporte@eftech.com.br"
-ORGANIZATION="EF-TECH"
+FQDN="glpi.fametec.com.br"
+ADMINEMAIL="suporte@fametec.com.br"
+ORGANIZATION="FAMETEC"
 MYSQL_ROOT_PASSWORD=''
 DBUSER="glpi"
 DBHOST="localhost"
+DBPORT=3306
 DBNAME="glpi"
 DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
 # DBPASS="qaz123"
@@ -26,7 +29,10 @@ MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};
 MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"
 CURL=`which curl`
 
-cat <<EOF > ~/install_glpi.log
+
+functionLog () {
+
+cat <<EOF > $LOGS
 
 ====================================================
 ## VARIAVEIS
@@ -39,6 +45,7 @@ ORGANIZATION=$ORGANIZATION
 MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 DBUSER=$DBUSER
 DBHOST=$DBHOST
+DBPORT=$DBPORT
 DBNAME=$DBNAME
 DBPASS=$DBPASS
 MYSQL_NEW_ROOT_PASSWORD=$MYSQL_NEW_ROOT_PASSWORD
@@ -52,42 +59,71 @@ CURL=$CURL
 
 
 EOF
-## FIREWALLD
-
-firewall-cmd --zone=public --add-service=http --permanent
-
-firewall-cmd --zone=public --add-service=https --permanent
 
 
-## REPOSITORIO
-
-cd ~ 
-
-curl 'https://setup.ius.io/' -o setup-ius.sh 
-
-bash setup-ius.sh  
-
-yum -y install epel-release expect
+}
 
 
-## MARIADB-SERVER
+functionEnableFirewall () {
 
-#if [ "$VERSION" != "9.3" ]; then 
-#	yum -y install mariadb-server
-#else
-	yum -y remove mariadb-server mariadb mariadb-config mariadb-libs mariadb-common 
-	yum -y install mariadb100u-server mariadb100u mariadb100u-config mariadb100u-libs mariadb100u-common
-#fi
+  echo "Setting firewall rules..." 
 
+  systemctl enable --now firewalld 
 
-## Restart do mysql
+  firewall-cmd --zone=public --add-service=http --permanent 
 
-systemctl enable mariadb 
+  firewall-cmd --zone=public --add-service=https --permanent 
 
-systemctl start mariadb
+} 
 
 
-## Configuração de segurança do banco
+functionDisableFirewall () {
+
+  systemctl disable --now firewalld 
+ 
+}
+
+functionInstallRepo () {
+
+  echo "Installing Yum Repo..."
+
+  curl -sSL 'https://setup.ius.io/' | bash   
+
+  yum -y install \
+	epel-release \
+	expect
+
+}
+
+functionInstallDataBase () {
+  
+  echo "Remove old database..."
+
+  yum -y remove \
+	mariadb-server \
+	mariadb \
+	mariadb-config \
+	mariadb-libs \
+	mariadb-common 
+
+  echo "Install MariaDB 10.0u..."
+  
+  yum -y install \
+	mariadb100u-server \
+	mariadb100u \
+	mariadb100u-config \
+	mariadb100u-libs \
+	mariadb100u-common
+
+  echo "Enable service..." 
+
+  systemctl enable --now  mariadb 
+
+}
+
+functionSetDataBaseSecure () { 
+
+  echo "Running mysql_secure_installation..."
 
 SECURE_MYSQL=$(expect -c "
 set timeout 10
@@ -113,46 +149,75 @@ expect eof
 
 echo "$SECURE_MYSQL"
 
-
-## DATABASE
-
-$MYSQL -e "create database $DBNAME character set utf8;"
-$MYSQL -e "create user $DBUSER@localhost identified by '"$DBPASS"';"
-$MYSQL -e "grant all privileges on $DBNAME.* to $DBUSER@localhost;"
+} 
 
 
-## APACHE E PHP7
+functionCreateDataBase () {
 
-yum install -y httpd mod_ssl
+  echo "Creating database $DBNAME..."
 
-yum -y remove php-cli mod_php php-common 
+  $MYSQL -e "create database $DBNAME character set utf8;"
 
-yum -y install mod_php72u php72u-cli php72u-mysqlnd 
+  $MYSQL -e "create user $DBUSER@localhost identified by '"$DBPASS"';"
 
-yum -y install \
-php-pear-CAS \
-wget \
-php72u-json \
-php72u-mbstring \
-php72u-mysqli \
-php72u-session \
-php72u-gd \
-php72u-curl \
-php72u-domxml \
-php72u-imap \
-php72u-ldap \
-php72u-openssl \
-php72u-opcache \
-php72u-apcu \
-php72u-xmlrpc \
-openssl 
+  $MYSQL -e "grant all privileges on $DBNAME.* to $DBUSER@localhost;"
 
-systemctl enable httpd 
+}
 
-systemctl start httpd
+functionInstallApache () {
+
+  echo "Installing Apache..."
+
+  yum -y install \
+	httpd \
+	mod_ssl
+
+}
 
 
-cat <<EOF > /etc/php.d/99-glpi.ini
+functionInstallPhp () {
+
+  echo "Remove old PHP..."
+
+  yum -y remove \
+	php-cli \
+	mod_php \
+	php-common 
+
+  echo "Install php72u..."
+
+  yum -y install \
+	mod_php72u \
+	php72u-cli \
+	php72u-mysqlnd 
+
+  yum -y install \
+	php-pear-CAS \
+	wget \
+	php72u-json \
+	php72u-mbstring \
+	php72u-mysqli \
+	php72u-session \
+	php72u-gd \
+	php72u-curl \
+	php72u-domxml \
+	php72u-imap \
+	php72u-ldap \
+	php72u-openssl \
+	php72u-opcache \
+	php72u-apcu \
+	php72u-xmlrpc \
+	jq \
+	openssl 
+  
+}
+
+
+functionSetPhpIni () {
+
+  echo "Setting 99-glpi.ini..."
+
+  cat <<EOF > /etc/php.d/99-glpi.ini
 memory_limit = 64M ;
 file_uploads = on ;
 max_execution_time = 600 ;
@@ -163,33 +228,27 @@ session.use_trans_sid = 0 ;
 EOF
 
 
-cat <<EOF > /etc/php.d/timezone.ini
+  cat <<EOF > /etc/php.d/timezone.ini
 [Date]
 date.timezone = $TIMEZONE ; 
 EOF
 
+} 
 
-## DOWNLOAD AND INSTALL GLPI
+functionInstall () {
 
-yum -y install wget
+    echo "Download and install GLPI $VERSION ..."
+    curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
 
-if [ ! -e packages/$VERSION/glpi-$VERSION.tgz ]
-then
-  
-  mkdir -p packages
-  if [ "$VERSION" != "9.3" ] ; then
-	  wget -c https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
+}
 
-  else
 
-	  wget -c https://github.com/glpi-project/glpi/releases/download/${VERSION}.0/glpi-$VERSION.tgz -O packages/glpi-$VERSION.tgz
-  fi
-fi
+functionSetPermission () {
+    chown -Rf apache:apache /var/www/html/glpi
+}
 
-tar -zxvf packages/glpi-$VERSION.tgz -C /var/www/html/
 
-chown -R apache:apache /var/www/html/glpi
-
+functionSetHttpConf () {
 
 cat <<EOF > /etc/httpd/conf.d/glpi.conf
     <Directory /var/www/html/glpi/>
@@ -199,13 +258,20 @@ cat <<EOF > /etc/httpd/conf.d/glpi.conf
     </Directory>
 EOF
 
-## DESATIVAR SELINUX
 
-#sed -i s/enforcing/permissive/g /etc/selinux/config
+}
 
-#setenforce 0
 
-## ATIVAR SELINUX
+functionDisableSELinux () {
+
+  sed -i s/enforcing/permissive/g /etc/selinux/config
+  
+  setenforce 0
+
+}
+
+
+functionEnableSELinux () {
 
     chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
     setsebool -P httpd_can_network_connect 1
@@ -213,19 +279,57 @@ EOF
     setsebool -P httpd_can_sendmail 1
     setenforce 1
 
+} 
+
+functionStartHttpd () {
+
+  echo "Start HTTPD..." 
+
+  systemctl enable --now httpd
+
+} 
 
 
-systemctl restart httpd
+functionDeployDataBase () {
 
-php /var/www/html/glpi/scripts/cliinstall.php --host=$DBHOST --db=$DBNAME --user=$DBUSER --pass=$DBPASS --lang=pt_BR
-if [ $? -eq 0 ]; then
-  rm -rf /var/www/html/glpi/install/install.php
-fi
+    local SUBVERSION=`echo $VERSION | cut -d . -f 2`
+
+    if [ $SUBVERSION -ge 4 ]; then
+      echo "Deploy DB using bin/console. Please wait..."
+      /usr/bin/php /var/www/html/glpi/bin/console glpi:database:install \
+	--no-interaction \
+	--db-host=${DBHOST} \
+	--db-port=${DBPORT} \
+	--db-name=${DBNAME} \
+	--db-user=${DBUSER} \
+	--db-password=${DBPASS} \
+	--default-language=${GLPI_LANG}
+    else 
+      echo "Deploy DB using cliinstall.php. Please wait..." 
+      /usr/bin/php /var/www/html/glpi/scripts/cliinstall.php \
+        --host=${DBHOST} \
+        --hostport=${DBPORT} \
+        --db=$DBNAME \
+        --user=$DBUSER \
+        --pass=$DBPASS \
+        --lang=$GLPI_LANG 
+   fi
+}
 
 
-## BACKUP 
+functionGetCurrentVersion () {
+    echo "{ `curl -s http://localhost/glpi/ajax/telemetry.php | grep -v code` }" | jq -r '.glpi.version'
+}
 
-cat <<EOF > /etc/cron.daily/backup-glpi.sh
+functionGetTelemetry () {
+    echo "{ `curl -s http://localhost/glpi/ajax/telemetry.php | grep -v code` }" 
+}
+
+
+functionInstallBackupJob () {
+
+
+  cat <<EOF > /etc/cron.daily/backup-glpi.sh
 #!/bin/sh
 
 # Backup Banco GLPI
@@ -266,3 +370,42 @@ EOF
 
 chmod +x /etc/cron.daily/backup-glpi.sh
 
+}
+
+
+EXECUTE="
+functionLog 
+functionDisableSELinux
+functionDisableFirewall
+functionInstallRepo
+functionInstallDataBase
+functionSetDataBaseSecure  
+functionCreateDataBase
+functionInstallApache
+functionInstallPhp
+functionSetPhpIni
+functionInstall
+functionSetPermission
+functionSetHttpConf
+functionStartHttpd
+functionDeployDataBase
+functionInstallBackupJob
+functionEnableSELinux
+functionEnableFirewall
+"
+
+
+for job in $EXECUTE; do
+
+  echo "Run $job... "
+
+  $job >> $LOGS 2>&1
+
+  if [ $? -eq 0 ]; then
+    echo "ok" 
+  else 
+    echo "fail" 
+  fi
+done
+
+functionGetTelemetry >> $LOGS

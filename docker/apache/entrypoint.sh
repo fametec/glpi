@@ -107,7 +107,7 @@ sleep 5
 
 CURRENTVERSION=`functionGetCurrentVersion`
 
-if [ "$CURRENTVERSION" == "$VERSION" -o "$CURRENTVERSION" == "" ]; then
+if [ "$CURRENTVERSION" == "$VERSION" ] || [ "$CURRENTVERSION" == "" ]; then
   echo "Version $CURRENTVERSION = $VERSION"
 else
   echo "Upgrading from $CURRENTVERSION to $VERSION ..."
@@ -118,5 +118,9 @@ else
 fi
 
 functionRemoveInstall
+
+echo 
+echo "GLPI UP!!!"
+echo
 
 while true; do sleep 1000; done
