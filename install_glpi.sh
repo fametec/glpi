@@ -4,11 +4,11 @@
 
 # Debug
 
-set -xv
+# set -xv
 
 ## VARIABLES
 
-LOGS="~/install_glpi.log"
+LOGS="install_glpi.log"
 GLPI_LANG="pt_BR"
 VERSION="9.4.1.1"
 TIMEZONE=America/Fortaleza
