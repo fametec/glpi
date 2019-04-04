@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# set -x
+set -x
 # 
 
 functionSetSubVersion () {
@@ -20,7 +20,12 @@ functionGetCurrentVersion () {
 
 functionInstall () {
     echo "Download and install GLPI $VERSION ..."
-    curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
+    
+    if [ -e /glpi-$VERSION.tgz ]; then
+      tar -zxf /glpi-$VERSION.tgz -C /var/www/html/
+    else
+      curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
+    fi
     functionSetPermission	
 }
 

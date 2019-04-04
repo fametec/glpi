@@ -390,8 +390,6 @@ functionSetHttpConf
 functionStartHttpd
 functionDeployDataBase
 functionInstallBackupJob
-functionEnableSELinux
-functionEnableFirewall
 "
 
 

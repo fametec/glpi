@@ -15,9 +15,6 @@ ENV MARIADB_USER glpi
 ENV MARIADB_PASSWORD glpi
 
 RUN curl 'https://setup.ius.io/' | sh 
-#yum -y install epel-release \
-#	&& yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
-#	&& rpm --import /etc/pki/rpm-gpg/IUS-COMMUNITY-GPG-KEY 
 
 RUN yum -y install \
 		mod_php72u \
@@ -48,6 +45,8 @@ RUN yum -y install \
 ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
+
+COPY glpi-9.4.1.1.tgz /
 
 ADD entrypoint.sh /
 
