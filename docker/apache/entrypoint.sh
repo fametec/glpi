@@ -105,27 +105,9 @@ fi
 #
 functionSetPermission
 #
-httpd -D FOREGROUND &
-
-
-sleep 5
-
-CURRENTVERSION=`functionGetCurrentVersion`
-
-if [ "$CURRENTVERSION" == "$VERSION" ] || [ "$CURRENTVERSION" == "" ]; then
-  echo "Version $CURRENTVERSION = $VERSION"
-else
-  echo "Upgrading from $CURRENTVERSION to $VERSION ..."
-  functionInstall
-  functionConfigDataBase
-  functionUpgrade
-#  functionRemoveInstall
-fi
-
+#
 functionRemoveInstall
+#
+httpd -D FOREGROUND
+#
 
-echo 
-echo "GLPI UP!!!"
-echo
-
-while true; do sleep 1000; done
