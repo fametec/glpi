@@ -1,4 +1,4 @@
-FROM fametec/glpi:9.4.1.1
+FROM fametec/glpi:latest
 
 RUN yum -y install cronie
  

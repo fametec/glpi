@@ -3,53 +3,53 @@ services:
 #
     mariadb-glpi: 
         image: docker.io/mariadb:latest
-#        volumes: 
-#          - mariadb-glpi-volume:/var/www/mysql:rw
+        volumes: 
+          - mariadb-glpi-volume:/var/www/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi 
           MYSQL_PASSWORD: glpi 
           MYSQL_RANDOM_ROOT_PASSWORD: 1 
-        ports: 
-          - 3307:3306
+#        ports: 
+#          - 3307:3306
         networks: 
-          - backend
+          - glpi-backend
 #
     glpi: 
-        image: fametec/glpi:9.4.1.1
- #       volumes: 
- #         - glpi-volume:/var/www/html:rw
+        image: fametec/glpi:9.4.2
+        volumes: 
+          - glpi-volume:/var/www/html:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3307
+          MARIADB_PORT: 3306
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi
           MARIADB_PASSWORD: glpi
-          VERSION: "9.4.1.1"
+          VERSION: "9.4.2"
         depends_on: 
           - mariadb-glpi
         ports: 
           - 30080:80
           - 30443:443
         networks: 
-          - frontend
-          - backend
+          - glpi-frontend
+          - glpi-backend
 #
     crond: 
-        image: fametec/crond-glpi:9.4.1.1
+        image: fametec/crond-glpi:9.4.2
         depends_on: 
           - glpi
           - mariadb-glpi
-#        volumes: 
-#          - glpi-volume:/var/www/html:rw
+        volumes: 
+          - glpi-volume:/var/www/html:rw
         networks: 
-          - backend
+          - glpi-backend
 #
-#volumes: 
-#  glpi-volume:
-#  mariadb-glpi-volume: 
+volumes: 
+  glpi-volume:
+  mariadb-glpi-volume: 
 #
 networks: 
-  frontend: 
-  backend:
+  glpi-frontend: 
+  glpi-backend:

@@ -91,7 +91,14 @@ functionDeployDataBase () {
 
 if [ ! -d /var/www/html/glpi/ ]; then
     echo "Directory not found, go to install..." 
+
     functionInstall 
+
+    if [ $? -ne 0 ]; then
+      echo "fail"
+      exit 2
+    fi
+
 fi
 
 if [ -e /var/www/html/glpi/config/config_db.php ]; then
@@ -108,6 +115,6 @@ functionSetPermission
 #
 functionRemoveInstall
 #
-httpd -D FOREGROUND
+# httpd -D FOREGROUND
 #
 

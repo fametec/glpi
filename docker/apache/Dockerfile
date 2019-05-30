@@ -1,6 +1,6 @@
 FROM docker.io/centos
 
-ENV VERSION 9.4.1.1
+ENV VERSION 9.4.2
 
 ENV GLPI_LANG pt_BR
 
@@ -46,15 +46,15 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-COPY glpi-9.4.1.1.tgz /
+ADD https://github.com/glpi-project/glpi/releases/download/9.4.2/glpi-9.4.2.tgz /
 
-ADD entrypoint.sh /
+ADD configure.sh /
 
-RUN chmod 755 /entrypoint.sh
+RUN chmod 755 /configure.sh
 
 VOLUME ["/var/www/html"]
 
 EXPOSE 80/tcp 443/tcp
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
 
