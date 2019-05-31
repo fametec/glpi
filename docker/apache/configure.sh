@@ -1,37 +1,37 @@
 #!/bin/bash
 #
-set -x
+# set -x
 # 
 
-functionSetSubVersion () {
+SetSubVersion () {
     local _version=$1
     local _index=$2
     local _out=`echo ${_version} | cut -d . -f${_index}`
     return $_out
 }
 
-functionSetPermission () {
+SetPermission () {
     chown -Rf apache:apache /var/www/html/glpi
 }
 
-functionGetCurrentVersion () {
+GetCurrentVersion () {
     echo "{ `curl -s http://localhost/glpi/ajax/telemetry.php | grep -v code` }" | jq -r '.glpi.version'
 }
 
-functionInstall () {
+Install () {
     echo "Download and install GLPI $VERSION ..."
     
     if [ -e /glpi-$VERSION.tgz ]; then
       tar -zxf /glpi-$VERSION.tgz -C /var/www/html/
     else
-      curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
+      curl --progress-bar -L https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
     fi
-    functionSetPermission	
+    SetPermission	
 }
 
-functionUpgrade () {
+Upgrade () {
     
-    functionSetSubVersion $VERSION 2
+    SetSubVersion $VERSION 2
 
     if [ $? -ge 4 ]; then
       echo "Upgrade to $VERSION using bin/console..."
@@ -45,11 +45,11 @@ functionUpgrade () {
 }
 
 
-functionRemoveInstall () {
+RemoveInstall () {
     rm -rf /var/www/html/glpi/install/install.php;
 }
 
-functionConfigDataBase () {
+ConfigDataBase () {
       {
         echo "<?php"; \
         echo "class DB extends DBmysql {"; \
@@ -63,9 +63,9 @@ functionConfigDataBase () {
       } > /var/www/html/glpi/config/config_db.php
 }
 
-functionDeployDataBase () {
+DeployDataBase () {
 
-    functionSetSubVersion $VERSION 2
+    SetSubVersion $VERSION 2
 
     if [ $? -ge 4 ]; then
       echo "Deploy DB using bin/console. Please wait..."
@@ -92,7 +92,7 @@ functionDeployDataBase () {
 if [ ! -d /var/www/html/glpi/ ]; then
     echo "Directory not found, go to install..." 
 
-    functionInstall 
+    Install 
 
     if [ $? -ne 0 ]; then
       echo "fail"
@@ -102,19 +102,36 @@ if [ ! -d /var/www/html/glpi/ ]; then
 fi
 
 if [ -e /var/www/html/glpi/config/config_db.php ]; then
+
     echo "DB Already installed. " 
-    functionConfigDataBase
+
+    ConfigDataBase
+
+    CURRENTVERSION=$(GetCurrentVersion)
+
+    if [ -n $CURRENTVERSION ] && [ $CURRENTVERSION != $VERSION ]; then
+
+        Install
+
+        Upgrade
+
+    fi
+
 else
+
     sleep 5
-    functionDeployDataBase
-    functionConfigDataBase
+
+    DeployDataBase
+
+    ConfigDataBase
+
 fi
 #
-functionSetPermission
+SetPermission
 #
 #
-functionRemoveInstall
+RemoveInstall
 #
 # httpd -D FOREGROUND
 #
-
+GetCurrentVersion

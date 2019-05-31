@@ -46,8 +46,6 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.4.2/glpi-9.4.2.tgz /
-
 ADD configure.sh /
 
 RUN chmod 755 /configure.sh
