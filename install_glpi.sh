@@ -10,7 +10,7 @@
 
 LOGS="install_glpi.log"
 GLPI_LANG="pt_BR"
-VERSION="9.4.1.1"
+VERSION="9.4.2"
 TIMEZONE=America/Fortaleza
 FQDN="glpi.fametec.com.br"
 ADMINEMAIL="suporte@fametec.com.br"
@@ -64,7 +64,7 @@ EOF
 }
 
 
-functionEnableFirewall () {
+EnableFirewall() {
 
   echo "Setting firewall rules..." 
 
@@ -77,13 +77,13 @@ functionEnableFirewall () {
 } 
 
 
-functionDisableFirewall () {
+DisableFirewall () {
 
   systemctl disable --now firewalld 
  
 }
 
-functionInstallRepo () {
+InstallRepo () {
 
   echo "Installing Yum Repo..."
 
@@ -95,7 +95,7 @@ functionInstallRepo () {
 
 }
 
-functionInstallDataBase () {
+InstallDataBase () {
   
   echo "Remove old database..."
 
@@ -121,7 +121,7 @@ functionInstallDataBase () {
 
 }
 
-functionSetDataBaseSecure () { 
+SetDataBaseSecure () { 
 
   echo "Running mysql_secure_installation..."
 
@@ -152,7 +152,7 @@ echo "$SECURE_MYSQL"
 } 
 
 
-functionCreateDataBase () {
+CreateDataBase () {
 
   echo "Creating database $DBNAME..."
 
@@ -164,7 +164,7 @@ functionCreateDataBase () {
 
 }
 
-functionInstallApache () {
+InstallApache () {
 
   echo "Installing Apache..."
 
@@ -175,7 +175,7 @@ functionInstallApache () {
 }
 
 
-functionInstallPhp () {
+InstallPhp () {
 
   echo "Remove old PHP..."
 
@@ -213,7 +213,7 @@ functionInstallPhp () {
 }
 
 
-functionSetPhpIni () {
+SetPhpIni () {
 
   echo "Setting 99-glpi.ini..."
 
@@ -235,7 +235,7 @@ EOF
 
 } 
 
-functionInstall () {
+Install () {
 
     echo "Download and install GLPI $VERSION ..."
     curl -sSL https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/
@@ -243,12 +243,12 @@ functionInstall () {
 }
 
 
-functionSetPermission () {
+SetPermission () {
     chown -Rf apache:apache /var/www/html/glpi
 }
 
 
-functionSetHttpConf () {
+SetHttpConf () {
 
 cat <<EOF > /etc/httpd/conf.d/glpi.conf
     <Directory /var/www/html/glpi/>
@@ -262,7 +262,7 @@ EOF
 }
 
 
-functionDisableSELinux () {
+DisableSELinux () {
 
   sed -i s/enforcing/permissive/g /etc/selinux/config
   
@@ -271,7 +271,7 @@ functionDisableSELinux () {
 }
 
 
-functionEnableSELinux () {
+EnableSELinux () {
 
     chcon -R -t httpd_sys_rw_content_t /var/www/html/glpi/
     setsebool -P httpd_can_network_connect 1
@@ -281,7 +281,7 @@ functionEnableSELinux () {
 
 } 
 
-functionStartHttpd () {
+StartHttpd () {
 
   echo "Start HTTPD..." 
 
@@ -290,7 +290,7 @@ functionStartHttpd () {
 } 
 
 
-functionDeployDataBase () {
+DeployDataBase () {
 
     local SUBVERSION=`echo $VERSION | cut -d . -f 2`
 
@@ -317,16 +317,16 @@ functionDeployDataBase () {
 }
 
 
-functionGetCurrentVersion () {
+GetCurrentVersion () {
     echo "{ `curl -s http://localhost/glpi/ajax/telemetry.php | grep -v code` }" | jq -r '.glpi.version'
 }
 
-functionGetTelemetry () {
+GetTelemetry () {
     echo "{ `curl -s http://localhost/glpi/ajax/telemetry.php | grep -v code` }" 
 }
 
 
-functionInstallBackupJob () {
+InstallBackupJob () {
 
 
   cat <<EOF > /etc/cron.daily/backup-glpi.sh
@@ -374,22 +374,22 @@ chmod +x /etc/cron.daily/backup-glpi.sh
 
 
 EXECUTE="
-functionLog 
-functionDisableSELinux
-functionDisableFirewall
-functionInstallRepo
-functionInstallDataBase
-functionSetDataBaseSecure  
-functionCreateDataBase
-functionInstallApache
-functionInstallPhp
-functionSetPhpIni
-functionInstall
-functionSetPermission
-functionSetHttpConf
-functionStartHttpd
-functionDeployDataBase
-functionInstallBackupJob
+Log 
+DisableSELinux
+DisableFirewall
+InstallRepo
+InstallDataBase
+SetDataBaseSecure  
+CreateDataBase
+InstallApache
+InstallPhp
+SetPhpIni
+Install
+SetPermission
+SetHttpConf
+StartHttpd
+DeployDataBase
+InstallBackupJob
 "
 
 
