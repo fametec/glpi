@@ -1,8 +1,11 @@
 version: "3.5"
 services:
 #
+# MARIADB
+#
     mariadb-glpi: 
         image: docker.io/mariadb:latest
+        restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/www/mysql:rw
         environment: 
@@ -15,8 +18,11 @@ services:
         networks: 
           - glpi-backend
 #
+# GLPI
+#
     glpi: 
-        image: fametec/glpi:9.4.2
+        image: fametec/glpi:latest
+        restart: unless-stopped
         volumes: 
           - glpi-volume:/var/www/html:rw
         environment: 
@@ -26,7 +32,7 @@ services:
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi
           MARIADB_PASSWORD: glpi
-          VERSION: "9.4.1.1"
+          VERSION: "9.4.2"
         depends_on: 
           - mariadb-glpi
         ports: 
@@ -36,8 +42,11 @@ services:
           - glpi-frontend
           - glpi-backend
 #
+# CRON
+#
     crond: 
-        image: fametec/crond-glpi:9.4.2
+        image: fametec/crond-glpi:latest
+        restart: unless-stopped
         depends_on: 
           - glpi
           - mariadb-glpi
@@ -46,9 +55,13 @@ services:
         networks: 
           - glpi-backend
 #
+# VOLUMES
+#
 volumes: 
   glpi-volume:
   mariadb-glpi-volume: 
+#
+# NETWORKS
 #
 networks: 
   glpi-frontend: 
