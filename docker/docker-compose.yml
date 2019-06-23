@@ -32,7 +32,7 @@ services:
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi
           MARIADB_PASSWORD: glpi
-          VERSION: "9.4.2"
+          VERSION: "9.4.3"
         depends_on: 
           - mariadb-glpi
         ports: 
