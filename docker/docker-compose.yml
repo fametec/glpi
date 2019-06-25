@@ -6,8 +6,8 @@ services:
     mariadb-glpi: 
         image: docker.io/mariadb:latest
         restart: unless-stopped
-        volumes: 
-          - mariadb-glpi-volume:/var/www/mysql:rw
+#        volumes: 
+#          - mariadb-glpi-volume:/var/www/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi 
@@ -23,8 +23,8 @@ services:
     glpi: 
         image: fametec/glpi:latest
         restart: unless-stopped
-        volumes: 
-          - glpi-volume:/var/www/html:rw
+ #       volumes: 
+ #         - glpi-volume:/var/www/html:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
@@ -44,22 +44,22 @@ services:
 #
 # CRON
 #
-    crond: 
-        image: fametec/crond-glpi:latest
-        restart: unless-stopped
-        depends_on: 
-          - glpi
-          - mariadb-glpi
-        volumes: 
-          - glpi-volume:/var/www/html:rw
-        networks: 
-          - glpi-backend
+#    crond: 
+#        image: fametec/crond-glpi:latest
+#        restart: unless-stopped
+#        depends_on: 
+#          - glpi
+#          - mariadb-glpi
+#        volumes: 
+#          - glpi-volume:/var/www/html:rw
+#        networks: 
+#          - glpi-backend
 #
 # VOLUMES
 #
-volumes: 
-  glpi-volume:
-  mariadb-glpi-volume: 
+#volumes: 
+#  glpi-volume:
+#  mariadb-glpi-volume: 
 #
 # NETWORKS
 #
