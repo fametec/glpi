@@ -39,6 +39,7 @@ RUN yum -y install \
 		openssl \
 		jq \
 		php-pear-CAS \
+		mariadb10u \
 	&& yum -y clean all \
 	&& rm -rf /var/cache/yum
 
@@ -46,9 +47,9 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD configure.sh /
+ADD configure.sh backup.sh /
 
-RUN chmod 755 /configure.sh
+RUN chmod 755 /configure.sh /backup.sh
 
 VOLUME ["/var/www/html"]
 
