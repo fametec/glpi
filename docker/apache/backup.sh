@@ -40,4 +40,5 @@ if [ $? -eq 0 ]; then
 
 fi
 
+/bin/find /var/www/html/glpi/files/_dumps/ -mtime +30 -delete
 
