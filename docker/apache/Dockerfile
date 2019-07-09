@@ -39,7 +39,7 @@ RUN yum -y install \
 		openssl \
 		jq \
 		php-pear-CAS \
-		mariadb10u \
+		mariadb \
 	&& yum -y clean all \
 	&& rm -rf /var/cache/yum
 
