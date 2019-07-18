@@ -21,7 +21,7 @@ services:
 # GLPI
 #
     glpi: 
-        image: fametec/glpi:latest
+        image: fametec/glpi:9.4.3
         restart: unless-stopped
  #       volumes: 
  #         - glpi-volume:/var/www/html:rw
@@ -45,7 +45,7 @@ services:
 # CRON
 #
     crond: 
-        image: fametec/crond-glpi:latest
+        image: fametec/crond-glpi:9.4.3
         restart: unless-stopped
         depends_on: 
           - glpi
