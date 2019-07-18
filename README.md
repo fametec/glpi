@@ -63,7 +63,82 @@ Run configure.sh
     docker exec -it glpi /configure.sh
 
 
+## docker-compose.yaml
 
+    version: "3.5"
+    services:
+    #
+    # MARIADB
+    #
+        mariadb-glpi: 
+            image: docker.io/mariadb:latest
+            restart: unless-stopped
+    #        volumes: 
+    #          - mariadb-glpi-volume:/var/www/mysql:rw
+            environment: 
+              MYSQL_DATABASE: glpi
+              MYSQL_USER: glpi 
+              MYSQL_PASSWORD: glpi 
+              MYSQL_RANDOM_ROOT_PASSWORD: 1 
+    #        ports: 
+    #          - 3307:3306
+            networks: 
+              - glpi-backend
+    #
+    # GLPI
+    #
+        glpi: 
+            image: fametec/glpi:latest
+            restart: unless-stopped
+     #       volumes: 
+     #         - glpi-volume:/var/www/html:rw
+            environment: 
+              GLPI_LANG: pt_BR
+              MARIADB_HOST: mariadb-glpi
+              MARIADB_PORT: 3306
+              MARIADB_DATABASE: glpi
+              MARIADB_USER: glpi
+              MARIADB_PASSWORD: glpi
+              VERSION: "9.4.3"
+            depends_on: 
+              - mariadb-glpi
+            ports: 
+              - 30080:80
+              - 30443:443
+            networks: 
+              - glpi-frontend
+              - glpi-backend
+    #
+    # CRON
+    #
+        crond: 
+            image: fametec/crond-glpi:latest
+            restart: unless-stopped
+            depends_on: 
+              - glpi
+              - mariadb-glpi
+            environment: 
+              MARIADB_HOST: mariadb-glpi
+              MARIADB_PORT: 3306
+              MARIADB_DATABASE: glpi
+              MARIADB_USER: glpi
+              MARIADB_PASSWORD: glpi
+    #        volumes: 
+    #          - glpi-volume:/var/www/html:rw
+            networks: 
+              - glpi-backend
+    #
+    # VOLUMES
+    #
+    #volumes: 
+    #  glpi-volume:
+    #  mariadb-glpi-volume: 
+    #
+    # NETWORKS
+    #
+    networks: 
+      glpi-frontend: 
+      glpi-backend:
 
 
 # Manual install
