@@ -74,7 +74,7 @@ Run configure.sh
             image: docker.io/mariadb:latest
             restart: unless-stopped
     #        volumes: 
-    #          - mariadb-glpi-volume:/var/www/mysql:rw
+    #          - mariadb-glpi-volume:/var/lib/mysql:rw
             environment: 
               MYSQL_DATABASE: glpi
               MYSQL_USER: glpi 
