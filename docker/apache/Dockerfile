@@ -39,6 +39,7 @@ RUN yum -y install \
 		php72u-opcache \
 		php72u-apcu \
 		php72u-xmlrpc \
+		php72u-intl \
 		openssl \
 		jq \
 		php-pear-CAS \
