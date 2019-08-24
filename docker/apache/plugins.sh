@@ -67,6 +67,14 @@ PluginOCS() {
 
 }
 
+PluginFusion() {
+
+	RemoveOldPlugin fusioninventory
+
+	curl --progress-bar -L "https://github.com/fusioninventory/fusioninventory-for-glpi/releases/download/glpi9.4%2B1.1/fusioninventory-9.4+1.1.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+}
+
 
 PluginDataInjection() {
 
@@ -173,6 +181,12 @@ InstallPlugins() {
 
 				;;
 
+				glpi-fusioninventory
+
+					PluginFusion
+
+				;;
+
 				glpi-datainjection)
 
 					PluginDataInjection
@@ -227,6 +241,7 @@ InstallPlugins() {
 					PluginCosts
 					PluginTag
 					PluginGenericObject
+					PluginFusion
 
 				;;
 
@@ -246,6 +261,7 @@ InstallPlugins() {
 					echo " glpi-costs"
 					echo " glpi-tags"
 					echo " glpi-genericobject"
+					echo " glpi-fusioninventory"
 
 				;;
 
