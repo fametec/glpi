@@ -120,11 +120,19 @@ PluginCosts() {
 }
 
 
-PluginTags() {
+PluginTag() {
 
-	RemoveOldPlugin tags
+	RemoveOldPlugin tag
 
 	curl --progress-bar -L "https://github.com/pluginsGLPI/tag/releases/download/2.4.2/glpi-tag-2.4.2.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+}
+
+PluginGenericObject() {
+
+	RemoveOldPlugin genericobject 
+
+	curl --progress-bar -L "https://github.com/pluginsGLPI/genericobject/releases/download/2.7.0/glpi-genericobject-2.7.0.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
 
 }
 
@@ -195,9 +203,15 @@ InstallPlugins() {
 
 				;;
 
-				glpi-tags) 
+				glpi-tag) 
 
-					PluginTags
+					PluginTag
+
+				;;
+
+				glpi-genericobject)
+
+					PluginGenericObject
 
 				;;
 
@@ -211,7 +225,8 @@ InstallPlugins() {
 					PluginTasklists
 					PluginFormCreator
 					PluginCosts
-					PluginTags
+					PluginTag
+					PluginGenericObject
 
 				;;
 
@@ -230,6 +245,7 @@ InstallPlugins() {
 					echo " glpi-formcreator"
 					echo " glpi-costs"
 					echo " glpi-tags"
+					echo " glpi-genericobject"
 
 				;;
 
