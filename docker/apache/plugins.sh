@@ -38,6 +38,25 @@ PluginOCS() {
 }
 
 
+PluginDataInjection() {
+
+    curl --progress-bar -L "https://github.com/pluginsGLPI/datainjection/releases/download/2.7.0/glpi-datainjection-2.7.0.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+}
+
+PluginFields() {
+
+	curl --progress-bar -L "https://github.com/pluginsGLPI/fields/releases/download/1.10.1/glpi-fields-1.10.1.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+}
+
+
+PluginTasklists() {
+
+	curl --progress-bar -L "https://github.com/InfotelGLPI/tasklists/releases/download/1.5.0/glpi-tasklists.1.5.0.tar.gz" | tar -jxf - -C /var/www/html/glpi/plugins/ 
+
+}
+
 
 InstallPlugins() {
 
@@ -75,11 +94,32 @@ InstallPlugins() {
 
 				;;
 
+				glpi-datainjection)
+
+					PluginDataInjection
+
+				;;
+
+				glpi-fields) 
+
+					PluginFields
+
+				;;
+
+				glpi-tasklists)
+
+					PluginTasklists
+
+				;;
+
 				all)
 					PluginModifications
 					PluginTelegramBot
 					PluginPDF
 					PluginOCS
+					PluginDataInjection
+					PluginFields
+					PluginTasklists
 
 				;;
 
@@ -92,6 +132,9 @@ InstallPlugins() {
 					echo " glpi-telegrambot"
 					echo " glpi-pdf"
 					echo " glpi-ocsinventoryng"
+					echo " glpi-datainjection"
+					echo " glpi-fields"
+					echo " glpi-tasklists"
 
 				;;
 
