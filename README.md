@@ -237,11 +237,7 @@ https://www.fametreinamentos.com.br
 
 ## Support
 
-https://www.fameconsultoria.com.br
-
 https://www.fametec.com.br
     
 contato@fametec.com.br
-
-
 
