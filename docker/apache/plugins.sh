@@ -98,7 +98,7 @@ PluginFormCreator() {
 
 	RemoveOldPlugin formcreator
 
-	curl --progress-bar -L "https://github.com/pluginsGLPI/formcreator/releases/download/v2.8.4/glpi-formcreator-2.8.4.tar.bz2" | tar -zxf - -C /var/www/html/glpi/plugins/ 
+	curl --progress-bar -L "https://github.com/pluginsGLPI/formcreator/releases/download/v2.8.4/glpi-formcreator-2.8.4.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/ 
 
 }
 
