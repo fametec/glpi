@@ -94,6 +94,26 @@ PluginTasklists() {
 }
 
 
+PluginFormCreator() {
+
+	RemoveOldPlugin formcreator
+
+	curl --progress-bar -L "https://github.com/pluginsGLPI/formcreator/releases/download/v2.8.4/glpi-formcreator-2.8.4.tar.bz2" | tar -zxf - -C /var/www/html/glpi/plugins/ 
+
+}
+
+
+PluginBehaviors() {
+
+	RemoveOldPlugin behaviors
+
+	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2287/glpi-behaviors-2.2.1.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
+
+}
+
+
+
+
 InstallPlugins() {
 
 	if [ ! -z $PLUGINS ]
@@ -148,6 +168,12 @@ InstallPlugins() {
 
 				;;
 
+				glpi-formcreator)
+
+					PluginFormCreator
+
+				;;
+
 				all)
 					PluginModifications
 					PluginTelegramBot
@@ -156,6 +182,7 @@ InstallPlugins() {
 					PluginDataInjection
 					PluginFields
 					PluginTasklists
+					PluginFormCreator
 
 				;;
 
@@ -171,6 +198,7 @@ InstallPlugins() {
 					echo " glpi-datainjection"
 					echo " glpi-fields"
 					echo " glpi-tasklists"
+					echo " glpi-formcreator"
 
 				;;
 
