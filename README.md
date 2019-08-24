@@ -157,6 +157,7 @@ Run configure.sh
  - ocsinventoryng
  - tasklists
  - telegrambot
+ - fusioninventory
 
 
 # Manual install
@@ -178,7 +179,7 @@ This script will install the GLPI on Linux Server CentOS 7 Minimal.
 Edit the script
 
 
-    VERSION="9.4.2"                      # GLPI Version to install, default=9.3.2
+    VERSION="9.4.3"                      # GLPI Version to install, default=9.3.2
     TIMEZONE=America/Fortaleza           # Timezone default=America/Fortaleza
     FQDN="glpi.eftech.com.br"            # Virtualhost default=glpi.eftech.com.br
     ADMINEMAIL="suporte@eftech.com.br"   # Admin e-mail virtualhost
@@ -204,7 +205,7 @@ Example:
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.4.2
+    VERSION=9.4.3
     TIMEZONE=America/Fortaleza
     FQDN=glpi.eftech.com.br
     ADMINEMAIL=suporte@eftech.com.br

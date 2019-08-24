@@ -20,4 +20,4 @@
  - ocsinventoryng
  - tasklists
  - telegrambot
-      
+ - fusioninventory     
