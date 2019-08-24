@@ -16,14 +16,14 @@ RemoveOldPlugin() {
 		return "Use: $0 directory"
 	fi
 
-	if [ ! -d /var/www/html/glpi/$1 ]
+	if [ ! -d /var/www/html/glpi/plugins/$1 ]
 	then
 
 		echo "Directory not found."
 
 	else
 
-		rm -rf /var/www/html/glpi/$1
+		rm -rf /var/www/html/glpi/plugins/$1
 
 	fi
 
@@ -88,7 +88,7 @@ PluginFields() {
 PluginTasklists() {
 
 	RemoveOldPlugin tasklists
-	
+
 	curl --progress-bar -L "https://github.com/InfotelGLPI/tasklists/releases/download/1.5.0/glpi-tasklists.1.5.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/ 
 
 }
