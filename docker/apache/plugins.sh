@@ -120,6 +120,14 @@ PluginCosts() {
 }
 
 
+PluginTags() {
+
+	RemoveOldPlugin tags
+
+	curl --progress-bar -L "https://github.com/pluginsGLPI/tag/releases/download/2.4.2/glpi-tag-2.4.2.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+}
+
 
 InstallPlugins() {
 
