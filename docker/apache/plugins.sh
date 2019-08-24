@@ -181,7 +181,7 @@ InstallPlugins() {
 
 				;;
 
-				glpi-fusioninventory
+				glpi-fusioninventory)
 
 					PluginFusion
 
