@@ -195,6 +195,12 @@ InstallPlugins() {
 
 				;;
 
+				glpi-tags) 
+
+					PluginTags
+
+				;;
+
 				all)
 					PluginModifications
 					PluginTelegramBot
@@ -205,6 +211,7 @@ InstallPlugins() {
 					PluginTasklists
 					PluginFormCreator
 					PluginCosts
+					PluginTags
 
 				;;
 
@@ -222,6 +229,7 @@ InstallPlugins() {
 					echo " glpi-tasklists"
 					echo " glpi-formcreator"
 					echo " glpi-costs"
+					echo " glpi-tags"
 
 				;;
 
