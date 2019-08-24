@@ -111,6 +111,13 @@ PluginBehaviors() {
 
 }
 
+PluginCosts() {
+
+	RemoveOldPlugin costs
+
+	curl --progress-bar -L "https://github.com/ticgal/costs/releases/download/1.1.0/glpi-costs-1.1.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
+
+}
 
 
 
@@ -174,6 +181,12 @@ InstallPlugins() {
 
 				;;
 
+				glpi-costs)
+
+					PluginCosts
+
+				;;
+
 				all)
 					PluginModifications
 					PluginTelegramBot
@@ -183,6 +196,7 @@ InstallPlugins() {
 					PluginFields
 					PluginTasklists
 					PluginFormCreator
+					PluginCosts
 
 				;;
 
@@ -199,6 +213,7 @@ InstallPlugins() {
 					echo " glpi-fields"
 					echo " glpi-tasklists"
 					echo " glpi-formcreator"
+					echo " glpi-costs"
 
 				;;
 
