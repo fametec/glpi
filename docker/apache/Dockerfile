@@ -24,6 +24,7 @@ RUN yum -y install \
 		php72u-mysqlnd
 
 RUN yum -y install \
+		bzip2 \
 		httpd mod_ssl \
 		php72u-json \
 		php72u-mbstring \

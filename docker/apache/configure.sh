@@ -116,16 +116,34 @@ DeployDataBase () {
 
 }
 
-pluginModifications() {
+PluginModifications() {
 
-	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/1.4.0.tar.gz" | tar -zxvf - -C /var/www/html/glpi/plugins/
+	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/1.4.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
 
-	setPermission
+	mv /var/www/html/glpi/plugins/glpi-modifications-1.4.0 /var/www/html/glpi/plugins/Mod
+
+	SetPermission
 
 }
 
 
-installPlugins() {
+PluginTelegramBot() {
+
+	curl --progress-bar -L "https://github.com/pluginsGLPI/telegrambot/releases/download/2.0.0/glpi-telegrambot-2.0.0.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
+
+	SetPermission
+
+}
+
+PluginPDF() {
+
+	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2293/glpi-pdf-1.6.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
+
+	SetPermission
+
+}
+
+InstallPlugins() {
 
 	if [ ! -z $PLUGINS ]
 	then
@@ -139,12 +157,26 @@ installPlugins() {
 
 				glpi-modifications)
 
-					pluginModifications
+					PluginModifications
+
+				;;
+
+				glpi-telegrambot)
+
+					PluginTelelgramBot
+
+				;;
+
+				glpi-pdf)
+
+					PluginPDF
 
 				;;
 
 				all)
-					pluginModifications
+					PluginModifications
+					PluginTelegramBot
+					PluginPDF
 
 				;;
 
@@ -154,7 +186,8 @@ installPlugins() {
 					echo "Available: "
 					echo " all (all plugins above)"
 					echo " glpi-modifications"
-					echo " telegram"
+					echo " glpi-telegrambot"
+					echo " glpi-pdf"
 
 				;;
 
@@ -209,7 +242,7 @@ else
 fi
 #
 #
-installPlugins
+InstallPlugins
 #
 #
 SetPermission

@@ -38,6 +38,7 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
     -e VERSION="9.4.2" \
+    -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
     fametec/glpi
@@ -100,6 +101,7 @@ Run configure.sh
               MARIADB_USER: glpi
               MARIADB_PASSWORD: glpi
               VERSION: "9.4.3"
+              PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
             ports: 
