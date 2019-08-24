@@ -51,9 +51,9 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD configure.sh backup.sh /
+ADD configure.sh backup.sh plugins.sh /
 
-RUN chmod 755 /configure.sh /backup.sh
+RUN chmod 755 /configure.sh /backup.sh /plugins.sh
 
 VOLUME ["/var/www/html"]
 

@@ -116,88 +116,6 @@ DeployDataBase () {
 
 }
 
-PluginModifications() {
-
-	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/1.4.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
-
-	mv /var/www/html/glpi/plugins/glpi-modifications-1.4.0 /var/www/html/glpi/plugins/Mod
-
-	SetPermission
-
-}
-
-
-PluginTelegramBot() {
-
-	curl --progress-bar -L "https://github.com/pluginsGLPI/telegrambot/releases/download/2.0.0/glpi-telegrambot-2.0.0.tar.bz2" | tar -jxf - -C /var/www/html/glpi/plugins/
-
-	SetPermission
-
-}
-
-PluginPDF() {
-
-	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2293/glpi-pdf-1.6.0.tar.gz" | tar -zxf - -C /var/www/html/glpi/plugins/
-
-	SetPermission
-
-}
-
-InstallPlugins() {
-
-	if [ ! -z $PLUGINS ]
-	then
-		
-		LIST=$(echo $PLUGINS | sed "s/,/ /g")
-
-		for i in $LIST
-		do
-
-			case $i in
-
-				glpi-modifications)
-
-					PluginModifications
-
-				;;
-
-				glpi-telegrambot)
-
-					PluginTelelgramBot
-
-				;;
-
-				glpi-pdf)
-
-					PluginPDF
-
-				;;
-
-				all)
-					PluginModifications
-					PluginTelegramBot
-					PluginPDF
-
-				;;
-
-				*)
-				
-					echo "Use: $0 <plugin_name> "
-					echo "Available: "
-					echo " all (all plugins above)"
-					echo " glpi-modifications"
-					echo " glpi-telegrambot"
-					echo " glpi-pdf"
-
-				;;
-
-			esac	
-
-		done
-
-	fi
-
-}
 
 if [ ! -d /var/www/html/glpi/ ]; then
 
@@ -242,7 +160,7 @@ else
 fi
 #
 #
-InstallPlugins
+source ./plugins.sh 
 #
 #
 SetPermission
