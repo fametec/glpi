@@ -14,7 +14,7 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
-ENV PLUGINS glpi-modification,telegram
+ENV PLUGINS all
 
 RUN curl 'https://setup.ius.io/' | sh 
 
