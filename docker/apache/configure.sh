@@ -116,6 +116,56 @@ DeployDataBase () {
 
 }
 
+pluginModifications() {
+
+	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/1.4.0.tar.gz" | tar -zxvf - -C /var/www/html/glpi/plugins/
+
+	setPermission
+
+}
+
+
+installPlugins() {
+
+	if [ ! -z $PLUGINS ]
+	then
+		
+		LIST=$(echo $PLUGINS | sed "s/,/ /g")
+
+		for i in $LIST
+		do
+
+			case $i in
+
+				glpi-modifications)
+
+					pluginModifications
+
+				;;
+
+				all)
+					pluginModifications
+
+				;;
+
+				*)
+				
+					echo "Use: $0 <plugin_name> "
+					echo "Available: "
+					echo " all (all plugins above)"
+					echo " glpi-modifications"
+					echo " telegram"
+
+				;;
+
+			esac	
+
+		done
+
+	fi
+
+}
+
 if [ ! -d /var/www/html/glpi/ ]; then
 
     echo "Directory not found, go to install..." 
@@ -157,6 +207,10 @@ else
     ConfigDataBase
 
 fi
+#
+#
+installPlugins
+#
 #
 SetPermission
 #

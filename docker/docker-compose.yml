@@ -44,22 +44,22 @@ services:
 #
 # CRON
 #
-    crond: 
-        image: fametec/crond-glpi:latest
-        restart: unless-stopped
-        depends_on: 
-          - glpi
-          - mariadb-glpi
-        environment: 
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi
-          MARIADB_PASSWORD: glpi
+#    crond: 
+#        image: fametec/crond-glpi:latest
+#        restart: unless-stopped
+#        depends_on: 
+#          - glpi
+#          - mariadb-glpi
+#        environment: 
+#          MARIADB_HOST: mariadb-glpi
+#          MARIADB_PORT: 3306
+#          MARIADB_DATABASE: glpi
+#          MARIADB_USER: glpi
+#          MARIADB_PASSWORD: glpi
 #        volumes: 
 #          - glpi-volume:/var/www/html:rw
-        networks: 
-          - glpi-backend
+#        networks: 
+#          - glpi-backend
 #
 # VOLUMES
 #

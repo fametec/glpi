@@ -14,6 +14,8 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
+ENV PLUGINS glpi-modification,telegram
+
 RUN curl 'https://setup.ius.io/' | sh 
 
 RUN yum -y install \
