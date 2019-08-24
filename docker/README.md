@@ -7,7 +7,7 @@
 
       docker exec -it glpi_glpi_1 /configure.sh
       
-# Plugins available
+# Available Plugins
 
  - fields
  - costs
