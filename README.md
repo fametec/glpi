@@ -13,6 +13,10 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
 
 ## Install on docker container 
 
+### Play
+
+[![asciicast](https://asciinema.org/a/GUsmlWWh2rKKwV1pqNw3j5ica.svg)](https://asciinema.org/a/GUsmlWWh2rKKwV1pqNw3j5ica)
+
 
 ### Deploy MariaDB
 
