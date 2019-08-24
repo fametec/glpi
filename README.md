@@ -143,6 +143,22 @@ Run configure.sh
       glpi-backend:
 
 
+
+# Plugins available
+
+ - fields
+ - costs
+ - datainjection
+ - formcreator
+ - tag
+ - genericobject
+ - Mod
+ - pdf
+ - ocsinventoryng
+ - tasklists
+ - telegrambot
+
+
 # Manual install
 
 This script will install the GLPI on Linux Server CentOS 7 Minimal.  
