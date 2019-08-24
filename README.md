@@ -38,6 +38,7 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
     -e VERSION="9.4.2" \
+    -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
     fametec/glpi
@@ -63,7 +64,100 @@ Run configure.sh
     docker exec -it glpi /configure.sh
 
 
+## docker-compose.yaml
 
+    version: "3.5"
+    services:
+    #
+    # MARIADB
+    #
+        mariadb-glpi: 
+            image: docker.io/mariadb:latest
+            restart: unless-stopped
+    #        volumes: 
+    #          - mariadb-glpi-volume:/var/lib/mysql:rw
+            environment: 
+              MYSQL_DATABASE: glpi
+              MYSQL_USER: glpi 
+              MYSQL_PASSWORD: glpi 
+              MYSQL_RANDOM_ROOT_PASSWORD: 1 
+    #        ports: 
+    #          - 3307:3306
+            networks: 
+              - glpi-backend
+    #
+    # GLPI
+    #
+        glpi: 
+            image: fametec/glpi:latest
+            restart: unless-stopped
+     #       volumes: 
+     #         - glpi-volume:/var/www/html:rw
+            environment: 
+              GLPI_LANG: pt_BR
+              MARIADB_HOST: mariadb-glpi
+              MARIADB_PORT: 3306
+              MARIADB_DATABASE: glpi
+              MARIADB_USER: glpi
+              MARIADB_PASSWORD: glpi
+              VERSION: "9.4.3"
+              PLUGINS: "all"
+            depends_on: 
+              - mariadb-glpi
+            ports: 
+              - 30080:80
+              - 30443:443
+            networks: 
+              - glpi-frontend
+              - glpi-backend
+    #
+    # CRON
+    #
+        crond: 
+            image: fametec/crond-glpi:latest
+            restart: unless-stopped
+            depends_on: 
+              - glpi
+              - mariadb-glpi
+            environment: 
+              MARIADB_HOST: mariadb-glpi
+              MARIADB_PORT: 3306
+              MARIADB_DATABASE: glpi
+              MARIADB_USER: glpi
+              MARIADB_PASSWORD: glpi
+    #        volumes: 
+    #          - glpi-volume:/var/www/html:rw
+            networks: 
+              - glpi-backend
+    #
+    # VOLUMES
+    #
+    #volumes: 
+    #  glpi-volume:
+    #  mariadb-glpi-volume: 
+    #
+    # NETWORKS
+    #
+    networks: 
+      glpi-frontend: 
+      glpi-backend:
+
+
+
+# Plugins available
+
+ - fields
+ - costs
+ - datainjection
+ - formcreator
+ - tag
+ - genericobject
+ - Mod
+ - pdf
+ - ocsinventoryng
+ - tasklists
+ - telegrambot
+ - fusioninventory
 
 
 # Manual install
@@ -85,7 +179,7 @@ This script will install the GLPI on Linux Server CentOS 7 Minimal.
 Edit the script
 
 
-    VERSION="9.4.2"                      # GLPI Version to install, default=9.3.2
+    VERSION="9.4.3"                      # GLPI Version to install, default=9.3.2
     TIMEZONE=America/Fortaleza           # Timezone default=America/Fortaleza
     FQDN="glpi.eftech.com.br"            # Virtualhost default=glpi.eftech.com.br
     ADMINEMAIL="suporte@eftech.com.br"   # Admin e-mail virtualhost
@@ -111,7 +205,7 @@ Example:
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.4.2
+    VERSION=9.4.3
     TIMEZONE=America/Fortaleza
     FQDN=glpi.eftech.com.br
     ADMINEMAIL=suporte@eftech.com.br

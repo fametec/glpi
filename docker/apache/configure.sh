@@ -116,6 +116,7 @@ DeployDataBase () {
 
 }
 
+
 if [ ! -d /var/www/html/glpi/ ]; then
 
     echo "Directory not found, go to install..." 
@@ -157,6 +158,10 @@ else
     ConfigDataBase
 
 fi
+#
+#
+source ./plugins.sh 
+#
 #
 SetPermission
 #

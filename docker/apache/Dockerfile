@@ -14,6 +14,8 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
+ENV PLUGINS all
+
 RUN curl 'https://setup.ius.io/' | sh 
 
 RUN yum -y install \
@@ -22,6 +24,7 @@ RUN yum -y install \
 		php72u-mysqlnd
 
 RUN yum -y install \
+		bzip2 \
 		httpd mod_ssl \
 		php72u-json \
 		php72u-mbstring \
@@ -36,6 +39,7 @@ RUN yum -y install \
 		php72u-opcache \
 		php72u-apcu \
 		php72u-xmlrpc \
+		php72u-intl \
 		openssl \
 		jq \
 		php-pear-CAS \
@@ -47,9 +51,9 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD configure.sh backup.sh /
+ADD configure.sh backup.sh plugins.sh /
 
-RUN chmod 755 /configure.sh /backup.sh
+RUN chmod 755 /configure.sh /backup.sh /plugins.sh
 
 VOLUME ["/var/www/html"]
 
