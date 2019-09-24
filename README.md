@@ -41,11 +41,11 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
     -e MARIADB_DATABASE=glpi \
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
-    -e VERSION="9.4.2" \
+    -e VERSION="9.4.4" \
     -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
-    fametec/glpi
+    fametec/glpi:9.4.4
 
 
 ### Deploy Cron to Schedule jobs
@@ -58,9 +58,9 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
 
 To upgrade, just change VERSION, example: 
 
-GLPI 9.3.2 to 9.4.2
+GLPI 9.3.2 to 9.4.4
 
-    docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume -e VERSION=9.4.0 fametec/glpi
+    docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume -e VERSION=9.4.4 fametec/glpi:9.4.4
 
 
 Run configure.sh
@@ -104,7 +104,7 @@ Run configure.sh
               MARIADB_DATABASE: glpi
               MARIADB_USER: glpi
               MARIADB_PASSWORD: glpi
-              VERSION: "9.4.3"
+              VERSION: "9.4.4"
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
@@ -183,7 +183,7 @@ This script will install the GLPI on Linux Server CentOS 7 Minimal.
 Edit the script
 
 
-    VERSION="9.4.3"                      # GLPI Version to install, default=9.3.2
+    VERSION="9.4.4"                      # GLPI Version to install, default=9.4.4
     TIMEZONE=America/Fortaleza           # Timezone default=America/Fortaleza
     FQDN="glpi.eftech.com.br"            # Virtualhost default=glpi.eftech.com.br
     ADMINEMAIL="suporte@eftech.com.br"   # Admin e-mail virtualhost
@@ -209,7 +209,7 @@ Example:
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.4.3
+    VERSION=9.4.4
     TIMEZONE=America/Fortaleza
     FQDN=glpi.eftech.com.br
     ADMINEMAIL=suporte@eftech.com.br
