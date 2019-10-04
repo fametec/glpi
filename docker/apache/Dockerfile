@@ -1,4 +1,4 @@
-FROM docker.io/centos
+FROM centos:7
 
 ENV VERSION 9.4.4
 
