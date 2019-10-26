@@ -1,0 +1,59 @@
+FROM centos:latest
+
+ENV VERSION 9.4.4
+
+ENV GLPI_LANG pt_BR
+
+ENV MARIADB_HOST mariadb
+
+ENV MARIADB_PORT 3306
+
+ENV MARIADB_DATABASE glpi
+
+ENV MARIADB_USER glpi
+
+ENV MARIADB_PASSWORD glpi
+
+ENV PLUGINS all
+
+RUN dnf -y install epel-release
+
+RUN dnf -y install \
+		bzip2 \
+		nginx \
+		php \
+		php-fpm \
+		php-pear \
+		php-json \
+		php-mbstring \
+		php-mysqli \
+		php-session \
+		php-gd \
+		php-curl \
+		php-domxml \
+		php-ldap \
+		php-opcache \
+		php-apcu \
+		php-xmlrpc \
+		php-intl \
+		jq \
+		mariadb \
+	&& dnf -y clean all \
+	&& rm -rf /var/cache/yum
+
+# COPY php.d /etc/php.d
+
+# COPY /config/php-fpm.conf /etc/
+
+# COPY /config/www.conf /etc/php-fpm.d/
+
+VOLUME ["/var/www/html"]
+
+WORKDIR /var/www/html
+
+COPY src/ /var/www/html/
+
+EXPOSE 80/tcp
+
+# ENTRYPOINT ["php-fpm"]
+

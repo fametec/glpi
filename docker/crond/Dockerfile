@@ -1,6 +1,6 @@
 FROM fametec/glpi:9.4.4
 
-RUN yum -y install cronie
+RUN dnf -y install cronie
  
 ADD crontab /etc/crontab
 

@@ -1,0 +1,54 @@
+version: "3.5"
+services:
+    mariadb-glpi: 
+        image: docker.io/mariadb:latest
+        restart: unless-stopped
+        environment: 
+          MYSQL_DATABASE: glpi
+          MYSQL_USER: glpi 
+          MYSQL_PASSWORD: glpi 
+          MYSQL_RANDOM_ROOT_PASSWORD: 1 
+        networks: 
+          - glpi-backend
+    glpi: 
+        build: nginx.old/
+        image: fametec/glpi-nginx
+        restart: unless-stopped
+        environment: 
+          GLPI_LANG: pt_BR
+          MARIADB_HOST: mariadb-glpi
+          MARIADB_PORT: 3306
+          MARIADB_DATABASE: glpi
+          MARIADB_USER: glpi
+          MARIADB_PASSWORD: glpi
+          VERSION: "9.4.4"
+          PLUGINS: "all"
+        volumes:
+          - glpi-volume:/usr/share/nginx/html/glpi:rw
+        depends_on: 
+          - mariadb-glpi
+          - php-fpm
+        ports: 
+          - 30080:80
+        networks: 
+          - glpi-frontend
+          - glpi-backend
+    php-fpm: 
+        build: php/
+        image: fametec/glpi-php
+        restart: unless-stopped
+        volumes:
+          - glpi-volume:/usr/share/nginx/html/glpi:rw
+        depends_on:
+          - mariadb-glpi
+        ports:
+          - 9000:9000
+        networks:
+          - glpi-backend
+
+networks: 
+    glpi-frontend: 
+    glpi-backend:
+
+volumes:
+    glpi-volume:
