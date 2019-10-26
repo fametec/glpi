@@ -17,7 +17,7 @@ ENV MARIADB_PASSWORD glpi
 ENV PLUGINS all
 
 
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -26,7 +26,9 @@ RUN apt-get update \
 	libexif-dev \
 	libxml2-dev \
 	libc-client-dev \
-	libkrb5-dev
+	libkrb5-dev \
+  && apt-get -y clean \
+  && apt-get -y autoremove
 
 RUN docker-php-ext-install ldap 
 

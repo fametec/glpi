@@ -3,6 +3,8 @@ services:
     mariadb-glpi: 
         image: docker.io/mariadb:latest
         restart: unless-stopped
+        volumes:
+          - mariadb-glpi-volume:/var/lib/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi 
@@ -11,8 +13,8 @@ services:
         networks: 
           - glpi-backend
     glpi: 
-        build: nginx.old/
-        image: fametec/glpi-nginx
+        build: nginx
+        image: fametec/glpi-nginx:latest
         restart: unless-stopped
         environment: 
           GLPI_LANG: pt_BR
@@ -35,7 +37,7 @@ services:
           - glpi-backend
     php-fpm: 
         build: php/
-        image: fametec/glpi-php
+        image: fametec/glpi-php-fpm:latest
         restart: unless-stopped
         volumes:
           - glpi-volume:/usr/share/nginx/html/glpi:rw
@@ -52,3 +54,4 @@ networks:
 
 volumes:
     glpi-volume:
+    mariadb-glpi-volume:
