@@ -13,7 +13,6 @@ services:
         networks: 
           - glpi-backend
     glpi: 
-        build: nginx
         image: fametec/glpi-nginx:latest
         restart: unless-stopped
         environment: 
@@ -36,7 +35,6 @@ services:
           - glpi-frontend
           - glpi-backend
     php-fpm: 
-        build: php/
         image: fametec/glpi-php-fpm:latest
         restart: unless-stopped
         volumes:
