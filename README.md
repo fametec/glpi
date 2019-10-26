@@ -70,6 +70,16 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
               - 9000:9000
             networks:
               - glpi-backend
+        cron:
+            build: cron/
+            image: fametec/glpi-cron-php-fpm
+            restart: unless-stopped
+            volumes:
+              - glpi-volume:/usr/share/nginx/html/glpi:rw
+            depends_on:
+              - mariadb-glpi
+            networks:
+              - glpi-backend
     #
     networks: 
         glpi-frontend: 
@@ -80,7 +90,6 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
         mariadb-glpi-volume:
 
 
-    docker-compose up -d
 
 
 

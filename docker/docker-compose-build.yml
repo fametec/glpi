@@ -47,11 +47,21 @@ services:
           - 9000:9000
         networks:
           - glpi-backend
-
+    cron:
+        build: cron/
+        image: fametec/glpi-cron-php-fpm
+        restart: unless-stopped
+        volumes:
+          - glpi-volume:/usr/share/nginx/html/glpi:rw
+        depends_on:
+          - mariadb-glpi
+        networks:
+          - glpi-backend
+#
 networks: 
     glpi-frontend: 
     glpi-backend:
-
+#
 volumes:
     glpi-volume:
     mariadb-glpi-volume:
