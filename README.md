@@ -15,12 +15,13 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
 
 ## Install on docker container 
 
-### Play
-
-[![asciicast](https://asciinema.org/a/GUsmlWWh2rKKwV1pqNw3j5ica.svg)](https://asciinema.org/a/GUsmlWWh2rKKwV1pqNw3j5ica)
+### Download and Install
 
 
-## docker-compose.yaml
+    curl -sSL https://raw.githubusercontent.com/fametec/glpi/9.4.4-nginx/docker/docker-compose.yml -o docker-compose.yml
+
+
+### docker-compose.yaml
 
     version: "3.5"
     services:
@@ -81,6 +82,12 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
 
     docker-compose up -d
 
+
+
+### Deploy with docker-compose
+
+
+    docker-compose up
 
 
 
