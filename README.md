@@ -71,7 +71,6 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
             networks:
               - glpi-backend
         cron:
-            build: cron/
             image: fametec/glpi-cron-php-fpm
             restart: unless-stopped
             volumes:
