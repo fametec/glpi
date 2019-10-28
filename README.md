@@ -15,6 +15,9 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
 
 ## Install on docker container 
 
+[![asciicast](https://asciinema.org/a/277490.svg)](https://asciinema.org/a/277490)
+
+
 ### Download and Install
 
 
