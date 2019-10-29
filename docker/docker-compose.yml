@@ -15,22 +15,13 @@ services:
     glpi: 
         image: fametec/glpi-nginx:latest
         restart: unless-stopped
-        environment: 
-          GLPI_LANG: pt_BR
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi
-          MARIADB_PASSWORD: glpi
-          VERSION: "9.4.4"
-          PLUGINS: "all"
         volumes:
           - glpi-volume:/usr/share/nginx/html/glpi:rw
         depends_on: 
           - mariadb-glpi
           - php-fpm
         ports: 
-          - 30080:80
+          - 80:80
         networks: 
           - glpi-frontend
           - glpi-backend
@@ -41,12 +32,10 @@ services:
           - glpi-volume:/usr/share/nginx/html/glpi:rw
         depends_on:
           - mariadb-glpi
-        ports:
-          - 9000:9000
         networks:
           - glpi-backend
     cron:
-        image: fametec/glpi-cron-php-fpm
+        image: fametec/glpi-cron-php-fpm:latest
         restart: unless-stopped
         volumes:
           - glpi-volume:/usr/share/nginx/html/glpi:rw
