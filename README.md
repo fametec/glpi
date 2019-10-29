@@ -43,15 +43,6 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
         glpi: 
             image: fametec/glpi-nginx:latest
             restart: unless-stopped
-            environment: 
-              GLPI_LANG: pt_BR
-              MARIADB_HOST: mariadb-glpi
-              MARIADB_PORT: 3306
-              MARIADB_DATABASE: glpi
-              MARIADB_USER: glpi
-              MARIADB_PASSWORD: glpi
-              VERSION: "9.4.4"
-              PLUGINS: "all"
             volumes:
               - glpi-volume:/usr/share/nginx/html/glpi:rw
             depends_on: 
