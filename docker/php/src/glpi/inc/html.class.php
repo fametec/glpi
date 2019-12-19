@@ -3499,7 +3499,7 @@ class Html {
 
       // Check if field is allowed
       $field_so = $item->getSearchOptionByField('field', $field, $item->getTable());
-      $can_autocomplete = true || array_key_exists('autocomplete', $field_so) && $field_so['autocomplete'];
+      $can_autocomplete = array_key_exists('autocomplete', $field_so) && $field_so['autocomplete'];
 
       $output = '';
       if ($can_autocomplete && $CFG_GLPI["use_ajax_autocompletion"]) {
@@ -5446,9 +5446,7 @@ class Html {
                                              > ($nb_cb_per_row['total'] / 2));
             echo "\t\t<td class='center'>".Html::getCheckbox($cb_options)."</td>\n";
          }
-         if ($nb_cb_per_row['total'] == 1) {
-            echo "\t\t<td class='center'></td>\n";
-         }
+
          echo "\t</tr>\n";
       }
 
@@ -5904,6 +5902,7 @@ class Html {
             $_SESSION['glpi_js_toload'][$name][] = 'lib/jqueryplugins/spectrum-colorpicker/spectrum-min.js';
             break;
          case 'fileupload':
+            $_SESSION['glpi_js_toload'][$name][] = 'lib/file-type.js';
             $_SESSION['glpi_js_toload'][$name][] = 'lib/jqueryplugins/jquery-file-upload/js/jquery.fileupload.js';
             $_SESSION['glpi_js_toload'][$name][] = 'lib/jqueryplugins/jquery-file-upload/js/jquery.iframe-transport.js';
             $_SESSION['glpi_js_toload'][$name][] = 'js/fileupload.js';

@@ -439,6 +439,7 @@ class Ticket extends CommonITILObject {
          $ola->setTicketCalendar($calendars_id);
          if ($ola->fields['type'] == SLM::TTR) {
             $data["olalevels_id_ttr"] = OlaLevel::getFirstOlaLevel($olas_id);
+            $data['ola_ttr_begin_date'] = $date;
          }
          // Compute time_to_resolve
          $data[$dateField]             = $ola->computeDate($date);
@@ -1295,7 +1296,6 @@ class Ticket extends CommonITILObject {
 
       if (isset($input['content'])) {
          if (isset($input['_filename'])) {
-            $input['content']       = $input['content'];
             $input['_disablenotif'] = true;
          } else {
             $input['_donotadddocs'] = true;
@@ -5293,11 +5293,8 @@ class Ticket extends CommonITILObject {
 
       echo "</table>";
 
-      $display_save_btn = $canupdate
-                       || $can_requester
-                       || $canpriority
-                       || $canassign
-                       || $canassigntome;
+      $display_save_btn = (!array_key_exists('locked', $options) || !$options['locked'])
+         && ($canupdate || $can_requester || $canpriority || $canassign || $canassigntome);
 
       if ($display_save_btn
           && !$options['template_preview']) {
@@ -6189,6 +6186,7 @@ class Ticket extends CommonITILObject {
       // Ticket for the item
       // Link to open a new ticket
       if ($item->getID()
+          && !$item->isDeleted()
           && Ticket::isPossibleToAssignType($item->getType())
           && self::canCreate()
           && !(!empty($withtemplate) && ($withtemplate == 2))

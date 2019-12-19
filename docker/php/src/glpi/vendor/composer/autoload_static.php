@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit58a71ee63312b163689f19971eb9510f
+class ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b
 {
     public static $files = array (
         '383eaff206634a77a1be54e64e6459c7' => __DIR__ . '/..' . '/sabre/uri/lib/functions.php',
@@ -868,10 +868,10 @@ class ComposerStaticInit58a71ee63312b163689f19971eb9510f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit58a71ee63312b163689f19971eb9510f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit58a71ee63312b163689f19971eb9510f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit58a71ee63312b163689f19971eb9510f::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit58a71ee63312b163689f19971eb9510f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$classMap;
 
         }, null, ClassLoader::class);
     }

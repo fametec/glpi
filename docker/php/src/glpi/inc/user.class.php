@@ -1247,7 +1247,15 @@ class User extends CommonDBTM {
             if (count($authtype)
                 || $this->fields["authtype"] == Auth::EXTERNAL) {
                // Clean emails
-               $this->input["_emails"] = array_unique ($this->input["_emails"]);
+               // Do a case insensitive comparison as it seems that some LDAP servers
+               // may return same email with different case sensitivity.
+               $unique_emails = [];
+               foreach ($this->input["_emails"] as $email) {
+                  if (!in_array(strtolower($email), array_map('strtolower', $unique_emails))) {
+                     $unique_emails[] = $email;
+                  }
+               }
+               $this->input["_emails"] = $unique_emails;
 
                // Delete not available groups like to LDAP
                $iterator = $DB->request([
@@ -1263,7 +1271,8 @@ class User extends CommonDBTM {
 
                $useremail = new UserEmail();
                while ($data = $iterator->next()) {
-                  $i = array_search($data["email"], $this->input["_emails"]);
+                  // Do a case insensitive comparison as email may be stored with a different case
+                  $i = array_search(strtolower($data["email"]), array_map('strtolower', $this->input["_emails"]));
                   if ($i !== false) {
                      // Delete found item in order not to add it again
                      unset($this->input["_emails"][$i]);
@@ -2003,7 +2012,7 @@ class User extends CommonDBTM {
       echo "<td><label for='name'>" . __('Login') . "</label></td>";
       if ($this->fields["name"] == "" ||
           !empty($this->fields["password"])
-          || ($this->fields["authtype"] == Auth::DB_GLPI) ) {
+          || ($this->fields["authtype"] == Auth::DB_GLPI)) {
          //display login field for new records, or if this is not external auth
          echo "<td><input name='name' id='name' value=\"" . $this->fields["name"] . "\"></td>";
       } else {
@@ -3514,8 +3523,8 @@ class User extends CommonDBTM {
                         [
                            'glpi_profilerights.name'  => 'ticketvalidation',
                            'OR'                       => [
-                              'glpi_profilerights.rights'   => ['&', TicketValidation::CREATEREQUEST],
-                              'glpi_profilerights.rights'   => ['&', TicketValidation::CREATEINCIDENT]
+                              ['glpi_profilerights.rights'   => ['&', TicketValidation::CREATEREQUEST]],
+                              ['glpi_profilerights.rights'   => ['&', TicketValidation::CREATEINCIDENT]]
                            ]
                         ] + getEntitiesRestrictCriteria('glpi_profiles_users', '', $entity_restrict, 1)
                      ];

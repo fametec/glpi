@@ -839,15 +839,9 @@ class CommonDBTM extends CommonGLPI {
 
          while ($data = $iterator->next()) {
             $cnt = countElementsInTable('glpi_items_tickets', ['tickets_id' => $data['tickets_id']]);
-            $job->getFromDB($data['tickets_id']);
-            if ($cnt == 1) {
-               if ($CFG_GLPI["keep_tickets_on_delete"] == 1) {
-                  $itemsticket->delete(["id" => $data["id"]]);
-               } else {
-                  $job->delete(["id" => $data["tickets_id"]]);
-               }
-            } else {
-               $itemsticket->delete(["id" => $data["id"]]);
+            $itemsticket->delete(["id" => $data["id"]]);
+            if ($cnt == 1 && !$CFG_GLPI["keep_tickets_on_delete"]) {
+               $job->delete(["id" => $data["tickets_id"]]);
             }
          }
 
@@ -1457,7 +1451,7 @@ class CommonDBTM extends CommonGLPI {
                      // forward entity information if needed
                      if (count(static::$forward_entity_to)
                          && (in_array("entities_id", $this->updates)
-                             || in_array("is_recursive", $this->updates)) ) {
+                             || in_array("is_recursive", $this->updates))) {
                         $this->forwardEntityInformations();
                      }
 

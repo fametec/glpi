@@ -31,7 +31,7 @@
 */
 
 // Current version of GLPI
-define('GLPI_VERSION', '9.4.4');
+define('GLPI_VERSION', '9.4.5');
 if (substr(GLPI_VERSION, -4) === '-dev') {
    //for dev version
    define('GLPI_PREVER', str_replace('-dev', '', GLPI_VERSION));
@@ -41,7 +41,7 @@ if (substr(GLPI_VERSION, -4) === '-dev') {
    );
 } else {
    //for stable version
-   define("GLPI_SCHEMA_VERSION", '9.4.3');
+   define("GLPI_SCHEMA_VERSION", '9.4.5');
 }
 define('GLPI_MIN_PHP', '5.6.0'); // Must also be changed in top of index.php
 define('GLPI_YEAR', '2019');
@@ -243,7 +243,7 @@ $CFG_GLPI["itemdevices"]                  = ['Item_DevicePowerSupply', 'Item_Dev
 $CFG_GLPI["contract_types"]               = array_merge(['Computer', 'Monitor', 'NetworkEquipment',
                                                   'Peripheral', 'Phone', 'Printer', 'Project', 'Line',
                                                   'Software', 'SoftwareLicense', 'Certificate',
-                                                  'DCRoom', 'Rack', 'Enclosure'],
+                                                  'DCRoom', 'Rack', 'Enclosure', 'PDU'],
                                                   $CFG_GLPI['itemdevices']);
 
 $CFG_GLPI["report_types"]                 = ['Computer', 'Monitor', 'NetworkEquipment',
@@ -287,7 +287,7 @@ $CFG_GLPI["location_types"]               = ['Budget', 'CartridgeItem', 'Consuma
 $CFG_GLPI["ticket_types"]                 = ['Computer', 'Monitor', 'NetworkEquipment',
                                                   'Peripheral', 'Phone', 'Printer', 'Software',
                                                   'SoftwareLicense', 'Certificate',
-                                                  'Line', 'DCRoom', 'Rack', 'Enclosure'];
+                                                  'Line', 'DCRoom', 'Rack', 'Enclosure', 'PDU'];
 
 $CFG_GLPI["link_types"]                   = ['Budget', 'CartridgeItem', 'Computer',
                                                   'ConsumableItem', 'Contact', 'Contract', 'Monitor',

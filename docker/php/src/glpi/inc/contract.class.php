@@ -1428,7 +1428,7 @@ class Contract extends CommonDBTM {
       foreach (['notice'            => Alert::NOTICE,
                   'end'               => Alert::END,
                   'periodicity'       => Alert::PERIODICITY,
-                  'periodicitynotice' => Alert::NOTICE] as $event => $type ) {
+                  'periodicitynotice' => Alert::NOTICE] as $event => $type) {
          if (isset($contract_infos[$event]) && count($contract_infos[$event])) {
             foreach ($contract_infos[$event] as $entity => $contracts) {
                if (NotificationEvent::raiseEvent($event, new self(),
@@ -1542,7 +1542,8 @@ class Contract extends CommonDBTM {
                                                `glpi_contracts`.`duration` MONTH), CURDATE()) > '0'
                            OR `glpi_contracts`.`begin_date` IS NULL
                            OR (`glpi_contracts`.`duration` = 0
-                               AND DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' ))";
+                               AND DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' )
+                           OR `glpi_contracts`.`renewal` = 1)";
       }
 
       $query = "SELECT `glpi_contracts`.*

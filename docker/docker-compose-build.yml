@@ -13,7 +13,7 @@ services:
         networks: 
           - glpi-backend
     glpi: 
-        build: nginx
+        build: nginx/
         image: fametec/glpi-nginx:latest
         restart: unless-stopped
         volumes:
@@ -41,7 +41,7 @@ services:
         image: fametec/glpi-cron-php-fpm:latest
         restart: unless-stopped
         volumes:
-          - glpi-volume:/usr/share/nginx/html/glpi:rw
+          - glpi-volume:/usr/share/nginx/html:rw
         depends_on:
           - mariadb-glpi
         networks:

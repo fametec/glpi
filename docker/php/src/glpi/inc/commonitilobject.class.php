@@ -1192,12 +1192,12 @@ abstract class CommonITILObject extends CommonDBTM {
 
             // Compute new internal_time_to_resolve
             $this->updates[]                          = "internal_time_to_resolve";
-            $this->fields['internal_time_to_resolve'] = $ola->computeDate($this->fields['date'],
+            $this->fields['internal_time_to_resolve'] = $ola->computeDate($this->fields['ola_ttr_begin_date'],
                                                                           $this->fields["ola_waiting_duration"]);
             // Add current level to do
             $ola->addLevelToDo($this, $this->fields["olalevels_id_ttr"]);
 
-         } else if (in_array("internal_time_to_resolve", $this->fields)) {
+         } else if (array_key_exists("internal_time_to_resolve", $this->fields)) {
             // Change doesn't have internal_time_to_resolve
             // Using calendar
             if (($calendars_id > 0)
@@ -2857,10 +2857,13 @@ abstract class CommonITILObject extends CommonDBTM {
 
             foreach ($ids as $id) {
                if ($item->getFromDB($id)) {
-                  $input2 = [$field              => $id,
-                                  'taskcategories_id' => $input['taskcategories_id'],
-                                  'actiontime'        => $input['actiontime'],
-                                  'content'           => $input['content']];
+                  $input2 = [
+                     $field              => $id,
+                     'taskcategories_id' => $input['taskcategories_id'],
+                     'actiontime'        => $input['actiontime'],
+                     'state'             => $input['state'],
+                     'content'           => $input['content']
+                  ];
                   if ($task->can(-1, CREATE, $input2)) {
                      if ($task->add($input2)) {
                         $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
@@ -4242,12 +4245,12 @@ abstract class CommonITILObject extends CommonDBTM {
                 ><span class='sr-only'>" . __s('Add') . "</span></span>";
          $candeleteobserver = true;
 
-      } else if (($ID > 0)
-                 && !in_array($this->fields['status'], $this->getClosedStatusArray())
-                 && !$is_hidden['_users_id_observer']
-                 && !$this->isUser(CommonITILActor::OBSERVER, Session::getLoginUserID())
-                 && !$this->isUser(CommonITILActor::REQUESTER, Session::getLoginUserID())) {
-         echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+      }
+      if (($ID > 0)
+           && !in_array($this->fields['status'], $this->getClosedStatusArray())
+           && !$is_hidden['_users_id_observer']
+           && !$this->isUser(CommonITILActor::OBSERVER, Session::getLoginUserID())
+           && !$this->isUser(CommonITILActor::REQUESTER, Session::getLoginUserID())) {
          Html::showSimpleForm($this->getFormURL(), 'addme_observer',
                               __('Associate myself'),
                               [$this->getForeignKeyField() => $this->fields['id']],

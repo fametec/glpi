@@ -129,6 +129,18 @@ class KnowbaseItem_Item extends CommonDBRelation {
          );
       }
 
+      // Check status for CommonITILObjects, they must not be edited if they
+      // are resolved or closed
+      if ($item instanceof CommonITILObject) {
+         $canedit &= !in_array(
+            $item->fields['status'],
+            array_merge(
+               $item::getClosedStatusArray(),
+               $item::getSolvedStatusArray()
+            )
+         );
+      }
+
       if ($canedit) {
          echo '<form method="post" action="' . Toolbox::getItemTypeFormURL(__CLASS__) . '">';
          echo "<div class='center'>";

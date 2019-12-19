@@ -511,36 +511,6 @@ class Search {
       return $data;
    }
 
-   /**
-    * Search for a "usehaving" field in the searchOption of for each criteria
-    *
-    * @param $criterias List of criterias
-    * @param $searchopt List of searchOptions
-    *
-    * @return bool
-    */
-   private static function hasHaving($criterias, $searchopt) {
-      foreach ($criterias as $criteria) {
-         // Search recursively for groups
-         if (isset($criteria['criteria'])) {
-            $hasHaving = self::hasHaving($criteria['criteria'], $searchopt);
-            if ($hasHaving) {
-               return true;
-            }
-            continue;
-         }
-
-         if (isset($criteria['field'])
-            && isset($searchopt[$criteria['field']]["usehaving"])
-            || (isset($criteria['meta']) && $criteria['meta'] && $criteria['link'] == "AND NOT")
-         ) {
-            return true;
-         }
-      }
-
-      return false;
-   }
-
 
    /**
     * Construct SQL request depending of search parameters
@@ -693,25 +663,6 @@ class Search {
       if (count($data['search']['criteria'])) {
          $WHERE  = self::constructCriteriaSQL($data['search']['criteria'], $data, $searchopt);
          $HAVING = self::constructCriteriaSQL($data['search']['criteria'], $data, $searchopt, true);
-
-         // Check if a criteria was meant to be used as a having field
-         $hasHaving = self::hasHaving($data['search']['criteria'], $searchopt);
-         if ($hasHaving) {
-            $HAVING = $WHERE;
-            $WHERE = "";
-
-            // Each field specified in the HAVING must be in the SELECT aswell
-            $regex = "/`glpi_\w*?`\.`.*?`/";
-            $matches = [];
-            preg_match_all($regex, $HAVING, $matches);
-            if (isset($matches[0])) {
-               foreach ($matches[0] as $havingElement) {
-                  if (strpos($SELECT, $havingElement) === false) {
-                     $SELECT .= " $havingElement, ";
-                  }
-               }
-            }
-         }
 
          // if criteria (with meta flag) need additional join/from sql
          self::constructAdditionalSqlForMetacriteria($data['search']['criteria'], $SELECT, $FROM, $already_link_tables, $data);
@@ -1036,18 +987,15 @@ class Search {
             } else if (isset($searchopt[$criterion['field']]["usehaving"])
                        || ($meta && "AND NOT" === $criterion['link'])) {
                if (!$is_having) {
-                  // Add the having in the where as the whole WHERE will be
-                  // converted into an HAVING later
-                  $new_where = self::addHaving(
-                     $LINK,
-                     $NOT,
-                     $itemtype,
-                     $criterion['field'],
-                     $criterion['searchtype'],
-                     $criterion['value']
-                  );
-                  $sql .= $new_where;
+                  // the having part will be managed in a second pass
                   continue;
+               }
+
+               $new_having = self::addHaving($LINK, $NOT, $itemtype,
+                                             $criterion['field'], $criterion['searchtype'],
+                                             $criterion['value']);
+               if ($new_having !== false) {
+                  $sql .= $new_having;
                }
             } else {
                if ($is_having) {
@@ -2484,7 +2432,7 @@ JAVASCRIPT;
       global $CFG_GLPI;
 
       if (!isset($request["itemtype"])
-          || !isset($request["num"]) ) {
+          || !isset($request["num"])) {
          return "";
       }
 
@@ -2594,6 +2542,16 @@ JAVASCRIPT;
 
       if (isset($criteria['field'])) {
          $value = $criteria['field'];
+      } else if (isset($request['from_meta'])
+         && $request['from_meta']
+         && count($values)) {
+         // Get first field of the first category
+         foreach ($values as $categories) {
+            foreach ($categories as $field_id => $field_name) {
+               $value = $field_id;
+               break 2;
+            }
+         }
       }
 
       $rand = Dropdown::showFromArray("criteria{$prefix}[$num][field]", $values, [
@@ -2655,7 +2613,7 @@ JAVASCRIPT;
       global $CFG_GLPI;
 
       if (!isset($request["itemtype"])
-          || !isset($request["num"]) ) {
+          || !isset($request["num"])) {
          return "";
       }
 
@@ -2875,7 +2833,7 @@ JAVASCRIPT;
       global $CFG_GLPI;
       if (!isset($request["itemtype"])
           || !isset($request["field"])
-          || !isset($request["num"]) ) {
+          || !isset($request["num"])) {
          return "";
       }
 
@@ -3204,7 +3162,9 @@ JAVASCRIPT;
 
       $addtable = '';
 
-      if (($table != getTableForItemType($itemtype))
+      $is_fkey_composite_on_self = getTableNameForForeignKeyField($searchopt[$ID]["linkfield"]) == $table
+         && $searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table);
+      if (($is_fkey_composite_on_self || $table != getTableForItemType($itemtype))
           && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
          $addtable .= "_".$searchopt[$ID]["linkfield"];
       }
@@ -3256,7 +3216,7 @@ JAVASCRIPT;
                                  ".$table.$addtable.".$name2 $order,
                                  ".$table.$addtable.".`name` $order";
             }
-            return " ORDER BY `".$table."`.`name` $order";
+            return " ORDER BY `".$table.$addtable."`.`name` $order";
 
          case "glpi_networkequipments.ip" :
          case "glpi_ipaddresses.name" :
@@ -3406,7 +3366,9 @@ JAVASCRIPT;
          $complexjoin = self::computeComplexJoinID($searchopt[$ID]['joinparams']);
       }
 
-      if (((($table != getTableForItemType($itemtype))
+      $is_fkey_composite_on_self = getTableNameForForeignKeyField($searchopt[$ID]["linkfield"]) == $table
+         && $searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table);
+      if (((($is_fkey_composite_on_self || $table != getTableForItemType($itemtype))
             && (!isset($CFG_GLPI["union_search_type"][$itemtype])
                 || ($CFG_GLPI["union_search_type"][$itemtype] != $table)))
            || !empty($complexjoin))
@@ -3615,7 +3577,7 @@ JAVASCRIPT;
                // force ordering by date desc
                return " GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocompute, '".self::NULLVALUE."'),
                                                '".self::SHORTSEP."',$tocomputeid)
-                                     ORDER BY `$table`.`date` DESC
+                                     ORDER BY `$table$addtable`.`date` DESC
                                      SEPARATOR '".self::LONGSEP."')
                                     AS `".$NAME."`,
 
@@ -4053,21 +4015,21 @@ JAVASCRIPT;
 
       $inittable = $table;
       $addtable  = '';
-
-      $complexjoin = "";
-      if (isset($searchopt[$ID]['joinparams'])) {
-         $complexjoin = self::computeComplexJoinID($searchopt[$ID]['joinparams']);
-      }
-
+      $is_fkey_composite_on_self = getTableNameForForeignKeyField($searchopt[$ID]["linkfield"]) == $table
+         && $searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table);
       if (($table != 'asset_types')
-         && !empty($complexjoin)
-         && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
+          && ($is_fkey_composite_on_self || $table != getTableForItemType($itemtype))
+          && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
          $addtable = "_".$searchopt[$ID]["linkfield"];
          $table   .= $addtable;
       }
 
-      if (!empty($complexjoin)) {
-         $table .= "_".$complexjoin;
+      if (isset($searchopt[$ID]['joinparams'])) {
+         $complexjoin = self::computeComplexJoinID($searchopt[$ID]['joinparams']);
+
+         if (!empty($complexjoin)) {
+            $table .= "_".$complexjoin;
+         }
       }
 
       if ($meta
@@ -4166,7 +4128,19 @@ JAVASCRIPT;
          case "glpi_users.name" :
             if ($itemtype == 'User') { // glpi_users case / not link table
                if (in_array($searchtype, ['equals', 'notequals'])) {
-                  return " $link `$table`.`id`".$SEARCH;
+                  $search_str = "`$table`.`id`" . $SEARCH;
+
+                  if ($searchtype == 'notequals') {
+                     $nott = !$nott;
+                  }
+
+                  // Add NULL if $val = 0 and not negative search
+                  // Or negative search on real value
+                  if ((!$nott && ($val == 0)) || ($nott && ($val != 0))) {
+                     $search_str .= " OR `$table`.`id` IS NULL";
+                  }
+
+                  return " $link ($search_str)";
                }
                return self::makeTextCriteria("`$table`.`$field`", $val, $nott, $link);
             }
@@ -6034,8 +6008,7 @@ JAVASCRIPT;
                if ($data[$ID][0]['is_active']) {
                   return "<a href='reservation.php?reservationitems_id=".
                                           $data["refID"]."' title=\"".__s('See planning')."\">".
-                                          "<i class='far fa-calendar-alt'></i>";
-                                          "<span class='sr-only'>".__('See planning')."</span></a>";
+                                          "<i class='far fa-calendar-alt'></i><span class='sr-only'>".__('See planning')."</span></a>";
                } else {
                   return "&nbsp;";
                }
