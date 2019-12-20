@@ -264,11 +264,15 @@ SetPermission () {
 SetHttpConf () {
 
 cat <<EOF > /etc/httpd/conf.d/glpi.conf
+<VirtualHost *:80>
+    ServerName ${FQDN}
+    DocumentRoot /var/www/html/glpi
     <Directory /var/www/html/glpi/>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
+</VirtualHost>
 EOF
 
 
