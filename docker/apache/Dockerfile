@@ -1,6 +1,6 @@
 FROM centos:7
 
-ENV VERSION 9.4.3
+ENV VERSION 9.4.5
 
 ENV GLPI_LANG pt_BR
 
