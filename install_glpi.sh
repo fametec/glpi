@@ -87,11 +87,26 @@ InstallRepo () {
 
   echo "Installing Yum Repo..."
 
-  curl -sSL 'https://setup.ius.io/' | bash   
+#  curl -sSL 'https://setup.ius.io/' | bash   
 
-  yum -y install \
-	epel-release \
-	expect
+#  yum -y install \
+#	epel-release \
+#	expect
+
+  yum install epel-release yum-utils
+
+  yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+
+  cat > /etc/yum.repos.d/MariaDB.repo << EOF
+
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EOF
+
 
 }
 
@@ -109,11 +124,8 @@ InstallDataBase () {
   echo "Install MariaDB 10.0u..."
   
   yum -y install \
-	mariadb100u-server \
-	mariadb100u \
-	mariadb100u-config \
-	mariadb100u-libs \
-	mariadb100u-common
+        MariaDB-server \
+	MariaDB-client
 
   echo "Enable service..." 
 
@@ -187,26 +199,26 @@ InstallPhp () {
   echo "Install php72u..."
 
   yum -y install \
-	mod_php72u \
-	php72u-cli \
-	php72u-mysqlnd 
+	mod_php \
+	php-cli \
+	php-mysqlnd 
 
   yum -y install \
 	php-pear-CAS \
 	wget \
-	php72u-json \
-	php72u-mbstring \
-	php72u-mysqli \
-	php72u-session \
-	php72u-gd \
-	php72u-curl \
-	php72u-domxml \
-	php72u-imap \
-	php72u-ldap \
-	php72u-openssl \
-	php72u-opcache \
-	php72u-apcu \
-	php72u-xmlrpc \
+	php-json \
+	php-mbstring \
+	php-mysqli \
+	php-session \
+	php-gd \
+	php-curl \
+	php-domxml \
+	php-imap \
+	php-ldap \
+	php-openssl \
+	php-opcache \
+	php-apcu \
+	php-xmlrpc \
 	jq \
 	openssl 
   

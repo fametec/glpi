@@ -16,30 +16,42 @@ ENV MARIADB_PASSWORD glpi
 
 ENV PLUGINS all
 
-RUN curl 'https://setup.ius.io/' | sh 
+# RUN curl --progress 'https://setup.ius.io/' | sh 
+
+RUN yum -y install epel-release yum-utils
+
+RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+RUN yum-config-manager --enable remi-php73
+
+#RUN yum -y install \
+#		mod_php72u \
+#		php72u-cli \
+#		php72u-mysqlnd
 
 RUN yum -y install \
-		mod_php72u \
-		php72u-cli \
-		php72u-mysqlnd
-
-RUN yum -y install \
+		php \
+		php-common \
+		php-mcrypt \
+		php-cli \
+		php-gd \
+		php-mysqlnd \
 		bzip2 \
 		httpd mod_ssl \
-		php72u-json \
-		php72u-mbstring \
-		php72u-mysqli \
-		php72u-session \
-		php72u-gd \
-		php72u-curl \
-		php72u-domxml \
-		php72u-imap \
-		php72u-ldap \
-		php72u-openssl \
-		php72u-opcache \
-		php72u-apcu \
-		php72u-xmlrpc \
-		php72u-intl \
+		php-json \
+		php-mbstring \
+		php-mysqli \
+		php-session \
+		php-gd \
+		php-curl \
+		php-domxml \
+		php-imap \
+		php-ldap \
+		php-openssl \
+		php-opcache \
+		php-apcu \
+		php-xmlrpc \
+		php-intl \
 		openssl \
 		jq \
 		php-pear-CAS \
