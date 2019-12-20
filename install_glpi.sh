@@ -426,4 +426,4 @@ for job in $EXECUTE; do
   fi
 done
 
-functionGetTelemetry >> $LOGS
+GetTelemetry >> $LOGS
