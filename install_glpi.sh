@@ -10,7 +10,7 @@
 
 LOGS="install_glpi.log"
 GLPI_LANG="pt_BR"
-VERSION="9.4.3"
+VERSION="9.4.5"
 TIMEZONE=America/Fortaleza
 FQDN="glpi.fametec.com.br"
 ADMINEMAIL="suporte@fametec.com.br"
