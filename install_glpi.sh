@@ -93,19 +93,22 @@ InstallRepo () {
 #	epel-release \
 #	expect
 
-  yum install epel-release yum-utils
+  yum -y install expect\
+  	epel-release \
+	yum-utils
 
-  yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+  yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
   yum-config-manager --enable remi-php73
 
-  cat > /etc/yum.repos.d/MariaDB.repo << EOF
+  cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
+
 EOF
 
 
