@@ -168,6 +168,11 @@ Run configure.sh
 
 This script will install the GLPI on Linux Server CentOS 7 Minimal.  
 
+## Play
+
+[![asciicast](https://asciinema.org/a/Rb61UJXZh7mbMQuIoVoiURKQg.svg)](https://asciinema.org/a/Rb61UJXZh7mbMQuIoVoiURKQg)
+
+
 ## Silent
 
     curl -sSL 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' | bash
