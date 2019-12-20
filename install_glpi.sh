@@ -143,7 +143,7 @@ set timeout 10
 spawn mysql_secure_installation
 expect \"Enter current password for root (enter for none):\"
 send \"$MYSQL_ROOT_PASSWORD\r\"
-expect \"Change the root password?\"
+expect \"Set the root password?\"
 send \"y\r\"
 expect \"New password:\"
 send \"$MYSQL_NEW_ROOT_PASSWORD\r\"
