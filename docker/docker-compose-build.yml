@@ -4,17 +4,18 @@ services:
 # MARIADB
 #
     mariadb-glpi: 
-        image: docker.io/mariadb:latest
+        build: mariadb/
+        image: fametec/mariadb:glpi-9.4.5
         restart: unless-stopped
-#        volumes: 
-#          - mariadb-glpi-volume:/var/www/mysql:rw
+        volumes: 
+          - mariadb-glpi-volume:/var/www/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi 
           MYSQL_PASSWORD: glpi 
           MYSQL_RANDOM_ROOT_PASSWORD: 1 
-#        ports: 
-#          - 3307:3306
+        ports: 
+          - 3306:3306
         networks: 
           - glpi-backend
 #
@@ -24,8 +25,9 @@ services:
         build: apache/
         image: fametec/glpi:9.4.5
         restart: unless-stopped
-        #        volumes: 
-        #          - glpi-volume:/var/www/html:rw
+        volumes: 
+          - glpi-volume-files:/var/www/html/files:rw
+          - glpi-volume-plugins:/var/www/html/plugins:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
@@ -39,36 +41,37 @@ services:
           - mariadb-glpi
         ports: 
           - 30080:80
-          - 30443:443
         networks: 
           - glpi-frontend
           - glpi-backend
 #
 # CRON
 #
-#    crond: 
-#        build: crond/
-#        image: fametec/crond-glpi:9.4.5
-#        restart: unless-stopped
-#        depends_on: 
-#          - glpi
-#          - mariadb-glpi
-#        environment: 
-#          MARIADB_HOST: mariadb-glpi
-#          MARIADB_PORT: 3306
-#          MARIADB_DATABASE: glpi
-#          MARIADB_USER: glpi
-#          MARIADB_PASSWORD: glpi
-#        volumes: 
-#          - glpi-volume:/var/www/html:rw
-#        networks: 
-#          - glpi-backend
+    crond: 
+        build: crond/
+        image: fametec/crond-glpi:9.4.5
+        restart: unless-stopped
+        depends_on: 
+          - glpi
+          - mariadb-glpi
+        environment: 
+          MARIADB_HOST: mariadb-glpi
+          MARIADB_PORT: 3306
+          MARIADB_DATABASE: glpi
+          MARIADB_USER: glpi
+          MARIADB_PASSWORD: glpi
+        volumes: 
+          - glpi-volume-files:/var/www/html/files:rw
+          - glpi-volume-plugins:/var/www/html/plugins:rw
+        networks: 
+          - glpi-backend
 #
 # VOLUMES
 #
-#volumes: 
-#  glpi-volume:
-#  mariadb-glpi-volume: 
+volumes: 
+  glpi-volume-files:
+  glpi-volume-plugins:
+  mariadb-glpi-volume: 
 #
 # NETWORKS
 #

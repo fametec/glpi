@@ -6,7 +6,7 @@ ENV VERSION 9.4.5
 
 ENV GLPI_LANG pt_BR
 
-ENV MARIADB_HOST glpi-mariadb
+ENV MARIADB_HOST mariadb-glpi
 
 ENV MARIADB_PORT 3306
 
@@ -66,6 +66,11 @@ ADD conf.d /etc/httpd/conf.d
 
 COPY --chown=apache:apache src/glpi /var/www/html
 
+RUN curl --progress -L https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/ \
+	&& chown -R apache:apache /var/www/html
+
+VOLUME ["/var/www/html/config", "/var/www/html/files", "/var/www/html/plugins"]
+
 RUN {   \
         echo "<?php"; \
         echo "class DB extends DBmysql {"; \
@@ -82,7 +87,6 @@ RUN {   \
 
 # RUN chmod 755 /configure.sh /backup.sh /plugins.sh
 
-VOLUME ["/var/www/html/glpi/files", "/var/www/html/glpi/plugins"]
 
 EXPOSE 80/tcp 
 
