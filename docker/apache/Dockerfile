@@ -1,10 +1,12 @@
 FROM centos:7
 
+MAINTAINER eduardo@fametec.com.br
+
 ENV VERSION 9.4.5
 
 ENV GLPI_LANG pt_BR
 
-ENV MARIADB_HOST mariadb
+ENV MARIADB_HOST glpi-mariadb
 
 ENV MARIADB_PORT 3306
 
@@ -15,6 +17,8 @@ ENV MARIADB_USER glpi
 ENV MARIADB_PASSWORD glpi
 
 ENV PLUGINS all
+
+WORKDIR /var/www/html
 
 # RUN curl --progress 'https://setup.ius.io/' | sh 
 
@@ -37,7 +41,7 @@ RUN yum -y install \
 		php-gd \
 		php-mysqlnd \
 		bzip2 \
-		httpd mod_ssl \
+		httpd \
 		php-json \
 		php-mbstring \
 		php-mysqli \
@@ -52,24 +56,35 @@ RUN yum -y install \
 		php-apcu \
 		php-xmlrpc \
 		php-intl \
-		openssl \
 		jq \
 		php-pear-CAS \
-		mariadb \
-	&& yum -y clean all \
-	&& rm -rf /var/cache/yum
+	&& yum -y clean all
 
 ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-ADD configure.sh backup.sh plugins.sh /
+COPY --chown=apache:apache src/glpi /var/www/html
 
-RUN chmod 755 /configure.sh /backup.sh /plugins.sh
+RUN {   \
+        echo "<?php"; \
+        echo "class DB extends DBmysql {"; \
+        echo "   public \$dbhost     = \"${MARIADB_HOST}\";"; \
+        echo "   public \$dbport     = \"${MARIADB_PORT}\";"; \
+        echo "   public \$dbuser     = \"${MARIADB_USER}\";"; \
+        echo "   public \$dbpassword = \"${MARIADB_PASSWORD}\";"; \
+        echo "   public \$dbdefault  = \"${MARIADB_DATABASE}\";"; \
+        echo "}"; \
+    } > /var/www/html/config/config_db.php \
+	&& chown apache:apache /var/www/html/config/config_db.php
 
-VOLUME ["/var/www/html"]
+# ADD configure.sh backup.sh plugins.sh /
 
-EXPOSE 80/tcp 443/tcp
+# RUN chmod 755 /configure.sh /backup.sh /plugins.sh
 
-ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
+VOLUME ["/var/www/html/glpi/files", "/var/www/html/glpi/plugins"]
+
+EXPOSE 80/tcp 
+
+CMD ["httpd", "-D", "FOREGROUND"]
 

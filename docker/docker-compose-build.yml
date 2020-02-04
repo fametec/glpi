@@ -22,10 +22,10 @@ services:
 #
     glpi: 
         build: apache/
-        image: fametec/glpi:9.4.3
+        image: fametec/glpi:9.4.5
         restart: unless-stopped
- #       volumes: 
- #         - glpi-volume:/var/www/html:rw
+        #        volumes: 
+        #          - glpi-volume:/var/www/html:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
@@ -46,19 +46,19 @@ services:
 #
 # CRON
 #
-    crond: 
-        build: crond/
-        image: fametec/crond-glpi:9.4.3
-        restart: unless-stopped
-        depends_on: 
-          - glpi
-          - mariadb-glpi
-        environment: 
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi
-          MARIADB_PASSWORD: glpi
+#    crond: 
+#        build: crond/
+#        image: fametec/crond-glpi:9.4.5
+#        restart: unless-stopped
+#        depends_on: 
+#          - glpi
+#          - mariadb-glpi
+#        environment: 
+#          MARIADB_HOST: mariadb-glpi
+#          MARIADB_PORT: 3306
+#          MARIADB_DATABASE: glpi
+#          MARIADB_USER: glpi
+#          MARIADB_PASSWORD: glpi
 #        volumes: 
 #          - glpi-volume:/var/www/html:rw
 #        networks: 
