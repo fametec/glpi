@@ -5,7 +5,7 @@ RUN { \
 	echo ; \
 	echo 'while true' ; \
 	echo 'do ' ; \
-	echo '  cd /usr/share/nginx/html/glpi ' ; \
+	echo '  cd /usr/share/nginx/html/glpi/ ' ; \
 	echo '  /usr/local/bin/php front/cron.php' ; \
 	echo '  tail files/_log/cron.log' ; \
 	echo '  sleep 60' ; \
