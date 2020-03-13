@@ -64,7 +64,7 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-COPY --chown=apache:apache src/glpi /var/www/html
+# COPY --chown=apache:apache src/glpi /var/www/html
 
 RUN curl --progress -L https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/ \
 	&& chown -R apache:apache /var/www/html
