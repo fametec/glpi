@@ -9,7 +9,7 @@ VOLUME /var/lib/mysql
 #
 EXPOSE 3306
 
-COPY src/glpi-backup-9.4.5.sql /
+COPY src/*.sql /
 #
 CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
 #
