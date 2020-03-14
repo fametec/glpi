@@ -39,7 +39,7 @@ services:
         depends_on: 
           - mariadb-glpi
         ports: 
-          - 30080:80
+          - 80:80
         networks: 
           - glpi-frontend
           - glpi-backend
