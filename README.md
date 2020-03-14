@@ -5,6 +5,17 @@
 
 GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and IT Management Software package, that provides ITIL Service Desk features, licenses tracking and software auditing.
 
+## For Courses e-Learning
+
+https://www.fametreinamentos.com.br
+
+
+## For Support
+
+https://www.fametec.com.br
+    
+contato@fametec.com.br
+
 
 ## License
 
@@ -41,7 +52,7 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
     -e MARIADB_DATABASE=glpi \
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
-    -e VERSION="9.4.2" \
+    -e VERSION="9.4.5" \
     -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
@@ -54,21 +65,11 @@ GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and 
     docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi:/var/www/html/glpi fametec/crond-glpi
 
 
-## Install/Upgrade GLPI on docker container
+# Docker Compose
 
-To upgrade, just change VERSION, example: 
-
-GLPI 9.3.2 to 9.4.2
-
-    docker run -d --name glpi --link mariadb-glpi:mariadb --volume glpi-volume -e VERSION=9.4.0 fametec/glpi
+### docker-compose.yaml
 
 
-Run configure.sh
-
-    docker exec -it glpi /configure.sh
-
-
-## docker-compose.yaml
 
     version: "3.5"
     services:
@@ -76,41 +77,42 @@ Run configure.sh
     # MARIADB
     #
         mariadb-glpi: 
-            image: docker.io/mariadb:latest
+            image: fametec/mariadb:glpi-9.4.5
             restart: unless-stopped
-    #        volumes: 
-    #          - mariadb-glpi-volume:/var/lib/mysql:rw
+            volumes: 
+              - mariadb-glpi-volume:/var/lib/mysql:rw
             environment: 
               MYSQL_DATABASE: glpi
-              MYSQL_USER: glpi 
-              MYSQL_PASSWORD: glpi 
+              MYSQL_USER: glpi-user 
+              MYSQL_PASSWORD: glpi-pass 
               MYSQL_RANDOM_ROOT_PASSWORD: 1 
-    #        ports: 
-    #          - 3307:3306
+            ports: 
+              - 3306:3306
             networks: 
               - glpi-backend
     #
     # GLPI
     #
         glpi: 
-            image: fametec/glpi:latest
+            image: fametec/glpi:9.4.5
             restart: unless-stopped
-     #       volumes: 
-     #         - glpi-volume:/var/www/html:rw
+            volumes: 
+              - glpi-volume-config:/var/www/html/config:rw
+              - glpi-volume-files:/var/www/html/files:rw
+              - glpi-volume-plugins:/var/www/html/plugins:rw
             environment: 
               GLPI_LANG: pt_BR
               MARIADB_HOST: mariadb-glpi
               MARIADB_PORT: 3306
               MARIADB_DATABASE: glpi
-              MARIADB_USER: glpi
-              MARIADB_PASSWORD: glpi
-              VERSION: "9.4.3"
+              MARIADB_USER: glpi-user
+              MARIADB_PASSWORD: glpi-pass
+              VERSION: "9.4.5"
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
             ports: 
               - 30080:80
-              - 30443:443
             networks: 
               - glpi-frontend
               - glpi-backend
@@ -118,7 +120,7 @@ Run configure.sh
     # CRON
     #
         crond: 
-            image: fametec/crond-glpi:latest
+            image: fametec/crond-glpi:9.4.5
             restart: unless-stopped
             depends_on: 
               - glpi
@@ -127,18 +129,22 @@ Run configure.sh
               MARIADB_HOST: mariadb-glpi
               MARIADB_PORT: 3306
               MARIADB_DATABASE: glpi
-              MARIADB_USER: glpi
-              MARIADB_PASSWORD: glpi
-    #        volumes: 
-    #          - glpi-volume:/var/www/html:rw
+              MARIADB_USER: glpi-user
+              MARIADB_PASSWORD: glpi-pass
+            volumes: 
+              - glpi-volume-config:/var/www/html/config:ro
+              - glpi-volume-files:/var/www/html/files:rw
+              - glpi-volume-plugins:/var/www/html/plugins:rw
             networks: 
               - glpi-backend
     #
     # VOLUMES
     #
-    #volumes: 
-    #  glpi-volume:
-    #  mariadb-glpi-volume: 
+    volumes: 
+      glpi-volume-config:
+      glpi-volume-files:
+      glpi-volume-plugins:
+      mariadb-glpi-volume: 
     #
     # NETWORKS
     #
@@ -150,23 +156,23 @@ Run configure.sh
 
 # Plugins available
 
- - fields
- - costs
- - datainjection
- - formcreator
- - tag
- - genericobject
- - Mod
- - pdf
- - ocsinventoryng
- - tasklists
- - telegrambot
- - fusioninventory
+ - [x] fields
+ - [x] costs
+ - [x] datainjection
+ - [x] formcreator
+ - [x] tag
+ - [x] genericobject
+ - [x] Mod
+ - [x] pdf
+ - [x] ocsinventoryng
+ - [x] tasklists
+ - [x] telegrambot
+ - [x] fusioninventory
 
 
 # Manual install
 
-This script will install the GLPI on Linux Server CentOS 7 Minimal.  
+This script will install the GLPI on Linux Server CentOS 7.6  Minimal.  
 
 ## Play
 
@@ -175,12 +181,13 @@ This script will install the GLPI on Linux Server CentOS 7 Minimal.
 
 ## Silent
 
-    curl -sSL 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' | bash
+    ```curl -sSL 'https://raw.githubusercontent.com/fametec/glpi/master/install_glpi.sh' | bash```
 
 
 ## Download 
 
-    curl -sSL 'https://raw.githubusercontent.com/fameconsultoria/glpi/master/install_glpi.sh' -o install_glpi.sh 
+
+    ```curl -sSL 'https://raw.githubusercontent.com/fametec/glpi/master/install_glpi.sh' -o install_glpi.sh ```
 
 
 ## Configuration
@@ -188,16 +195,15 @@ This script will install the GLPI on Linux Server CentOS 7 Minimal.
 Edit the script
 
 
-    VERSION="9.4.3"                      # GLPI Version to install, default=9.3.2
-    TIMEZONE=America/Fortaleza           # Timezone default=America/Fortaleza
-    FQDN="glpi.eftech.com.br"            # Virtualhost default=glpi.eftech.com.br
-    ADMINEMAIL="suporte@eftech.com.br"   # Admin e-mail virtualhost
-    ORGANIZATION="EF-TECH"               # Organization name
+    VERSION="9.4.5"                      # GLPI Version to install, default=9.4.5
+    TIMEZONE=America/Fortaleza           # Timezone default=Etc/UTC
+    FQDN="glpi.fametec.com.br"           # Virtualhost default=glpi.fametec.com.br
+    ADMINEMAIL="suporte@fametec.com.br"  # Admin e-mail 
+    ORGANIZATION="FAMETec"               # Organization name
     MYSQL_ROOT_PASSWORD=''               # MariaDB root password, default=empty
     DBUSER="glpi"                        # Database username, default=glpi
     DBHOST="localhost"                   # Database Host/IP, default=localhost
     DBNAME="glpi"                        # Database name, default=glpi
-    # Create random password
     DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`" # 
     MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`" 
     
@@ -207,18 +213,18 @@ Edit the script
 
     sh install_glpi.sh
 
-After instalation the script save the credentials and variables in ~/install_glpi.log for future maintenance. 
+After instalation the script save the credentials and variables in ''install_glpi.log'' for future maintenance. 
 
 Example: 
 
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.4.3
+    VERSION=9.4.5
     TIMEZONE=America/Fortaleza
-    FQDN=glpi.eftech.com.br
-    ADMINEMAIL=suporte@eftech.com.br
-    ORGANIZATION=EF-TECH
+    FQDN=glpi.fametec.com.br
+    ADMINEMAIL=suporte@fametec.com.br
+    ORGANIZATION=FAMETec
     MYSQL_ROOT_PASSWORD=
     DBUSER=glpi
     DBHOST=localhost
@@ -233,16 +239,4 @@ Example:
     ====================================================
     
 
-
-
-## Courses e-Learning
-
-https://www.fametreinamentos.com.br
-
-
-## Support
-
-https://www.fametec.com.br
-    
-contato@fametec.com.br
 

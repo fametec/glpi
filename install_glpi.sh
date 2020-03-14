@@ -9,21 +9,23 @@
 ## VARIABLES
 
 LOGS="install_glpi.log"
-GLPI_LANG="pt_BR"
+GLPI_LANG="en_US"
+# GLPI_LANG="pt_BR"
 VERSION="9.4.5"
-TIMEZONE=America/Fortaleza
+TIMEZONE=Etc/UTC
+# TIMEZONE=America/Fortaleza
 FQDN="glpi.fametec.com.br"
 ADMINEMAIL="suporte@fametec.com.br"
-ORGANIZATION="FAMETEC"
+ORGANIZATION="FAMETec"
 MYSQL_ROOT_PASSWORD=''
 DBUSER="glpi"
 DBHOST="localhost"
 DBPORT=3306
 DBNAME="glpi"
 DBPASS="E`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
+MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
 # DBPASS="qaz123"
 # MYSQL_NEW_ROOT_PASSWORD="qaz123"
-MYSQL_NEW_ROOT_PASSWORD="C`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`"
 
 
 MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"

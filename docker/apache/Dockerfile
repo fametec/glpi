@@ -1,10 +1,12 @@
 FROM centos:7
 
+MAINTAINER eduardo@fametec.com.br
+
 ENV VERSION 9.4.5
 
 ENV GLPI_LANG pt_BR
 
-ENV MARIADB_HOST mariadb
+ENV MARIADB_HOST mariadb-glpi
 
 ENV MARIADB_PORT 3306
 
@@ -15,6 +17,8 @@ ENV MARIADB_USER glpi
 ENV MARIADB_PASSWORD glpi
 
 ENV PLUGINS all
+
+WORKDIR /var/www/html
 
 # RUN curl --progress 'https://setup.ius.io/' | sh 
 
@@ -37,7 +41,7 @@ RUN yum -y install \
 		php-gd \
 		php-mysqlnd \
 		bzip2 \
-		httpd mod_ssl \
+		httpd \
 		php-json \
 		php-mbstring \
 		php-mysqli \
@@ -52,24 +56,23 @@ RUN yum -y install \
 		php-apcu \
 		php-xmlrpc \
 		php-intl \
-		openssl \
 		jq \
 		php-pear-CAS \
-		mariadb \
-	&& yum -y clean all \
-	&& rm -rf /var/cache/yum
+	&& yum -y clean all
 
 ADD php.d /etc/php.d
-
 ADD conf.d /etc/httpd/conf.d
 
-ADD configure.sh backup.sh plugins.sh /
+COPY --chown=apache:apache src/glpi /var/www/html
 
-RUN chmod 755 /configure.sh /backup.sh /plugins.sh
+VOLUME ["/var/www/html/config", "/var/www/html/files", "/var/www/html/plugins"]
 
-VOLUME ["/var/www/html"]
+ADD glpi-entrypoint.sh backup.sh plugins.sh /
 
-EXPOSE 80/tcp 443/tcp
+RUN chmod 755 /glpi-entrypoint.sh /backup.sh /plugins.sh \
+	&& rm -rf /var/www/html/install/install.php
 
-ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
+EXPOSE 80/tcp 
+
+CMD ["/glpi-entrypoint.sh"]
 

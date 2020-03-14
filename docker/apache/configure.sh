@@ -12,7 +12,7 @@ SetSubVersion () {
 
 SetPermission () {
 
-    chown -Rf apache:apache /var/www/html/glpi
+    chown -Rf apache:apache /var/www/html
 
 }
 
