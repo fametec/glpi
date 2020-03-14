@@ -77,9 +77,7 @@ contato@fametec.com.br
     # MARIADB
     #
         mariadb-glpi: 
-            build: mariadb/
             image: fametec/mariadb:glpi-9.4.5
-            # image: mariadb:latest 
             restart: unless-stopped
             volumes: 
               - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -96,7 +94,6 @@ contato@fametec.com.br
     # GLPI
     #
         glpi: 
-            build: apache/
             image: fametec/glpi:9.4.5
             restart: unless-stopped
             volumes: 
@@ -123,7 +120,6 @@ contato@fametec.com.br
     # CRON
     #
         crond: 
-            build: crond/
             image: fametec/crond-glpi:9.4.5
             restart: unless-stopped
             depends_on: 
