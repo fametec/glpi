@@ -61,34 +61,18 @@ RUN yum -y install \
 	&& yum -y clean all
 
 ADD php.d /etc/php.d
-
 ADD conf.d /etc/httpd/conf.d
 
-# COPY --chown=apache:apache src/glpi /var/www/html
-
-RUN curl --progress -L https://github.com/glpi-project/glpi/releases/download/$VERSION/glpi-$VERSION.tgz | tar -zxf - -C /var/www/html/ \
-	&& chown -R apache:apache /var/www/html
+COPY --chown=apache:apache src/glpi /var/www/html
 
 VOLUME ["/var/www/html/config", "/var/www/html/files", "/var/www/html/plugins"]
 
-RUN {   \
-        echo "<?php"; \
-        echo "class DB extends DBmysql {"; \
-        echo "   public \$dbhost     = \"${MARIADB_HOST}\";"; \
-        echo "   public \$dbport     = \"${MARIADB_PORT}\";"; \
-        echo "   public \$dbuser     = \"${MARIADB_USER}\";"; \
-        echo "   public \$dbpassword = \"${MARIADB_PASSWORD}\";"; \
-        echo "   public \$dbdefault  = \"${MARIADB_DATABASE}\";"; \
-        echo "}"; \
-    } > /var/www/html/config/config_db.php \
-	&& chown apache:apache /var/www/html/config/config_db.php
+ADD glpi-entrypoint.sh backup.sh plugins.sh /
 
-# ADD configure.sh backup.sh plugins.sh /
-
-# RUN chmod 755 /configure.sh /backup.sh /plugins.sh
-
+RUN chmod 755 /glpi-entrypoint.sh /backup.sh /plugins.sh \
+	&& rm -rf /var/www/html/install/install.php
 
 EXPOSE 80/tcp 
 
-CMD ["httpd", "-D", "FOREGROUND"]
+CMD ["/glpi-entrypoint.sh"]
 

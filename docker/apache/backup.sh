@@ -15,11 +15,11 @@ if [ -z $MARIADB_DATABASE ]; then
 fi
 
 if [ -z $MARIADB_HOST ]; then
-  MARIADB_HOST="mariadb"
+  MARIADB_HOST="mariadb-glpi"
 fi
 
 if [ -z $MARIADB_PASSWORD ]; then
-  MARIADB_PASSWORD="glpi"
+  MARIADB_PASSWORD="glpi-pass"
 fi
 
 if [ -z $MARIADB_PORT ]; then
@@ -27,18 +27,18 @@ if [ -z $MARIADB_PORT ]; then
 fi
 
 if [ -z $MARIADB_USER ]; then
-  MARIADB_USER="glpi"
+  MARIADB_USER="glpi-user"
 fi
 
-/bin/mysqldump -h $MARIADB_HOST -P $MARIADB_PORT -u $MARIADB_USER -p$MARIADB_PASSWORD --single-transaction --routines --databases $MARIADB_DATABASE | /usr/bin/gzip > /var/www/html/glpi/files/_dumps/glpi-backup-${NOW}.sql.gz
+/bin/mysqldump -h $MARIADB_HOST -P $MARIADB_PORT -u $MARIADB_USER -p$MARIADB_PASSWORD --single-transaction --routines --databases $MARIADB_DATABASE | /usr/bin/gzip > /var/www/html/files/_dumps/glpi-backup-${NOW}.sql.gz
 
 if [ $? -eq 0 ]; then
 
   chown -R apache:apache /var/www/html/glpi/files/_dumps/glpi-backup-${NOW}.sql.gz
 
-  ls -lh /var/www/html/glpi/files/_dumps/glpi-backup-${NOW}.sql.gz
+  ls -lh /var/www/html/files/_dumps/glpi-backup-${NOW}.sql.gz
 
 fi
 
-/bin/find /var/www/html/glpi/files/_dumps/ -mtime +30 -delete
+/bin/find /var/www/html/files/_dumps/ -mtime +30 -delete
 

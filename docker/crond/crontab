@@ -1,6 +1,6 @@
 
-*/2 * * * * root cd /var/www/html/glpi && /usr/bin/php front/cron.php 
-*/5 * * * * root cd /var/www/html/glpi && /usr/bin/php front/cron.php --forcequeudnotification 
-*/5 * * * * root cd /var/www/html/glpi && /usr/bin/php front/cron.php --forcemailgate
+*/2 * * * * root cd /var/www/html && /usr/bin/php front/cron.php 
+*/5 * * * * root cd /var/www/html && /usr/bin/php front/cron.php --forcequeudnotification 
+*/5 * * * * root cd /var/www/html && /usr/bin/php front/cron.php --forcemailgate
 
 0 1 * * * root /backup.sh  
