@@ -28,12 +28,6 @@
 #  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
 #  * ---------------------------------------------------------------------
 # */
-
-CREATE DATABASE IF NOT EXISTS glpi character set utf8;
-
-USE glpi; 
-
-
 #GLPI Dump database on 2016-02-08 16:57
 
 ### Dump table glpi_alerts
