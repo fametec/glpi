@@ -1,6 +1,6 @@
 FROM fametec/glpi:9.4.5
 
-RUN yum -y install cronie
+RUN yum -y install cronie mariadb
  
 ADD crontab /etc/crontab
 
