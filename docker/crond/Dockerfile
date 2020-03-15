@@ -4,7 +4,7 @@ RUN yum -y install cronie mariadb
  
 ADD crontab /etc/crontab
 
-ADD crond-entrypoint.sh /
+ADD crond-entrypoint.sh backup.sh /
 
 RUN chmod 0644 /etc/crontab && chmod 755 /crond-entrypoint.sh /backup.sh
 
