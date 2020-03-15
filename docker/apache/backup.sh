@@ -19,7 +19,7 @@ if [ -z $MARIADB_HOST ]; then
 fi
 
 if [ -z $MARIADB_PASSWORD ]; then
-  MARIADB_PASSWORD="glpi-pass"
+  MARIADB_PASSWORD="glpi"
 fi
 
 if [ -z $MARIADB_PORT ]; then
@@ -27,14 +27,14 @@ if [ -z $MARIADB_PORT ]; then
 fi
 
 if [ -z $MARIADB_USER ]; then
-  MARIADB_USER="glpi-user"
+  MARIADB_USER="glpi"
 fi
 
 /bin/mysqldump -h $MARIADB_HOST -P $MARIADB_PORT -u $MARIADB_USER -p$MARIADB_PASSWORD --single-transaction --routines --databases $MARIADB_DATABASE | /usr/bin/gzip > /var/www/html/files/_dumps/glpi-backup-${NOW}.sql.gz
 
 if [ $? -eq 0 ]; then
 
-  chown -R apache:apache /var/www/html/glpi/files/_dumps/glpi-backup-${NOW}.sql.gz
+  chown -R apache:apache /var/www/html/files/_dumps/glpi-backup-${NOW}.sql.gz
 
   ls -lh /var/www/html/files/_dumps/glpi-backup-${NOW}.sql.gz
 
