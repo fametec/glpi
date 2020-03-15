@@ -4,8 +4,12 @@ RUN yum -y install cronie
  
 ADD crontab /etc/crontab
 
-RUN chmod 0644 /etc/crontab
+RUN chmod 0644 /etc/crontab 
 
 VOLUME ["/var/www/html"]
 
-ENTRYPOINT [ "crond", "-s", "-x", "bit", "-n", "/etc/crontab" ]
+COPY crond-entrypoint.sh /
+
+RUN chmod 755 /crond-entrypoint.sh
+
+CMD [ "crond-entrypoint.sh"" ]
