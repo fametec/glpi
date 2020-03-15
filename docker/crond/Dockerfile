@@ -8,4 +8,4 @@ ADD crond-entrypoint.sh /
 
 RUN chmod 0644 /etc/crontab && chmod 755 /crond-entrypoint.sh
 
-CMD [ "crond-entrypoint.sh" ]
+CMD [ "/crond-entrypoint.sh" ]
