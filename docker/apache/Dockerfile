@@ -69,7 +69,7 @@ VOLUME ["/var/www/html/config", "/var/www/html/files", "/var/www/html/plugins"]
 
 ADD glpi-entrypoint.sh backup.sh plugins.sh /
 
-RUN chmod 755 /glpi-entrypoint.sh /backup.sh /plugins.sh \
+RUN chmod 755 /glpi-entrypoint.sh /plugins.sh \
 	&& rm -rf /var/www/html/install/install.php
 
 EXPOSE 80/tcp 
