@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: glpi
+  labels: 
+    app: glpi
+spec:
+  ports: 
+    - port: 80
+  selector: 
+    app: glpi
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glpi
+  labels: 
+    app: glpi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: glpi
+  template:
+    metadata:
+      labels:
+        app: glpi
+    spec:
+      containers:
+      - image: fametec/glpi:9.4.5
+        name: glpi
+        env: 
+        - name: GLPI_LANG
+          value: "pt_BR"
+        - name: MARIADB_HOST
+          value: "mariadb-glpi"
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_DATABASE
+          value: "glpi"
+        - name: MARIADB_USER
+          value: "glpi"
+        - name: MARIADB_PASSWORD
+          value: "glpi"
+        - name: VERSION
+          value: "9.4.5"
+        - name: PLUGINS
+          value: "all"
+        ports:
+        - containerPort: 80
+          name: glpi
+
