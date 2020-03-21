@@ -22,6 +22,12 @@ contato@fametec.com.br
 ![license](https://img.shields.io/github/license/glpi-project/glpi.svg)
 
 
+## Topology
+
+
+![Topology](https://raw.githubusercontent.com/fametec/glpi/master/topologia-docker-compose-glpi.png)
+
+
 ## Install on docker container 
 
 ### Play
@@ -97,7 +103,6 @@ contato@fametec.com.br
             image: fametec/glpi:9.4.5
             restart: unless-stopped
             volumes: 
-              - glpi-volume-config:/var/www/html/config:rw
               - glpi-volume-files:/var/www/html/files:rw
               - glpi-volume-plugins:/var/www/html/plugins:rw
             environment: 
@@ -132,7 +137,6 @@ contato@fametec.com.br
               MARIADB_USER: glpi-user
               MARIADB_PASSWORD: glpi-pass
             volumes: 
-              - glpi-volume-config:/var/www/html/config:ro
               - glpi-volume-files:/var/www/html/files:rw
               - glpi-volume-plugins:/var/www/html/plugins:rw
             networks: 
@@ -141,7 +145,6 @@ contato@fametec.com.br
     # VOLUMES
     #
     volumes: 
-      glpi-volume-config:
       glpi-volume-files:
       glpi-volume-plugins:
       mariadb-glpi-volume: 
