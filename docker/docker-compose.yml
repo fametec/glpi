@@ -1,11 +1,10 @@
-version: "3.5"
+version: "3.3"
 services:
 #
 # MARIADB
 #
     mariadb-glpi: 
-        image: fametec/mariadb:glpi-9.4.5
-        # image: mariadb:latest 
+        image: fametec/mariadb-glpi:9.4.5
         restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/lib/mysql:rw
