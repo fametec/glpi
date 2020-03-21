@@ -22,6 +22,12 @@ contato@fametec.com.br
 ![license](https://img.shields.io/github/license/glpi-project/glpi.svg)
 
 
+## Topology
+
+
+![Topology](https://raw.githubusercontent.com/fametec/glpi/master/topologia-docker-compose-glpi.png)
+
+
 ## Install on docker container 
 
 ### Play
