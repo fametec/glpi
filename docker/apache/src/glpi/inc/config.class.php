@@ -151,7 +151,7 @@ class Config extends CommonDBTM {
          if (empty($input["smtp_passwd"])) {
             unset($input["smtp_passwd"]);
          } else {
-            $input["smtp_passwd"] = Toolbox::encrypt(stripslashes($input["smtp_passwd"]), GLPIKEY);
+            $input["smtp_passwd"] = Toolbox::encrypt(stripslashes($input["smtp_passwd"]));
          }
       }
 
@@ -163,8 +163,7 @@ class Config extends CommonDBTM {
          if (empty($input["proxy_passwd"])) {
             unset($input["proxy_passwd"]);
          } else {
-            $input["proxy_passwd"] = Toolbox::encrypt(stripslashes($input["proxy_passwd"]),
-                                                      GLPIKEY);
+            $input["proxy_passwd"] = Toolbox::encrypt(stripslashes($input["proxy_passwd"]));
          }
       }
 
@@ -1780,6 +1779,9 @@ class Config extends CommonDBTM {
 
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr><th>". __('Information about system installation and configuration')."</th></tr>";
+      echo "<tr class='tab_bg_1'><td>";
+      echo "<a class='vsubmit' href='?check_version'>".__('Check if a new version is available')."</a>";
+      echo "</td></tr>";
 
        $oldlang = $_SESSION['glpilanguage'];
        // Keep this, for some function call which still use translation (ex showAllReplicateDelay)
@@ -1834,7 +1836,7 @@ class Config extends CommonDBTM {
       echo wordwrap($msg."\n", $width, "\n\t");
 
       if (isset($_SERVER["HTTP_USER_AGENT"])) {
-         echo "\t" . $_SERVER["HTTP_USER_AGENT"] . "\n";
+         echo "\t" . Toolbox::clean_cross_side_scripting_deep($_SERVER["HTTP_USER_AGENT"]) . "\n";
       }
 
       foreach ($DB->getInfo() as $key => $val) {

@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\View\Helper;
@@ -62,8 +60,6 @@ class CurrencyFormat extends AbstractHelper
      */
     protected $correctionNeeded = false;
 
-
-
     /**
      * @throws Exception\ExtensionNotLoadedException if ext/intl is not present
      */
@@ -80,11 +76,11 @@ class CurrencyFormat extends AbstractHelper
     /**
      * Format a number
      *
-     * @param  float  $number
-     * @param  string $currencyCode
-     * @param  bool   $showDecimals
-     * @param  string $locale
-     * @param  string $pattern
+     * @param  float       $number
+     * @param  string|null $currencyCode
+     * @param  bool|null   $showDecimals
+     * @param  string|null $locale
+     * @param  string|null $pattern
      * @return string
      */
     public function __invoke(
@@ -167,7 +163,7 @@ class CurrencyFormat extends AbstractHelper
      * The 3-letter ISO 4217 currency code indicating the currency to use
      *
      * @param  string $currencyCode
-     * @return CurrencyFormat
+     * @return $this
      */
     public function setCurrencyCode($currencyCode)
     {
@@ -189,7 +185,7 @@ class CurrencyFormat extends AbstractHelper
      * Set the currency pattern
      *
      * @param  string $currencyPattern
-     * @return CurrencyFormat
+     * @return $this
      */
     public function setCurrencyPattern($currencyPattern)
     {
@@ -211,7 +207,7 @@ class CurrencyFormat extends AbstractHelper
      * Set locale to use instead of the default
      *
      * @param  string $locale
-     * @return CurrencyFormat
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -222,7 +218,7 @@ class CurrencyFormat extends AbstractHelper
     /**
      * Get the locale to use
      *
-     * @return string|null
+     * @return string
      */
     public function getLocale()
     {
@@ -237,7 +233,7 @@ class CurrencyFormat extends AbstractHelper
      * Set if the view helper should show two decimals
      *
      * @param  bool $showDecimals
-     * @return CurrencyFormat
+     * @return $this
      */
     public function setShouldShowDecimals($showDecimals)
     {
@@ -255,14 +251,11 @@ class CurrencyFormat extends AbstractHelper
         return $this->showDecimals;
     }
 
-
-
     /**
      * @param string          $formattedNumber
      * @param NumberFormatter $formatter
      * @param string          $locale
      * @param string          $currencyCode
-     *
      * @return string
      */
     private function fixICUBugForNoDecimals($formattedNumber, NumberFormatter $formatter, $locale, $currencyCode)
@@ -270,18 +263,15 @@ class CurrencyFormat extends AbstractHelper
         $pattern = sprintf(
             '/\%s\d+(\s?%s)?$/u',
             $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL),
-            preg_quote($this->getCurrencySymbol($locale, $currencyCode))
+            preg_quote($this->getCurrencySymbol($locale, $currencyCode), '/')
         );
 
         return preg_replace($pattern, '$1', $formattedNumber);
     }
 
-
-
     /**
      * @param string $locale
      * @param string $currencyCode
-     *
      * @return string
      */
     private function getCurrencySymbol($locale, $currencyCode)

@@ -578,6 +578,7 @@ return array(
     'Zend\\I18n\\Validator\\PhoneNumber' => $vendorDir . '/zendframework/zend-i18n/src/Validator/PhoneNumber.php',
     'Zend\\I18n\\Validator\\PostCode' => $vendorDir . '/zendframework/zend-i18n/src/Validator/PostCode.php',
     'Zend\\I18n\\View\\HelperConfig' => $vendorDir . '/zendframework/zend-i18n/src/View/HelperConfig.php',
+    'Zend\\I18n\\View\\HelperTrait' => $vendorDir . '/zendframework/zend-i18n/src/View/HelperTrait.php',
     'Zend\\I18n\\View\\Helper\\AbstractTranslatorHelper' => $vendorDir . '/zendframework/zend-i18n/src/View/Helper/AbstractTranslatorHelper.php',
     'Zend\\I18n\\View\\Helper\\CurrencyFormat' => $vendorDir . '/zendframework/zend-i18n/src/View/Helper/CurrencyFormat.php',
     'Zend\\I18n\\View\\Helper\\DateFormat' => $vendorDir . '/zendframework/zend-i18n/src/View/Helper/DateFormat.php',

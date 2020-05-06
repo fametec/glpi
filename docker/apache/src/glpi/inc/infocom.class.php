@@ -1522,7 +1522,6 @@ class Infocom extends CommonDBChild {
          'field'              => 'value',
          'name'               => _x('price', 'Value'),
          'datatype'           => 'decimal',
-         'width'              => '100',
          'forcegroupby'       => true,
          'joinparams'         => $joinparams
       ];
@@ -1533,7 +1532,6 @@ class Infocom extends CommonDBChild {
          'field'              => 'warranty_value',
          'name'               => __('Warranty extension value'),
          'datatype'           => 'decimal',
-         'width'              => '100',
          'forcegroupby'       => true,
          'joinparams'         => $joinparams
       ];
@@ -2003,8 +2001,8 @@ class Infocom extends CommonDBChild {
                         $ma->addMessage($ic->getErrorMessage(ERROR_RIGHT));
                      }
                   } else {
-                     $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_KO);
-                     $ma->addMessage($ic->getErrorMessage(ERROR_NOT_FOUND));
+                     // Infocom already exists for this item, nothing to do.
+                     $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_OK);
                   }
                }
             }

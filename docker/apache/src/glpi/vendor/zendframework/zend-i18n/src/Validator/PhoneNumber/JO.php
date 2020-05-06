@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -21,7 +19,7 @@ return [
             'personal' => '/^70\\d{7}$/',
             'uan' => '/^8(?:10|8\\d)\\d{5}$/',
             'shortcode' => '/^1(?:09|1[01]|9[024-79])$/',
-            'emergency' => '/^1(?:12|91)|911$/',
+            'emergency' => '/^(?:1(?:12|91)|911)$/',
         ],
         'possible' => [
             'general' => '/^\\d{7,9}$/',

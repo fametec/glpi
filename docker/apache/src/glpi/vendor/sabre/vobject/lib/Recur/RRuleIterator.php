@@ -67,6 +67,9 @@ class RRuleIterator implements Iterator
      */
     public function valid()
     {
+        if (null === $this->currentDate) {
+            return false;
+        }
         if (!is_null($this->count)) {
             return $this->counter < $this->count;
         }
@@ -338,7 +341,7 @@ class RRuleIterator implements Iterator
             if ($this->byHour) {
                 if ('23' == $this->currentDate->format('G')) {
                     // to obey the interval rule
-                    $this->currentDate = $this->currentDate->modify('+'.$this->interval - 1 .' days');
+                    $this->currentDate = $this->currentDate->modify('+'.($this->interval - 1).' days');
                 }
 
                 $this->currentDate = $this->currentDate->modify('+1 hours');
@@ -398,7 +401,7 @@ class RRuleIterator implements Iterator
 
             // We need to roll over to the next week
             if ($currentDay === $firstDay && (!$this->byHour || '0' == $currentHour)) {
-                $this->currentDate = $this->currentDate->modify('+'.$this->interval - 1 .' weeks');
+                $this->currentDate = $this->currentDate->modify('+'.($this->interval - 1).' weeks');
 
                 // We need to go to the first day of this week, but only if we
                 // are not already on this first day of this week.
@@ -461,6 +464,14 @@ class RRuleIterator implements Iterator
             // This goes to 0 because we need to start counting at the
             // beginning.
             $currentDayOfMonth = 0;
+
+            // To prevent running this forever (better: until we hit the max date of DateTimeImmutable) we simply
+            // stop at 9999-12-31. Looks like the year 10000 problem is not solved in php ....
+            if ($this->currentDate->getTimestamp() > 253402300799) {
+                $this->currentDate = null;
+
+                return;
+            }
         }
 
         $this->currentDate = $this->currentDate->setDate(

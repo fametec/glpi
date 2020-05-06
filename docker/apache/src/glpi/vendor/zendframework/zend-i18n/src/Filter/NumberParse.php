@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\Filter;
@@ -25,7 +23,7 @@ class NumberParse extends AbstractLocale
     /**
      * @var NumberFormatter
      */
-    protected $formatter = null;
+    protected $formatter;
 
     /**
      * @param array|Traversable|string|null $localeOrOptions
@@ -55,7 +53,7 @@ class NumberParse extends AbstractLocale
 
     /**
      * @param  string|null $locale
-     * @return NumberFormat
+     * @return $this
      */
     public function setLocale($locale = null)
     {
@@ -66,7 +64,7 @@ class NumberParse extends AbstractLocale
 
     /**
      * @param  int $style
-     * @return NumberFormat
+     * @return $this
      */
     public function setStyle($style)
     {
@@ -85,7 +83,7 @@ class NumberParse extends AbstractLocale
 
     /**
      * @param  int $type
-     * @return NumberFormat
+     * @return $this
      */
     public function setType($type)
     {
@@ -103,7 +101,7 @@ class NumberParse extends AbstractLocale
 
     /**
      * @param  NumberFormatter $formatter
-     * @return NumberFormat
+     * @return $this
      */
     public function setFormatter(NumberFormatter $formatter)
     {
@@ -134,7 +132,7 @@ class NumberParse extends AbstractLocale
     /**
      * Defined by Zend\Filter\FilterInterface
      *
-     * @see    Zend\Filter\FilterInterface::filter()
+     * @see    \Zend\Filter\FilterInterface::filter()
      * @param  mixed $value
      * @return mixed
      */

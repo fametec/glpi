@@ -1,0 +1,34 @@
+[2020-05-05 13:21:18] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/styles.scss is new, loading  {"user":"@johanxps"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/vintage.scss is new, loading  {"user":"@johanxps","mem_usage":"6.063\", 11.28Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/teclib.scss is new, loading  {"user":"@johanxps","mem_usage":"0.032\", 11.26Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/purplehaze.scss is new, loading  {"user":"@johanxps","mem_usage":"0.030\", 11.31Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/premiumred.scss is new, loading  {"user":"@johanxps","mem_usage":"0.033\", 11.37Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/lightblue.scss is new, loading  {"user":"@johanxps","mem_usage":"0.028\", 11.42Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/icecream.scss is new, loading  {"user":"@johanxps","mem_usage":"0.030\", 11.47Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/hipster.scss is new, loading  {"user":"@johanxps","mem_usage":"0.027\", 11.52Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/greenflat.scss is new, loading  {"user":"@johanxps","mem_usage":"0.028\", 11.58Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/flood.scss is new, loading  {"user":"@johanxps","mem_usage":"0.021\", 11.61Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/dark.scss is new, loading  {"user":"@johanxps","mem_usage":"0.030\", 11.67Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/clockworkorange.scss is new, loading  {"user":"@johanxps","mem_usage":"0.026\", 11.72Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/classic.scss is new, loading  {"user":"@johanxps","mem_usage":"0.032\", 11.77Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/automn.scss is new, loading  {"user":"@johanxps","mem_usage":"0.023\", 11.81Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/auror.scss is new, loading  {"user":"@johanxps","mem_usage":"0.029\", 11.87Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/palettes/aerialgreen.scss is new, loading  {"user":"@johanxps","mem_usage":"0.015\", 11.89Mio)"} 
+[2020-05-05 13:21:24] glpiphplog.DEBUG: Html::compileScss() in /tmp/glpi/inc/html.class.php line 6825
+css/highcontrast.scss is new, loading  {"user":"@johanxps","mem_usage":"0.023\", 11.93Mio)"} 

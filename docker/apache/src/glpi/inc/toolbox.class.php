@@ -239,7 +239,15 @@ class Toolbox {
     *
     * @return encrypted string
    **/
-   static function encrypt($string, $key) {
+   static function encrypt($string, $key = null) {
+
+      if ($key === null) {
+         $key = self::getGlpiSecKey();
+      }
+
+      if ($key === GLPIKEY && !defined('TU_USER')) {
+         self::deprecated('Using GLPIKEY is not secure!');
+      }
 
       $result = '';
       for ($i=0; $i<strlen($string); $i++) {
@@ -260,7 +268,11 @@ class Toolbox {
     *
     * @return decrypted string
    **/
-   static function decrypt($string, $key) {
+   static function decrypt($string, $key = null) {
+
+      if ($key === null) {
+         $key = self::getGlpiSecKey();
+      }
 
       $result = '';
       $string = base64_decode($string);
@@ -273,6 +285,19 @@ class Toolbox {
       }
 
       return Toolbox::unclean_cross_side_scripting_deep($result);
+   }
+
+   /**
+    * Get GLPI security key used for decryptable passwords
+    *
+    * Will read key from config/glpi.key if present.
+    * For 9.4 branch, this will defaults to GLPIKEY.
+    *
+    * @return string
+    */
+   public static function getGlpiSecKey() {
+      $glpikey = new GLPIKey();
+      return $glpikey->get();
    }
 
 
@@ -358,7 +383,7 @@ class Toolbox {
          }
 
          $config                      = ['safe'=>1];
-         $config["elements"]          = "*+iframe";
+         $config["elements"]          = "*+iframe+audio+video";
          $config["direct_list_nest"]  = 1;
 
          $value                       = htmLawed($value, $config);
@@ -713,25 +738,15 @@ class Toolbox {
 
       // If debug mode activated : display some information
       if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) {
-         // display_errors only need for for E_ERROR, E_PARSE, ... which cannot be catched
          // Recommended development settings
          ini_set('display_errors', 'On');
-         error_reporting(E_ALL | E_STRICT);
+         error_reporting(E_ALL);
          set_error_handler(['Toolbox','userErrorHandlerDebug']);
-
-      } else {
+      } else if (!defined('TU_USER')) {
          // Recommended production settings
          ini_set('display_errors', 'Off');
-         if (defined('TU_USER')) {
-            //do not set error_reporting to a low level for unit tests
-            error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
-         }
+         error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
          set_error_handler(['Toolbox', 'userErrorHandlerNormal']);
-      }
-
-      if (defined('TU_USER')) {
-         //user default error handler from tests
-         set_error_handler(null);
       }
    }
 
@@ -1361,36 +1376,41 @@ class Toolbox {
       //create new img resource for store thumbnail
       $source_dest = imagecreatetruecolor($new_width, $new_height);
 
+      // set transparent background for PNG/GIF
+      if ($img_type === IMAGETYPE_GIF || $img_type === IMAGETYPE_PNG) {
+         imagecolortransparent($source_dest, imagecolorallocatealpha($source_dest, 0, 0, 0, 127));
+         imagealphablending($source_dest, false);
+         imagesavealpha($source_dest, true);
+      }
+
       //resize image
       imagecopyresampled($source_dest, $source_res, 0, 0, $img_x, $img_y,
                          $new_width, $new_height, $img_width, $img_height);
 
       //output img
-      return imagejpeg($source_dest, $dest_path, 90);
+      $result = null;
+      switch ($img_type) {
+         case IMAGETYPE_GIF :
+         case IMAGETYPE_PNG :
+            $result = imagepng($source_dest, $dest_path);
+            break;
+
+         case IMAGETYPE_JPEG :
+         default :
+            $result = imagejpeg($source_dest, $dest_path, 90);
+            break;
+      }
+      return $result;
    }
 
 
    /**
     * Check if new version is available
     *
-    * @param $auto                  boolean: check done autically ? (if not display result)
-    *                                        (true by default)
-    * @param $messageafterredirect  boolean: use message after redirect instead of display
-    *                                        (false by default)
-    *
-    * @return string explaining the result
+    * @return string
    **/
-   static function checkNewVersionAvailable($auto = true, $messageafterredirect = false) {
+   static function checkNewVersionAvailable() {
       global $CFG_GLPI;
-
-      if (!$auto
-          && !Session::haveRight('backup', Backup::CHECKUPDATE)) {
-         return false;
-      }
-
-      if (!$auto && !$messageafterredirect) {
-         echo "<br>";
-      }
 
       //parse github releases (get last version number)
       $error = "";
@@ -1406,56 +1426,13 @@ class Toolbox {
       $latest_version = array_pop($released_tags);
 
       if (strlen(trim($latest_version)) == 0) {
-         if (!$auto) {
-            if ($messageafterredirect) {
-               Session::addMessageAfterRedirect($error, true, ERROR);
-            } else {
-               echo "<div class='center'>$error</div>";
-            }
-         } else {
-            return $error;
-         }
-
+         return $error;
       } else {
          if (version_compare($CFG_GLPI["version"], $latest_version, '<')) {
             Config::setConfigurationValues('core', ['founded_new_version' => $latest_version]);
-
-            if (!$auto) {
-               if ($messageafterredirect) {
-                  Session::addMessageAfterRedirect(sprintf(__('A new version is available: %s.'),
-                                                           $latest_version));
-                  Session::addMessageAfterRedirect(__('You will find it on the GLPI-PROJECT.org site.'));
-               } else {
-                  echo "<div class='center'>".sprintf(__('A new version is available: %s.'),
-                                                      $latest_version)."</div>";
-                  echo "<div class='center'>".__('You will find it on the GLPI-PROJECT.org site.').
-                       "</div>";
-               }
-
-            } else {
-               if ($messageafterredirect) {
-                  Session::addMessageAfterRedirect(sprintf(__('A new version is available: %s.'),
-                                                           $latest_version));
-               } else {
-                  return sprintf(__('A new version is available: %s.'), $latest_version);
-               }
-            }
-
+            return sprintf(__('A new version is available: %s.'), $latest_version);
          } else {
-            if (!$auto) {
-               if ($messageafterredirect) {
-                  Session::addMessageAfterRedirect(__('You have the latest available version'));
-               } else {
-                  echo "<div class='center'>".__('You have the latest available version')."</div>";
-               }
-
-            } else {
-               if ($messageafterredirect) {
-                  Session::addMessageAfterRedirect(__('You have the latest available version'));
-               } else {
-                  return __('You have the latest available version');
-               }
-            }
+            return __('You have the latest available version');
          }
       }
       return 1;
@@ -1728,7 +1705,7 @@ class Toolbox {
          if (!empty($CFG_GLPI["proxy_user"])) {
             $opts += [
                CURLOPT_PROXYAUTH    => CURLAUTH_BASIC,
-               CURLOPT_PROXYUSERPWD => $CFG_GLPI["proxy_user"] . ":" . self::decrypt($CFG_GLPI["proxy_passwd"], GLPIKEY),
+               CURLOPT_PROXYUSERPWD => $CFG_GLPI["proxy_user"] . ":" . self::decrypt($CFG_GLPI["proxy_passwd"]),
             ];
          }
 
@@ -1834,8 +1811,10 @@ class Toolbox {
       if (!empty($where)) {
 
          if (Session::getCurrentInterface()) {
-            $decoded_where = rawurldecode($where);
             // redirect to URL : URL must be rawurlencoded
+            $decoded_where = rawurldecode($where);
+
+            // redirect to full url -> check if it's based on glpi url
             if (preg_match('@(([^:/].+:)?//[^/]+)(/.+)?@', $decoded_where, $matches)) {
                if ($matches[1] !== $CFG_GLPI['url_base']) {
                   Session::addMessageAfterRedirect('Redirection failed');
@@ -1848,10 +1827,12 @@ class Toolbox {
                   Html::redirect($decoded_where);
                }
             }
-            // Redirect based on GLPI_ROOT : URL must be rawurlencoded
+
+            // Redirect to relative url -> redirect with glpi url to prevent exploits
             if ($decoded_where[0] == '/') {
-               // echo $decoded_where;exit();
-               Html::redirect($CFG_GLPI["root_doc"].$decoded_where);
+               $redirect_to = $CFG_GLPI["url_base"].$decoded_where;
+               //echo $redirect_to; exit();
+               Html::redirect($redirect_to);
             }
 
             $data = explode("_", $where);

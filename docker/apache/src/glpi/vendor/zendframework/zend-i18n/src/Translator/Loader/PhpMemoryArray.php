@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\Translator\Loader;
@@ -33,9 +31,8 @@ class PhpMemoryArray implements RemoteLoaderInterface
      *
      * @param  string $locale
      * @param  string $textDomain
-     *
-     * @throws \Zend\I18n\Exception\InvalidArgumentException
-     * @return \Zend\I18n\Translator\TextDomain|null
+     * @return TextDomain
+     * @throws Exception\InvalidArgumentException
      */
     public function load($locale, $textDomain)
     {
@@ -59,7 +56,7 @@ class PhpMemoryArray implements RemoteLoaderInterface
 
         $textDomain = new TextDomain($this->messages[$textDomain][$locale]);
 
-        if (array_key_exists('', $textDomain)) {
+        if ($textDomain->offsetExists('')) {
             if (isset($textDomain['']['plural_forms'])) {
                 $textDomain->setPluralRule(
                     PluralRule::fromString($textDomain['']['plural_forms'])

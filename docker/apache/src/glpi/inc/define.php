@@ -31,7 +31,7 @@
 */
 
 // Current version of GLPI
-define('GLPI_VERSION', '9.4.5');
+define('GLPI_VERSION', '9.4.6');
 if (substr(GLPI_VERSION, -4) === '-dev') {
    //for dev version
    define('GLPI_PREVER', str_replace('-dev', '', GLPI_VERSION));
@@ -41,7 +41,7 @@ if (substr(GLPI_VERSION, -4) === '-dev') {
    );
 } else {
    //for stable version
-   define("GLPI_SCHEMA_VERSION", '9.4.5');
+   define("GLPI_SCHEMA_VERSION", '9.4.6');
 }
 define('GLPI_MIN_PHP', '5.6.0'); // Must also be changed in top of index.php
 define('GLPI_YEAR', '2019');
@@ -322,6 +322,10 @@ $CFG_GLPI['device_types']                 = ['DeviceMotherboard', 'DeviceFirmwar
                                                   'DeviceSoundCard', 'DeviceControl', 'DevicePci',
                                                   'DeviceCase', 'DevicePowerSupply', 'DeviceGeneric',
                                                   'DeviceSimcard', 'DeviceSensor'];
+
+foreach ($CFG_GLPI['device_types'] as $dtype) {
+   $CFG_GLPI['location_types'][] = 'Item_' . $dtype;
+}
 
 $CFG_GLPI["itemdevices_types"]            = ['Computer', 'NetworkEquipment', 'Peripheral',
                                                   'Phone', 'Printer', 'Enclosure'];

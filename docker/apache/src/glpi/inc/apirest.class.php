@@ -335,7 +335,15 @@ class APIRest extends API {
                $this->parameters['parent_itemtype'] = $itemtype;
                $itemtype                            = $additional_itemtype;
             }
-            $itemtype = ucfirst($itemtype);
+
+            // AllAssets
+            if ($all_assets && $this->url_elements[$index] == "AllAssets") {
+               return "AllAssets";
+            }
+
+            // Get case sensitive itemtype name
+            $rc = new \ReflectionClass($itemtype);
+            $itemtype = $rc->getName();
             return $itemtype;
          }
          $this->returnError(__("resource not found or not an instance of CommonDBTM"),

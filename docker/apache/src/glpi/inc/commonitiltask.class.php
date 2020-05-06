@@ -284,14 +284,14 @@ abstract class CommonITILTask  extends CommonDBTM {
          }
       }
 
-      $input = $this->addFiles($input);
-
       return $input;
    }
 
 
    function post_updateItem($history = 1) {
       global $CFG_GLPI;
+
+      $this->input = $this->addFiles($this->input, ['force_update' => true]);
 
       if (in_array("begin", $this->updates)) {
          PlanningRecall::managePlanningUpdates($this->getType(), $this->getID(),
@@ -331,7 +331,7 @@ abstract class CommonITILTask  extends CommonDBTM {
             // change ticket status (from splitted button)
             $itemtype = $this->getItilObjectItemType();
             $this->input['_job'] = new $itemtype();
-            if (!$this->input['_job']->getFromDB($this->input[$this->input['_job']->getForeignKeyField()])) {
+            if (!$this->input['_job']->getFromDB($this->fields[$this->input['_job']->getForeignKeyField()])) {
                return false;
             }
             if (isset($this->input['_status'])

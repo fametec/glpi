@@ -3289,6 +3289,7 @@ JAVASCRIPT;
 
       // Add entity view :
       if (Session::isMultiEntitiesMode()
+          && $item->isEntityAssign()
           && (isset($CFG_GLPI["union_search_type"][$itemtype])
               || ($item && $item->maybeRecursive())
               || isset($_SESSION['glpiactiveentities']) && (count($_SESSION["glpiactiveentities"]) > 1))) {
@@ -3306,6 +3307,7 @@ JAVASCRIPT;
     * @return select string
    **/
    static function addDefaultSelect($itemtype) {
+      global $DB;
 
       $itemtable = getTableForItemType($itemtype);
       $item      = null;
@@ -3333,7 +3335,12 @@ JAVASCRIPT;
       if ($itemtable == 'glpi_entities') {
          $ret .= "`$itemtable`.`id` AS entities_id, '1' AS is_recursive, ";
       } else if ($mayberecursive) {
-         $ret .= "`$itemtable`.`entities_id`, `$itemtable`.`is_recursive`, ";
+         $ret .= $DB->quoteName("$itemtable.entities_id").", ";
+         //do not include field if not present in table
+         $item->getEmpty();
+         if (isset($item->fields['is_recursive'])) {
+            $ret .= $DB->quoteName("$itemtable.is_recursive").", ";
+         }
       }
       return $ret;
    }
@@ -3926,8 +3933,14 @@ JAVASCRIPT;
             $condition .= "OR `users_id` = " . Session::getLoginUserID() . " ";
             $condition .= "OR `users_id_tech` = " . Session::getLoginUserID() . " ";
 
-            // Check for parent item visibility
-            $condition .= "AND " . TicketTask::buildParentCondition() . ")";
+            // Check for parent item visibility unless the user can see all the
+            // possible parents
+            if (!Session::haveRight('ticket', Ticket::READALL)) {
+               $condition .= "AND " . TicketTask::buildParentCondition();
+            }
+
+            $condition .= ")";
+
             break;
 
          case 'ITILFollowup':
@@ -3953,12 +3966,12 @@ JAVASCRIPT;
             $condition .= "AND (";
 
             // Filter for "ticket" parents
-            $condition .= ITILFollowup::buildParentCondition("Ticket");
+            $condition .= ITILFollowup::buildParentCondition(\Ticket::getType());
             $condition .= "OR ";
 
             // Filter for "change" parents
             $condition .= ITILFollowup::buildParentCondition(
-               "Change",
+               \Change::getType(),
                'changes_id',
                "glpi_changes_users",
                "glpi_changes_groups"
@@ -3967,7 +3980,7 @@ JAVASCRIPT;
 
             // Fitler for "problem" parents
             $condition .= ITILFollowup::buildParentCondition(
-               "Problem",
+               \Problem::getType(),
                'problems_id',
                "glpi_problems_users",
                "glpi_groups_problems"
@@ -4050,11 +4063,10 @@ JAVASCRIPT;
             case "date" :
             case "date_delay" :
                $force_day = true;
-               if ($searchopt[$ID]["datatype"] == 'datetime') {
+               if ($searchopt[$ID]["datatype"] == 'datetime'
+                  && !(strstr($val, 'BEGIN') || strstr($val, 'LAST') || strstr($val, 'DAY'))
+               ) {
                   $force_day = false;
-               }
-               if (strstr($val, 'BEGIN') || strstr($val, 'LAST')) {
-                  $force_day = true;
                }
 
                $val = Html::computeGenericDateTimeSearch($val, $force_day);
@@ -4542,6 +4554,8 @@ JAVASCRIPT;
                   return $link." ($tocompute ".$regs[1]." ".$regs[3].") ";
                }
                if (is_numeric($val)) {
+                  $numeric_val = floatval($val);
+
                   if (isset($searchopt[$ID]["width"])) {
                      $ADD = "";
                      if ($nott
@@ -4549,18 +4563,18 @@ JAVASCRIPT;
                         $ADD = " OR $tocompute IS NULL";
                      }
                      if ($nott) {
-                        return $link." ($tocompute < ".(intval($val) - $searchopt[$ID]["width"])."
-                                        OR $tocompute > ".(intval($val) + $searchopt[$ID]["width"])."
+                        return $link." ($tocompute < ".($numeric_val - $searchopt[$ID]["width"])."
+                                        OR $tocompute > ".($numeric_val + $searchopt[$ID]["width"])."
                                         $ADD) ";
                      }
-                     return $link." (($tocompute >= ".(intval($val) - $searchopt[$ID]["width"])."
-                                      AND $tocompute <= ".(intval($val) + $searchopt[$ID]["width"]).")
+                     return $link." (($tocompute >= ".($numeric_val - $searchopt[$ID]["width"])."
+                                      AND $tocompute <= ".($numeric_val + $searchopt[$ID]["width"]).")
                                      $ADD) ";
                   }
                   if (!$nott) {
-                     return " $link ($tocompute = ".(intval($val)).") ";
+                     return " $link ($tocompute = $numeric_val) ";
                   }
-                  return " $link ($tocompute <> ".(intval($val)).") ";
+                  return " $link ($tocompute <> $numeric_val) ";
                }
                break;
          }
@@ -4803,9 +4817,13 @@ JAVASCRIPT;
 
       $complexjoin = self::computeComplexJoinID($joinparams);
 
+      $is_fkey_composite_on_self = getTableNameForForeignKeyField($linkfield) == $ref_table
+         && $linkfield != getForeignKeyFieldForTable($ref_table);
+
       // Auto link
       if (($ref_table == $new_table)
-          && empty($complexjoin)) {
+          && empty($complexjoin)
+          && !$is_fkey_composite_on_self) {
          $transitemtype = getItemTypeForTable($new_table);
          if (Session::haveTranslations($transitemtype, $field)) {
             $transAS            = $nt.'_trans';
@@ -7589,6 +7607,11 @@ JAVASCRIPT;
             ($matches[1] != '^' ? '%' : '') .
             trim($matches[2]) .
             ($matches[3] != '$' ? '%' : '');
+      } else if (isset($matches[1])
+            && strlen(trim($matches[1])) == 1
+            && (!isset($matches[3]) || empty($matches[3]))) {
+         // this case is for search with only ^, so mean the field is not empty / not null
+         $search = '%';
       }
       return $search;
    }

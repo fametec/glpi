@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -20,7 +18,7 @@ return [
             'uan' => '/^8(?:03|14)\\d{5}$/',
             'voip' => '/^3[08]\\d{6}$/',
             'shortcode' => '/^1(?:1(?:[79]|6(?:000|1(?:11|23))|8\\d)|4\\d{3}|5[0-3]\\d|6[0-389]\\d|8\\d{2}|9(?:0[04-9]|[1-4]\\d))$/',
-            'emergency' => '/^112|90[123]$/',
+            'emergency' => '/^(?:112|90[123])$/',
         ],
         'possible' => [
             'general' => '/^\\d{8}$/',

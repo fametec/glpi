@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b
+class ComposerStaticInitd97f32b4068999defa5ad7fcb9263064
 {
     public static $files = array (
         '383eaff206634a77a1be54e64e6459c7' => __DIR__ . '/..' . '/sabre/uri/lib/functions.php',
@@ -746,6 +746,7 @@ class ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b
         'Zend\\I18n\\Validator\\PhoneNumber' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/Validator/PhoneNumber.php',
         'Zend\\I18n\\Validator\\PostCode' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/Validator/PostCode.php',
         'Zend\\I18n\\View\\HelperConfig' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/View/HelperConfig.php',
+        'Zend\\I18n\\View\\HelperTrait' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/View/HelperTrait.php',
         'Zend\\I18n\\View\\Helper\\AbstractTranslatorHelper' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/View/Helper/AbstractTranslatorHelper.php',
         'Zend\\I18n\\View\\Helper\\CurrencyFormat' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/View/Helper/CurrencyFormat.php',
         'Zend\\I18n\\View\\Helper\\DateFormat' => __DIR__ . '/..' . '/zendframework/zend-i18n/src/View/Helper/DateFormat.php',
@@ -868,10 +869,10 @@ class ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit87d0f3e663c77c972c177ffd8422ff3b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd97f32b4068999defa5ad7fcb9263064::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd97f32b4068999defa5ad7fcb9263064::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitd97f32b4068999defa5ad7fcb9263064::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitd97f32b4068999defa5ad7fcb9263064::$classMap;
 
         }, null, ClassLoader::class);
     }

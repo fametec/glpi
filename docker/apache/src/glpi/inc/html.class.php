@@ -1317,7 +1317,12 @@ class Html {
       }
 
       //  CSS link
-      echo Html::scss('main_styles');
+      echo Html::scss('css/styles');
+      if (isset($_SESSION['glpihighcontrast_css']) && $_SESSION['glpihighcontrast_css']) {
+         echo Html::scss('css/highcontrast');
+      }
+      $theme = isset($_SESSION['glpipalette']) ? $_SESSION['glpipalette'] : 'auror';
+      echo Html::scss('css/palettes/' . $theme);
 
       echo Html::css('css/print.css', ['media' => 'print']);
       echo "<link rel='shortcut icon' type='images/x-icon' href='".
@@ -1409,7 +1414,7 @@ class Html {
 
       $menu['admin']['title']        = __('Administration');
       $menu['admin']['types']        = ['User', 'Group', 'Entity', 'Rule',
-                                             'Profile', 'QueuedNotification', 'Backup', 'Glpi\\Event'];
+                                             'Profile', 'QueuedNotification', 'Glpi\\Event'];
 
       $menu['config']['title']       = __('Setup');
       $menu['config']['types']       = ['CommonDropdown', 'CommonDevice', 'Notification',
@@ -1539,7 +1544,7 @@ class Html {
 
       // If in modal : display popHeader
       if (isset($_REQUEST['_in_modal']) && $_REQUEST['_in_modal']) {
-         return self::popHeader($title, $url);
+         return self::popHeader($title, $url, false, $sector, $item, $option);
       }
       // Print a nice HTML-head for every page
       if ($HEADER_LOADED) {
@@ -1619,7 +1624,7 @@ class Html {
    static function footer($keepDB = false) {
       global $CFG_GLPI, $FOOTER_LOADED, $TIMER_DEBUG;
 
-      // If in modal : display popHeader
+      // If in modal : display popFooter
       if (isset($_REQUEST['_in_modal']) && $_REQUEST['_in_modal']) {
          return self::popFooter();
       }
@@ -1834,7 +1839,7 @@ class Html {
       echo "</div>"; // fin de la div id ='page' initi??e dans la fonction header
 
       echo "<div id='footer'>";
-      echo "<table width='100%'><tr><td class='right'>" . self::getCopyrightMessage();
+      echo "<table width='100%'><tr><td class='right'>" . self::getCopyrightMessage(false);
       echo "</td></tr></table></div>";
 
       self::displayDebugInfos();
@@ -1898,7 +1903,7 @@ class Html {
       if (!isCommandLine()) {
          echo "</div></div>";
 
-         echo "<div id='footer-login'>" . self::getCopyrightMessage() . "</div>";
+         echo "<div id='footer-login'>" . self::getCopyrightMessage(false) . "</div>";
          self::loadJavascript();
          echo "</body></html>";
       }
@@ -3599,6 +3604,7 @@ class Html {
             menubar: false,
             statusbar: false,
             skin_url: '".$CFG_GLPI['root_doc']."/css/tiny_mce/skins/light',
+            content_css: '".$CFG_GLPI['root_doc']."/css/tiny_mce_custom.css',
             cache_suffix: '?v=".GLPI_VERSION."',
             setup: function(editor) {
                if ($('#$name').attr('required') == 'required') {
@@ -3856,7 +3862,11 @@ class Html {
                   }
                } else {
                   if (is_object($val)) {
-                     print_r($val);
+                     if (method_exists($val, '__toString')) {
+                        echo (string) $val;
+                     } else {
+                        echo "(object) " . get_class($val);
+                     }
                   } else {
                      echo htmlentities($val);
                   }
@@ -4500,7 +4510,7 @@ class Html {
          }
       }
 
-      $values = [$value => $valuename];
+      $values = ["$value" => $valuename];
       $output = self::select($name, $values, $options);
 
       $js = "
@@ -4953,6 +4963,9 @@ class Html {
          $file = $url;
          $url = self::getPrefixedUrl('/front/css.php');
          $url .= '?file=' . $file;
+         if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) {
+            $url .= '&debug';
+         }
       }
 
       return self::csslink($url, $options);
@@ -5117,8 +5130,6 @@ class Html {
                  "<div class='uploadbar' style='width: 0%;'></div></div>";
          $display .= "</div>";
 
-         $display .= "</div>"; // .fileupload
-
          $display .= Html::scriptBlock("
          $(function() {
             var fileindex{$p['rand']} = 0;
@@ -5164,7 +5175,7 @@ class Html {
                               displayUploadedFile(file, tag[index], editor, '{$p['name']}');
 
                               $('#progress{$p['rand']} .uploadbar')
-                                 .text('".__s('Upload successful')."')
+                                 .text('".addslashes(__('Upload successful'))."')
                                  .css('width', '100%')
                                  .delay(2000)
                                  .fadeOut('slow');
@@ -5180,6 +5191,7 @@ class Html {
             });
          });");
       }
+      $display .= "</div>"; // .fileupload
 
       if ($p['display']) {
          echo $display;
@@ -5549,6 +5561,7 @@ class Html {
             dialogClass: 'glpi_modal',
             open: function(event, ui) {
                $(this).parent().prev('.ui-widget-overlay').addClass('glpi_modal');
+               $(this).next('div').find('button').focus();
             },
             close: function(){
                $(this).remove();
@@ -6747,12 +6760,10 @@ class Html {
       global $CFG_GLPI, $GLPI_CACHE;
 
       $ckey = isset($args['v']) ? $args['v'] : GLPI_SCHEMA_VERSION;
-      $is_debug = $_SESSION['glpi_use_mode'] == Session::DEBUG_MODE;
-      $files = [];
 
       $scss = new Compiler();
       $scss->setFormatter('Leafo\ScssPhp\Formatter\Crunched');
-      if ($is_debug || isset($args['debug'])) {
+      if (isset($args['debug'])) {
          $ckey .= '_sourcemap';
          $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
          $scss->setSourceMapOptions(
@@ -6763,74 +6774,56 @@ class Html {
          );
       }
 
-      if (!isset($args['file']) || $args['file'] == 'main_styles') {
-         $files[] = 'css/styles';
-         if (isset($_SESSION['glpihighcontrast_css'])
-            && $_SESSION['glpihighcontrast_css']) {
-            $ckey .= '_highcontrast';
-            $files[] = 'css/highcontrast';
-         }
+      $file = isset($args['file']) ? $args['file'] : 'css/styles';
 
-         // CSS theme
-         $theme = 'auror';
-         if (isset($_SESSION["glpipalette"])) {
-            $theme = $_SESSION['glpipalette'];
-         }
-         $ckey .= '_' . $theme;
-         $files[] = 'css/palettes/' . $theme;
-      } else {
-         $ckey .= '_' . md5($args['file']);
+      $ckey .= '_' . $file;
+      $ckey = 'css_' . md5($ckey);
 
-         $filename = realpath(GLPI_ROOT . '/' . $args['file']);
-         if (!Toolbox::startsWith($filename, realpath(GLPI_ROOT))) {
-            // Prevent import of a file from ouside GLPI dir
-            return '';
-         }
-
-         if (!Toolbox::endsWith($args['file'], '.scss')) {
-            // Prevent include of file if ext is not .scss
-            $args['file'] .= '.scss';
-         }
-
-         $files[] = $args['file'];
+      if (!Toolbox::endsWith($file, '.scss')) {
+         // Prevent include of file if ext is not .scss
+         $file .= '.scss';
       }
 
-      $ckey = md5($ckey);
-      $import = '';
+      // Requested file path
+      $path = GLPI_ROOT . '/' . $file;
 
-      foreach ($files as $file) {
-         $path = GLPI_ROOT . "/$file";
-         if (!Toolbox::endsWith($file, '.scss')) {
-            $path .= ".scss";
+      // Alternate file path (prefixed by a "_", i.e. "_highcontrast.scss").
+      $pathargs = explode('/', $file);
+      $pathargs[] = '_' . array_pop($pathargs);
+      $pathalt = GLPI_ROOT . '/' . implode('/', $pathargs);
+
+      if (!file_exists($path) && !file_exists($pathalt)) {
+         Toolbox::logWarning('Requested file ' . $path . ' does not exists.');
+         return '';
+      }
+      if (!file_exists($path)) {
+         $path = $pathalt;
+      }
+
+      // Prevent import of a file from ouside GLPI dir
+      $path = realpath($path);
+      if (!Toolbox::startsWith($path, realpath(GLPI_ROOT))) {
+         Toolbox::logWarning('Requested file ' . $path . ' is outside GLPI file tree.');
+         return '';
+      }
+
+      $import = '@import "' . $file . '";';
+      $fckey = md5($file);
+      $md5file = md5(file_get_contents($path));
+
+      //check if files has changed
+      if ($GLPI_CACHE->has($fckey)) {
+         $md5 = $GLPI_CACHE->get($fckey);
+
+         if ($md5file != $md5) {
+            //file has changed
+            Toolbox::logDebug("$file has changed, reloading");
+            $args['reload'] = true;
+            $GLPI_CACHE->set($fckey, $md5file);
          }
-         $pathargs = explode('/', $file);
-         $pathargs[] = '_' . array_pop($pathargs);
-         $pathalt = GLPI_ROOT . '/' . implode('/', $pathargs) . '.scss';
-         if (file_exists($path) || file_exists($pathalt)) {
-            if (!file_exists($path)) {
-               $path = $pathalt;
-            }
-            $import .= '@import "' . $file . '";';
-            $fckey = md5($file);
-            $md5file = md5(file_get_contents($path));
-
-            //check if files has changed
-            if ($GLPI_CACHE->has($fckey)) {
-               $md5 = $GLPI_CACHE->get($fckey);
-
-               if ($md5file != $md5) {
-                  //file has changed
-                  Toolbox::logDebug("$file has changed, reloading");
-                  $args['reload'] = true;
-                  $GLPI_CACHE->set($fckey, $md5file);
-               }
-            } else {
-               Toolbox::logDebug("$file is new, loading");
-               $GLPI_CACHE->set($fckey, $md5file);
-            }
-         } else {
-            Toolbox::logWarning('Requested file ' . $path . ' does not exists.');
-         }
+      } else {
+         Toolbox::logDebug("$file is new, loading");
+         $GLPI_CACHE->set($fckey, $md5file);
       }
 
       $scss->addImportPath(GLPI_ROOT);
@@ -6868,6 +6861,6 @@ class Html {
     * @return string
     */
    public static function getScssCompileDir() {
-      return GLPI_ROOT . '/css/compiled';
+      return GLPI_ROOT . '/css_compiled';
    }
 }

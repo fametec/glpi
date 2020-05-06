@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\Validator;
@@ -23,7 +21,7 @@ class PhoneNumber extends AbstractValidator
     /**
      * Validation failure message template definitions
      *
-     * @var array
+     * @var string[]
      */
     protected $messageTemplates = [
         self::NO_MATCH    => 'The input does not match a phone number format',
@@ -56,7 +54,7 @@ class PhoneNumber extends AbstractValidator
     /**
      * Allowed Types
      *
-     * @var array
+     * @var string[]
      */
     protected $allowedTypes = [
         'general',
@@ -91,11 +89,11 @@ class PhoneNumber extends AbstractValidator
             $this->setCountry($country);
         }
 
-        if (array_key_exists('allowed_types', $options)) {
+        if (isset($options['allowed_types'])) {
             $this->allowedTypes($options['allowed_types']);
         }
 
-        if (array_key_exists('allow_possible', $options)) {
+        if (isset($options['allow_possible'])) {
             $this->allowPossible($options['allow_possible']);
         }
 
@@ -105,8 +103,8 @@ class PhoneNumber extends AbstractValidator
     /**
      * Allowed Types
      *
-     * @param  array|null $types
-     * @return self|array
+     * @param  string[]|null $types
+     * @return $this|string[]
      */
     public function allowedTypes(array $types = null)
     {
@@ -123,7 +121,7 @@ class PhoneNumber extends AbstractValidator
      * Allow Possible
      *
      * @param  bool|null $possible
-     * @return self|bool
+     * @return $this|bool
      */
     public function allowPossible($possible = null)
     {
@@ -150,7 +148,7 @@ class PhoneNumber extends AbstractValidator
      * Set Country
      *
      * @param  string $country
-     * @return self
+     * @return $this
      */
     public function setCountry($country)
     {
@@ -186,8 +184,8 @@ class PhoneNumber extends AbstractValidator
     /**
      * Returns true if and only if $value matches phone number format
      *
-     * @param  string $value
-     * @param  array  $context
+     * @param  string|null $value
+     * @param  array|null  $context
      * @return bool
      */
     public function isValid($value = null, $context = null)
@@ -231,11 +229,13 @@ class PhoneNumber extends AbstractValidator
 
         // check against allowed types strict match:
         foreach ($countryPattern['patterns']['national'] as $type => $pattern) {
-            if (in_array($type, $this->allowedTypes)) {
+            if (in_array($type, $this->allowedTypes, true)) {
                 // check pattern:
                 if (preg_match($pattern, $value)) {
                     return true;
-                } elseif (isset($valueNoCountry) && preg_match($pattern, $valueNoCountry)) {
+                }
+
+                if (isset($valueNoCountry) && preg_match($pattern, $valueNoCountry)) {
                     // this handles conditions where the country code and prefix are the same
                     return true;
                 }
@@ -245,11 +245,13 @@ class PhoneNumber extends AbstractValidator
         // check for possible match:
         if ($this->allowPossible()) {
             foreach ($countryPattern['patterns']['possible'] as $type => $pattern) {
-                if (in_array($type, $this->allowedTypes)) {
+                if (in_array($type, $this->allowedTypes, true)) {
                     // check pattern:
                     if (preg_match($pattern, $value)) {
                         return true;
-                    } elseif (isset($valueNoCountry) && preg_match($pattern, $valueNoCountry)) {
+                    }
+
+                    if (isset($valueNoCountry) && preg_match($pattern, $valueNoCountry)) {
                         // this handles conditions where the country code and prefix are the same
                         return true;
                     }

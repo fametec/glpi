@@ -658,13 +658,6 @@ abstract class CommonITILObject extends CommonDBTM {
 
       // Add document if needed
       $this->getFromDB($input["id"]); // entities_id field required
-      if (!isset($input['_donotadddocs']) || !$input['_donotadddocs']) {
-         $options = [];
-         if (isset($input['solution'])) {
-            $options['content_field'] = 'solution';
-         }
-         $input = $this->addFiles($input, $options);
-      }
 
       if (isset($input["document"]) && ($input["document"] > 0)) {
          $doc = new Document();
@@ -937,6 +930,16 @@ abstract class CommonITILObject extends CommonDBTM {
       }
 
       return $input;
+   }
+
+   function post_updateItem($history = 1) {
+      if (!isset($this->input['_donotadddocs']) || !$this->input['_donotadddocs']) {
+         $options = ['force_update' => true];
+         if (isset($this->input['solution'])) {
+            $options['content_field'] = 'solution';
+         }
+         $this->input = $this->addFiles($this->input, $options);
+      }
    }
 
 
@@ -6710,9 +6713,7 @@ abstract class CommonITILObject extends CommonDBTM {
             echo "<div class='groups_id_tech'>";
             $group->getFromDB($item_i['groups_id_tech']);
             echo "<i class='fas fa-users' aria-hidden='true'></i>&nbsp;";
-            echo $group->getLink()."&nbsp;";
-            echo Html::showToolTip($group->getComments(),
-                                   ['link' => $group->getLinkURL()]);
+            echo $group->getLink(['comments' => true]);
             echo "</div>";
          }
          if (isset($item_i['users_id_editor']) && $item_i['users_id_editor'] > 0) {

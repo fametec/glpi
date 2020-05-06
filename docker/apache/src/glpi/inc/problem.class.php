@@ -1239,18 +1239,6 @@ class Problem extends CommonITILObject {
              Html::clean(Html::entity_decode_deep($this->fields["content"]))."</textarea>";
       echo "</td></tr>";
 
-      if ($ID) {
-         echo "<tr class='tab_bg_1'>";
-         echo "<th colspan='2'  width='".($colsize1+$colsize2)."%'>";
-         $docnb = Document_Item::countForItem($this);
-         echo "<a href=\"".$this->getLinkURL()."&amp;forcetab=Document_Item$1\">";
-         //TRANS: %d is the document number
-         echo sprintf(_n('%d associated document', '%d associated documents', $docnb), $docnb);
-         echo "</a></th>";
-         echo "<td colspan='2'></td>";
-         echo "</tr>";
-      }
-
       $options['colspan'] = 2;
       $this->showFormButtons($options);
 
@@ -1350,11 +1338,12 @@ class Problem extends CommonITILObject {
     *
     * Will also display problems of linked items
     *
-    * @param $item CommonDBTM object
+    * @param CommonDBTM $item
+    * @param boolean    $withtemplate
     *
     * @return nothing (display a table)
    **/
-   static function showListForItem(CommonDBTM $item) {
+   static function showListForItem(CommonDBTM $item, $withtemplate = 0) {
       global $DB, $CFG_GLPI;
 
       if (!Session::haveRight(self::$rightname, self::READALL)) {

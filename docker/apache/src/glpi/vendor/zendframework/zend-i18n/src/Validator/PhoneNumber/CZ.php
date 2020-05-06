@@ -1,18 +1,16 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
     'code' => '420',
     'patterns' => [
         'national' => [
-            'general' => '/^[2-8]\\d{8}|9\\d{8,11}$/',
-            'fixed' => '/^2\\d{8}|(?:3[1257-9]|4[16-9]|5[13-9])\\d{7}$/',
+            'general' => '/^(?:[2-8]\\d{8}|9\\d{8,11})$/',
+            'fixed' => '/^(?:2\\d{8}|(?:3[1257-9]|4[16-9]|5[13-9])\\d{7})$/',
             'mobile' => '/^(?:60[1-8]|7(?:0[2-5]|[2379]\\d))\\d{6}$/',
             'tollfree' => '/^800\\d{6}$/',
             'premium' => '/^9(?:0[05689]|76)\\d{6}$/',

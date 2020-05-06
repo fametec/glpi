@@ -44,7 +44,7 @@ contato@fametec.com.br
     -e MYSQL_PASSWORD=glpi \
     -e MYSQL_RANDOM_ROOT_PASSWORD=1 \
     -p 3306:3306
-    mariadb 
+    fametec/mariadb:glpi-9.4.6 
 
 
 ### Deploy GLPI
@@ -62,13 +62,13 @@ contato@fametec.com.br
     -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
-    fametec/glpi
+    fametec/glpi:9.4.6
 
 
 ### Deploy Cron to Schedule jobs
 
 
-    docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi:/var/www/html/glpi fametec/crond-glpi
+    docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi:/var/www/html/glpi fametec/crond-glpi:9.4.6
 
 
 # Docker Compose
@@ -83,7 +83,7 @@ contato@fametec.com.br
     # MARIADB
     #
         mariadb-glpi: 
-            image: fametec/mariadb:glpi-9.4.5
+            image: fametec/mariadb:glpi-9.4.6
             restart: unless-stopped
             volumes: 
               - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -100,7 +100,7 @@ contato@fametec.com.br
     # GLPI
     #
         glpi: 
-            image: fametec/glpi:9.4.5
+            image: fametec/glpi:9.4.6
             restart: unless-stopped
             volumes: 
               - glpi-volume-files:/var/www/html/files:rw
@@ -112,7 +112,7 @@ contato@fametec.com.br
               MARIADB_DATABASE: glpi
               MARIADB_USER: glpi-user
               MARIADB_PASSWORD: glpi-pass
-              VERSION: "9.4.5"
+              VERSION: "9.4.6"
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
@@ -125,7 +125,7 @@ contato@fametec.com.br
     # CRON
     #
         crond: 
-            image: fametec/crond-glpi:9.4.5
+            image: fametec/crond-glpi:9.4.6
             restart: unless-stopped
             depends_on: 
               - glpi
@@ -198,7 +198,7 @@ This script will install the GLPI on Linux Server CentOS 7.6  Minimal.
 Edit the script
 
 
-    VERSION="9.4.5"                      # GLPI Version to install, default=9.4.5
+    VERSION="9.4.6"                      # GLPI Version to install, default=9.4.5
     TIMEZONE=America/Fortaleza           # Timezone default=Etc/UTC
     FQDN="glpi.fametec.com.br"           # Virtualhost default=glpi.fametec.com.br
     ADMINEMAIL="suporte@fametec.com.br"  # Admin e-mail 
@@ -223,7 +223,7 @@ Example:
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.4.5
+    VERSION=9.4.6
     TIMEZONE=America/Fortaleza
     FQDN=glpi.fametec.com.br
     ADMINEMAIL=suporte@fametec.com.br

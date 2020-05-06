@@ -94,6 +94,10 @@ class MailCollector  extends CommonDBTM {
    const REQUESTER_FIELD_FROM = 0;
    const REQUESTER_FIELD_REPLY_TO = 1;
 
+   static $undisclosedFields = [
+      'passwd',
+   ];
+
    static function getTypeName($nb = 0) {
       return _n('Receiver', 'Receivers', $nb);
    }
@@ -145,7 +149,7 @@ class MailCollector  extends CommonDBTM {
          if (empty($input["passwd"])) {
             unset($input["passwd"]);
          } else {
-            $input["passwd"] = Toolbox::encrypt(stripslashes($input["passwd"]), GLPIKEY);
+            $input["passwd"] = Toolbox::encrypt(stripslashes($input["passwd"]));
          }
       }
 
@@ -174,7 +178,7 @@ class MailCollector  extends CommonDBTM {
          if (empty($input["passwd"])) {
             unset($input["passwd"]);
          } else {
-            $input["passwd"] = Toolbox::encrypt(stripslashes($input["passwd"]), GLPIKEY);
+            $input["passwd"] = Toolbox::encrypt(stripslashes($input["passwd"]));
          }
       }
 
@@ -1218,14 +1222,14 @@ class MailCollector  extends CommonDBTM {
 
       if ($this->fields['use_kerberos']) {
          $this->marubox = @imap_open($this->fields['host'], $this->fields['login'],
-                                     Toolbox::decrypt($this->fields['passwd'], GLPIKEY),
+                                     Toolbox::decrypt($this->fields['passwd']),
                                      CL_EXPUNGE, 1);
       } else {
          $try_options = [['DISABLE_AUTHENTICATOR' => 'GSSAPI'],
                               ['DISABLE_AUTHENTICATOR' => 'PLAIN']];
          foreach ($try_options as $option) {
             $this->marubox = @imap_open($this->fields['host'], $this->fields['login'],
-                                        Toolbox::decrypt($this->fields['passwd'], GLPIKEY),
+                                        Toolbox::decrypt($this->fields['passwd']),
                                         CL_EXPUNGE, 1, $option);
             if (is_resource($this->marubox)) {
                break;
@@ -2002,10 +2006,6 @@ class MailCollector  extends CommonDBTM {
       // mailcollector for RuleMailCollector, _mailgate for RuleTicket
       Rule::cleanForItemCriteria($this, 'mailcollector');
       Rule::cleanForItemCriteria($this, '_mailgate');
-   }
-
-   static public function unsetUndisclosedFields(&$fields) {
-      unset($fields['passwd']);
    }
 
    /**

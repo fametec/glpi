@@ -207,6 +207,13 @@ class RuleTicket extends Rule {
                      }
                   }
 
+                  // Special case for _users_id_requester, _users_id_observer and _users_id_assign
+                  if (in_array($action->fields["field"],
+                               ['_users_id_requester', '_users_id_observer', '_users_id_assign'])) {
+                     // must reset alternative_email field to prevent mix of user/email
+                     unset($output[$action->fields["field"].'_notif']);
+                  }
+
                   // Special case of slas_id_ttr & slas_id_tto & olas_id_ttr & olas_id_tto
                   if ($action->fields["field"] === 'slas_id_ttr'
                       || $action->fields["field"] === 'slas_id_tto'
@@ -351,11 +358,11 @@ class RuleTicket extends Rule {
       $criterias['itilcategories_id']['linkfield']          = 'itilcategories_id';
       $criterias['itilcategories_id']['type']               = 'dropdown';
 
-      $criterias['itilcategories_id_cn']['table']              = 'glpi_itilcategories';
-      $criterias['itilcategories_id_cn']['field']              = 'completename';
-      $criterias['itilcategories_id_cn']['name']               = __('Category').' - '.__('Complete name');
-      $criterias['itilcategories_id_cn']['linkfield']          = 'itilcategories_id';
-      $criterias['itilcategories_id_cn']['type']               = 'dropdown';
+      $criterias['itilcategories_id_cn']['table']           = 'glpi_itilcategories';
+      $criterias['itilcategories_id_cn']['field']           = 'completename';
+      $criterias['itilcategories_id_cn']['name']            = __('Category').' - '.__('Complete name');
+      $criterias['itilcategories_id_cn']['linkfield']       = 'itilcategories_id';
+      $criterias['itilcategories_id_cn']['type']            = 'dropdown';
 
       $criterias['type']['table']                           = 'glpi_tickets';
       $criterias['type']['field']                           = 'type';

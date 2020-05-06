@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\Validator;
@@ -25,12 +23,14 @@ class IsInt extends AbstractValidator
     const NOT_INT_STRICT = 'notIntStrict';
 
     /**
-     * @var array
+     * Validation failure message template definitions
+     *
+     * @var string[]
      */
     protected $messageTemplates = [
-        self::INVALID => "Invalid type given. String or integer expected",
-        self::NOT_INT => "The input does not appear to be an integer",
-        self::NOT_INT_STRICT => "The input is not strictly an integer",
+        self::INVALID        => 'Invalid type given. String or integer expected',
+        self::NOT_INT        => 'The input does not appear to be an integer',
+        self::NOT_INT_STRICT => 'The input is not strictly an integer',
     ];
 
     /**
@@ -67,7 +67,7 @@ class IsInt extends AbstractValidator
             $options = ArrayUtils::iteratorToArray($options);
         }
 
-        if (array_key_exists('locale', $options)) {
+        if (isset($options['locale'])) {
             $this->setLocale($options['locale']);
         }
 
@@ -80,6 +80,8 @@ class IsInt extends AbstractValidator
 
     /**
      * Returns the set locale
+     *
+     * @return string|null
      */
     public function getLocale()
     {
@@ -92,8 +94,8 @@ class IsInt extends AbstractValidator
     /**
      * Sets the locale to use
      *
-     * @param  string $locale
-     * @return Int
+     * @param  string|null $locale
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -115,7 +117,7 @@ class IsInt extends AbstractValidator
      * Sets the strict option mode
      *
      * @param bool $strict
-     * @return self
+     * @return $this
      * @throws Exception\InvalidArgumentException
      */
     public function setStrict($strict)
@@ -131,7 +133,7 @@ class IsInt extends AbstractValidator
     /**
      * Returns true if and only if $value is a valid integer
      *
-     * @param  string|int $value
+     * @param  string|int|float $value
      * @return bool
      * @throws Exception\InvalidArgumentException
      */
@@ -157,10 +159,10 @@ class IsInt extends AbstractValidator
         try {
             $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
             if (intl_is_failure($format->getErrorCode())) {
-                throw new Exception\InvalidArgumentException("Invalid locale string given");
+                throw new Exception\InvalidArgumentException('Invalid locale string given');
             }
         } catch (IntlException $intlException) {
-            throw new Exception\InvalidArgumentException("Invalid locale string given", 0, $intlException);
+            throw new Exception\InvalidArgumentException('Invalid locale string given', 0, $intlException);
         }
 
         try {
@@ -177,10 +179,12 @@ class IsInt extends AbstractValidator
         $decimalSep  = $format->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         $groupingSep = $format->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 
-        $valueFiltered = str_replace($groupingSep, '', $value);
-        $valueFiltered = str_replace($decimalSep, '.', $valueFiltered);
+        $valueFiltered = strtr($value, [
+            $groupingSep => '',
+            $decimalSep => '.',
+        ]);
 
-        if (strval($parsedInt) !== $valueFiltered) {
+        if ((string) $parsedInt !== $valueFiltered) {
             $this->error(self::NOT_INT);
             return false;
         }

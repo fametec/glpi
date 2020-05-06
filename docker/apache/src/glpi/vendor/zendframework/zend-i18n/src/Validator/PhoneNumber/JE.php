@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -20,9 +18,9 @@ return [
             'shared' => '/^8(?:4(?:4(?:4(?:05|42|69)|703)|5(?:041|800))|70002)\\d{4}$/',
             'personal' => '/^701511\\d{4}$/',
             'voip' => '/^56\\d{8}$/',
-            'uan' => '/^3(?:0(?:07(?:35|81)|8901)|3\\d{4}|4(?:4(?:4(?:05|42|69)|703)|5(?:041|800))|7(?:0002|1206))\\d{4}|55\\d{8}$/',
-            'shortcode' => '/^1(?:00|18\\d{3}|23|4(?:[14]|28|7\\d)|5\\d|7(?:0[12]|[128]|35?)|808|9[135])|23[234]$/',
-            'emergency' => '/^112|999$/',
+            'uan' => '/^(?:3(?:0(?:07(?:35|81)|8901)|3\\d{4}|4(?:4(?:4(?:05|42|69)|703)|5(?:041|800))|7(?:0002|1206))\\d{4}|55\\d{8})$/',
+            'shortcode' => '/^(?:1(?:00|18\\d{3}|23|4(?:[14]|28|7\\d)|5\\d|7(?:0[12]|[128]|35?)|808|9[135])|23[234])$/',
+            'emergency' => '/^(?:112|999)$/',
         ],
         'possible' => [
             'general' => '/^\\d{6,10}$/',

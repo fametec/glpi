@@ -159,27 +159,31 @@
             "sass",
             "scss",
             "stylesheet"
-        ]
+        ],
+        "abandoned": "scssphp/scssphp"
     },
     {
         "name": "michelf/php-markdown",
-        "version": "1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/michelf/php-markdown.git",
-            "reference": "01ab082b355bf188d907b9929cd99b2923053495"
+            "reference": "c83178d49e372ca967d1a8c77ae4e051b3a3c75c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/01ab082b355bf188d907b9929cd99b2923053495",
-            "reference": "01ab082b355bf188d907b9929cd99b2923053495",
+            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/c83178d49e372ca967d1a8c77ae4e051b3a3c75c",
+            "reference": "c83178d49e372ca967d1a8c77ae4e051b3a3c75c",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2018-01-15T00:49:33+00:00",
+        "require-dev": {
+            "phpunit/phpunit": ">=4.3 <5.8"
+        },
+        "time": "2019-12-02T02:32:27+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -661,17 +665,17 @@
     },
     {
         "name": "sabre/vobject",
-        "version": "4.2.0",
-        "version_normalized": "4.2.0.0",
+        "version": "4.2.1",
+        "version_normalized": "4.2.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sabre-io/vobject.git",
-            "reference": "bd500019764e434ff65872d426f523e7882a0739"
+            "reference": "6d7476fbd227ae285029c19ad518cd451336038c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sabre-io/vobject/zipball/bd500019764e434ff65872d426f523e7882a0739",
-            "reference": "bd500019764e434ff65872d426f523e7882a0739",
+            "url": "https://api.github.com/repos/sabre-io/vobject/zipball/6d7476fbd227ae285029c19ad518cd451336038c",
+            "reference": "6d7476fbd227ae285029c19ad518cd451336038c",
             "shasum": ""
         },
         "require": {
@@ -685,7 +689,7 @@
         "suggest": {
             "hoa/bench": "If you would like to run the benchmark scripts"
         },
-        "time": "2019-02-19T13:05:37+00:00",
+        "time": "2019-12-18T19:29:43+00:00",
         "bin": [
             "bin/vobject",
             "bin/generate_vcards"
@@ -878,17 +882,17 @@
     },
     {
         "name": "simplepie/simplepie",
-        "version": "1.5.2",
-        "version_normalized": "1.5.2.0",
+        "version": "1.5.4",
+        "version_normalized": "1.5.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/simplepie/simplepie.git",
-            "reference": "0e8fe72132dad765d25db4cabc69a91139af1263"
+            "reference": "f4c8246511a38fc9d99a59fb42f61eeeafb31663"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/simplepie/simplepie/zipball/0e8fe72132dad765d25db4cabc69a91139af1263",
-            "reference": "0e8fe72132dad765d25db4cabc69a91139af1263",
+            "url": "https://api.github.com/repos/simplepie/simplepie/zipball/f4c8246511a38fc9d99a59fb42f61eeeafb31663",
+            "reference": "f4c8246511a38fc9d99a59fb42f61eeeafb31663",
             "shasum": ""
         },
         "require": {
@@ -907,7 +911,7 @@
             "ext-mbstring": "",
             "mf2/mf2": "Microformat module that allows for parsing HTML for microformats"
         },
-        "time": "2018-08-02T05:43:58+00:00",
+        "time": "2019-11-23T07:05:15+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -947,17 +951,17 @@
     },
     {
         "name": "symfony/console",
-        "version": "v3.4.22",
-        "version_normalized": "3.4.22.0",
+        "version": "v3.4.36",
+        "version_normalized": "3.4.36.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
-            "reference": "069bf3f0e8f871a2169a06e43d9f3f03f355e9be"
+            "reference": "1ee23b3b659b06c622f2bd2492a229e416eb4586"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/069bf3f0e8f871a2169a06e43d9f3f03f355e9be",
-            "reference": "069bf3f0e8f871a2169a06e43d9f3f03f355e9be",
+            "url": "https://api.github.com/repos/symfony/console/zipball/1ee23b3b659b06c622f2bd2492a229e416eb4586",
+            "reference": "1ee23b3b659b06c622f2bd2492a229e416eb4586",
             "shasum": ""
         },
         "require": {
@@ -986,7 +990,7 @@
             "symfony/lock": "",
             "symfony/process": ""
         },
-        "time": "2019-01-25T10:42:12+00:00",
+        "time": "2019-12-01T10:04:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1140,23 +1144,23 @@
     },
     {
         "name": "tecnickcom/tcpdf",
-        "version": "6.2.26",
-        "version_normalized": "6.2.26.0",
+        "version": "6.3.2",
+        "version_normalized": "6.3.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/tecnickcom/TCPDF.git",
-            "reference": "367241059ca166e3a76490f4448c284e0a161f15"
+            "reference": "9fde7bb9b404b945e7ea88fb7eccd23d9a4e324b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/367241059ca166e3a76490f4448c284e0a161f15",
-            "reference": "367241059ca166e3a76490f4448c284e0a161f15",
+            "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/9fde7bb9b404b945e7ea88fb7eccd23d9a4e324b",
+            "reference": "9fde7bb9b404b945e7ea88fb7eccd23d9a4e324b",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2018-10-16T17:24:05+00:00",
+        "time": "2019-09-20T09:35:01+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1333,7 +1337,8 @@
             "psr-16",
             "psr-6",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-cache"
     },
     {
         "name": "zendframework/zend-eventmanager",
@@ -1389,29 +1394,34 @@
             "eventmanager",
             "events",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-eventmanager"
     },
     {
         "name": "zendframework/zend-i18n",
-        "version": "2.9.0",
-        "version_normalized": "2.9.0.0",
+        "version": "2.10.1",
+        "version_normalized": "2.10.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/zendframework/zend-i18n.git",
-            "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f"
+            "reference": "84038e6a1838b611dcc491b1c40321fa4c3a123c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
-            "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
+            "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/84038e6a1838b611dcc491b1c40321fa4c3a123c",
+            "reference": "84038e6a1838b611dcc491b1c40321fa4c3a123c",
             "shasum": ""
         },
         "require": {
+            "ext-intl": "*",
             "php": "^5.6 || ^7.0",
             "zendframework/zend-stdlib": "^2.7 || ^3.0"
         },
+        "conflict": {
+            "phpspec/prophecy": "<1.9.0"
+        },
         "require-dev": {
-            "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+            "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.16",
             "zendframework/zend-cache": "^2.6.1",
             "zendframework/zend-coding-standard": "~1.0.0",
             "zendframework/zend-config": "^2.6",
@@ -1422,7 +1432,6 @@
             "zendframework/zend-view": "^2.6.3"
         },
         "suggest": {
-            "ext-intl": "Required for most features of Zend\\I18n; included in default builds of PHP",
             "zendframework/zend-cache": "Zend\\Cache component",
             "zendframework/zend-config": "Zend\\Config component",
             "zendframework/zend-eventmanager": "You should install this package to use the events in the translator",
@@ -1432,12 +1441,12 @@
             "zendframework/zend-validator": "You should install this package to use the provided validators",
             "zendframework/zend-view": "You should install this package to use the provided view helpers"
         },
-        "time": "2018-05-16T16:39:13+00:00",
+        "time": "2019-12-12T14:08:22+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.9.x-dev",
-                "dev-develop": "2.10.x-dev"
+                "dev-master": "2.10.x-dev",
+                "dev-develop": "2.11.x-dev"
             },
             "zf": {
                 "component": "Zend\\I18n",
@@ -1459,7 +1468,8 @@
             "ZendFramework",
             "i18n",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-i18n"
     },
     {
         "name": "zendframework/zend-json",
@@ -1511,7 +1521,8 @@
             "ZendFramework",
             "json",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-json"
     },
     {
         "name": "zendframework/zend-serializer",
@@ -1570,7 +1581,8 @@
             "ZendFramework",
             "serializer",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-serializer"
     },
     {
         "name": "zendframework/zend-servicemanager",
@@ -1640,7 +1652,8 @@
             "service-manager",
             "servicemanager",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-servicemanager"
     },
     {
         "name": "zendframework/zend-stdlib",
@@ -1688,6 +1701,7 @@
             "ZendFramework",
             "stdlib",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-stdlib"
     }
 ]

@@ -9,7 +9,7 @@ VOLUME /var/lib/mysql
 #
 EXPOSE 3306
 #
-COPY src/*.sql src/*.sh /docker-entrypoint-initdb.d/
+COPY src/*.sql /docker-entrypoint-initdb.d/
 #
 # CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
 #

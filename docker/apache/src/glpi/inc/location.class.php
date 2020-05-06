@@ -390,15 +390,19 @@ class Location extends CommonTreeDropdown {
       global $DB, $CFG_GLPI;
 
       $locations_id = $this->fields['id'];
-      $itemtype     = Session::getSavedOption(__CLASS__, 'criterion', '');
+      $current_itemtype     = Session::getSavedOption(__CLASS__, 'criterion', '');
 
       if (!$this->can($locations_id, READ)) {
          return false;
       }
 
       $queries = [];
-      $itemtypes = $itemtype ? [$itemtype] : $CFG_GLPI['location_types'];
+      $itemtypes = $current_itemtype ? [$current_itemtype] : $CFG_GLPI['location_types'];
       foreach ($itemtypes as $itemtype) {
+         $item = new $itemtype();
+         if (!$item->maybeLocated()) {
+            continue;
+         }
          $table = getTableForItemType($itemtype);
          $itemtype_criteria = [
             'SELECT' => [
@@ -410,7 +414,6 @@ class Location extends CommonTreeDropdown {
                "$table.locations_id"   => $locations_id,
             ] + getEntitiesRestrictCriteria($table, 'entities_id')
          ];
-         $item = new $itemtype();
          if ($item->maybeDeleted()) {
             $itemtype_criteria['WHERE']['is_deleted'] = 0;
          }
@@ -423,18 +426,27 @@ class Location extends CommonTreeDropdown {
       $criteria['LIMIT'] = $_SESSION['glpilist_limit'];
 
       $iterator = $DB->request($criteria);
-      $number = count($iterator);;
-      if ($start >= $number) {
-         $start = 0;
-      }
+
+      // Execute a second request to get the total number of rows
+      unset($criteria['SELECT']);
+      unset($criteria['START']);
+      unset($criteria['LIMIT']);
+
+      $criteria['COUNT'] = 'total';
+      $number = $DB->request($criteria)->next()['total'];
+
       // Mini Search engine
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_1'><th colspan='2'>".__('Type')."</th></tr>";
       echo "<tr class='tab_bg_1'><td class='center'>";
       echo __('Type')."&nbsp;";
-      Dropdown::showItemType($CFG_GLPI['location_types'],
-                             ['value'      => $itemtype,
-                                   'on_change'  => 'reloadTab("start=0&criterion="+this.value)']);
+      $all_types = array_merge(['0' => '---'], $CFG_GLPI['location_types']);
+      Dropdown::showItemType(
+         $all_types, [
+            'value'      => $current_itemtype,
+            'on_change'  => 'reloadTab("start=0&criterion="+this.value)'
+         ]
+      );
       echo "</td></tr></table>";
 
       if ($number) {

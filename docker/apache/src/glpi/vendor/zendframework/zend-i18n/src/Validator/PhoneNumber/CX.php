@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -18,7 +16,7 @@ return [
             'premium' => '/^190[0126]\\d{6}$/',
             'personal' => '/^500\\d{6}$/',
             'voip' => '/^550\\d{6}$/',
-            'emergency' => '/^000|112$/',
+            'emergency' => '/^(?:000|112)$/',
         ],
         'possible' => [
             'general' => '/^\\d{6,10}$/',

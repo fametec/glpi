@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -16,7 +14,7 @@ return [
             'mobile' => '/^(?:4[67]|5\\d|6[4-8]|7(?:7[67]\\d|\\d{2})|88\\d{2})\\d{5}$/',
             'premium' => '/^90\\d{6}$/',
             'voip' => '/^33200\\d{4}$/',
-            'emergency' => '/^355|911$/',
+            'emergency' => '/^(?:355|911)$/',
         ],
         'possible' => [
             'general' => '/^\\d{7,9}$/',

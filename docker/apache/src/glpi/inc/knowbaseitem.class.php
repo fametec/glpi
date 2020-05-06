@@ -74,6 +74,16 @@ class KnowbaseItem extends CommonDBVisible {
       return 'b';
    }
 
+
+   function getName($options = []) {
+      if (KnowbaseItemTranslation::canBeTranslated($this)) {
+         return KnowbaseItemTranslation::getTranslatedValue($this);
+      }
+
+      return parent::getName();
+   }
+
+
    /**
     * @see CommonGLPI::getMenuName()
     *
@@ -167,6 +177,21 @@ class KnowbaseItem extends CommonDBVisible {
       return "$dir/front/helpdesk.faq.php";
    }
 
+   /**
+    * Get the form page URL for the current classe
+    *
+    * @param $full path or relative one (true by default)
+   **/
+   static function getFormURL($full = true) {
+      global $CFG_GLPI;
+
+      $dir = ($full ? $CFG_GLPI['root_doc'] : '');
+
+      if (Session::getCurrentInterface() == "central") {
+         return "$dir/front/knowbaseitem.form.php";
+      }
+      return "$dir/front/helpdesk.faq.php";
+   }
 
    function defineTabs($options = []) {
 
@@ -621,22 +646,22 @@ class KnowbaseItem extends CommonDBVisible {
    }
 
 
-   /**
-    * @see CommonDBTM::prepareInputForUpdate()
-   **/
    function prepareInputForUpdate($input) {
-
-      // add documents (and replace inline pictures)
-      $input = $this->addFiles(
-         $input,
-         ['content_field' => 'answer']
-      );
-
       // set title for question if empty
       if (isset($input["name"]) && empty($input["name"])) {
          $input["name"] = __('New item');
       }
       return $input;
+   }
+
+   function post_updateItem($history = 1) {
+      $this->input = $this->addFiles(
+         $this->input,
+         [
+            'force_update'  => true,
+            'content_field' => 'answer',
+         ]
+      );
    }
 
 
@@ -1911,8 +1936,8 @@ class KnowbaseItem extends CommonDBVisible {
 
       $values = [
          'id'     => $this->getID(),
-         'name'   => $revision->fields['name'],
-         'answer' => $revision->fields['answer']
+         'name'   => addslashes($revision->fields['name']),
+         'answer' => addslashes($revision->fields['answer'])
       ];
 
       if ($this->update($values)) {

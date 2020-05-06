@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
@@ -17,7 +15,7 @@ return [
             'tollfree' => '/^8(?:00|55|66|77|88)[2-9]\\d{6}$/',
             'premium' => '/^900[2-9]\\d{6}$/',
             'personal' => '/^5(?:00|33|44)[2-9]\\d{6}$/',
-            'emergency' => '/^333|9(?:11|99)$/',
+            'emergency' => '/^(?:333|9(?:11|99))$/',
         ],
         'possible' => [
             'general' => '/^\\d{7}(?:\\d{3})?$/',

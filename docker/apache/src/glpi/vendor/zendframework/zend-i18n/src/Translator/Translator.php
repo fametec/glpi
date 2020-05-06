@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\I18n\Translator;
@@ -68,21 +66,21 @@ class Translator implements TranslatorInterface
     /**
      * Default locale.
      *
-     * @var string
+     * @var string|null
      */
     protected $locale;
 
     /**
      * Locale to use as fallback if there is no translation.
      *
-     * @var string
+     * @var string|null
      */
     protected $fallbackLocale;
 
     /**
      * Translation cache.
      *
-     * @var CacheStorage
+     * @var CacheStorage|null
      */
     protected $cache;
 
@@ -110,8 +108,8 @@ class Translator implements TranslatorInterface
     /**
      * Instantiate a translator
      *
-     * @param  array|Traversable                  $options
-     * @return Translator
+     * @param  array|Traversable $options
+     * @return static
      * @throws Exception\InvalidArgumentException
      */
     public static function factory($options)
@@ -132,7 +130,7 @@ class Translator implements TranslatorInterface
         if (isset($options['locale'])) {
             $locales = (array) $options['locale'];
             $translator->setLocale(array_shift($locales));
-            if (count($locales) > 0) {
+            if ($locales) {
                 $translator->setFallbackLocale(array_shift($locales));
             }
         }
@@ -236,8 +234,8 @@ class Translator implements TranslatorInterface
     /**
      * Set the default locale.
      *
-     * @param  string     $locale
-     * @return Translator
+     * @param  string|null $locale
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -270,8 +268,8 @@ class Translator implements TranslatorInterface
     /**
      * Set the fallback locale.
      *
-     * @param  string     $locale
-     * @return Translator
+     * @param  string|null $locale
+     * @return $this
      */
     public function setFallbackLocale($locale)
     {
@@ -283,7 +281,7 @@ class Translator implements TranslatorInterface
     /**
      * Get the fallback locale.
      *
-     * @return string
+     * @return string|null
      */
     public function getFallbackLocale()
     {
@@ -293,8 +291,8 @@ class Translator implements TranslatorInterface
     /**
      * Sets a cache
      *
-     * @param  CacheStorage $cache
-     * @return Translator
+     * @param  CacheStorage|null $cache
+     * @return $this
      */
     public function setCache(CacheStorage $cache = null)
     {
@@ -306,7 +304,7 @@ class Translator implements TranslatorInterface
     /**
      * Returns the set cache
      *
-     * @return CacheStorage The set cache
+     * @return CacheStorage|null The set cache
      */
     public function getCache()
     {
@@ -317,7 +315,7 @@ class Translator implements TranslatorInterface
      * Set the plugin manager for translation loaders
      *
      * @param  LoaderPluginManager $pluginManager
-     * @return Translator
+     * @return $this
      */
     public function setPluginManager(LoaderPluginManager $pluginManager)
     {
@@ -345,9 +343,9 @@ class Translator implements TranslatorInterface
     /**
      * Translate a message.
      *
-     * @param  string $message
-     * @param  string $textDomain
-     * @param  string $locale
+     * @param  string      $message
+     * @param  string      $textDomain
+     * @param  string|null $locale
      * @return string
      */
     public function translate($message, $textDomain = 'default', $locale = null)
@@ -371,11 +369,11 @@ class Translator implements TranslatorInterface
     /**
      * Translate a plural message.
      *
-     * @param  string                         $singular
-     * @param  string                         $plural
-     * @param  int                            $number
-     * @param  string                         $textDomain
-     * @param  string|null                    $locale
+     * @param  string      $singular
+     * @param  string      $plural
+     * @param  int         $number
+     * @param  string      $textDomain
+     * @param  string|null $locale
      * @return string
      * @throws Exception\OutOfBoundsException
      */
@@ -389,35 +387,34 @@ class Translator implements TranslatorInterface
         $locale      = $locale ?: $this->getLocale();
         $translation = $this->getTranslatedMessage($singular, $locale, $textDomain);
 
-        if ($translation === null || $translation === '') {
-            if (null !== ($fallbackLocale = $this->getFallbackLocale())
-                && $locale !== $fallbackLocale
-            ) {
-                return $this->translatePlural(
-                    $singular,
-                    $plural,
-                    $number,
-                    $textDomain,
-                    $fallbackLocale
-                );
-            }
-
-            return ($number == 1 ? $singular : $plural);
-        } elseif (is_string($translation)) {
+        if (is_string($translation)) {
             $translation = [$translation];
         }
 
-        $index = $this->messages[$textDomain][$locale]
-                      ->getPluralRule()
-                      ->evaluate($number);
+        $index = ($number === 1) ? 0 : 1; // en_EN Plural rule
+        if ($this->messages[$textDomain][$locale] instanceof TextDomain) {
+            $index = $this->messages[$textDomain][$locale]
+                ->getPluralRule()
+                ->evaluate($number);
+        }
 
-        if (! isset($translation[$index])) {
-            throw new Exception\OutOfBoundsException(
-                sprintf('Provided index %d does not exist in plural array', $index)
+        if (isset($translation[$index]) && $translation[$index] !== '' && $translation[$index] !== null) {
+            return $translation[$index];
+        }
+
+        if (null !== ($fallbackLocale = $this->getFallbackLocale())
+            && $locale !== $fallbackLocale
+        ) {
+            return $this->translatePlural(
+                $singular,
+                $plural,
+                $number,
+                $textDomain,
+                $fallbackLocale
             );
         }
 
-        return $translation[$index];
+        return $index === 0 ? $singular : $plural;
     }
 
     /**
@@ -465,7 +462,7 @@ class Translator implements TranslatorInterface
         }
 
         if ($this->isEventManagerEnabled()) {
-            $until = function ($r) {
+            $until = static function ($r) {
                 return is_string($r);
             };
 
@@ -483,17 +480,17 @@ class Translator implements TranslatorInterface
             }
         }
 
-        return;
+        return null;
     }
 
     /**
      * Add a translation file.
      *
-     * @param  string     $type
-     * @param  string     $filename
-     * @param  string     $textDomain
-     * @param  string     $locale
-     * @return Translator
+     * @param  string      $type
+     * @param  string      $filename
+     * @param  string      $textDomain
+     * @param  string|null $locale
+     * @return $this
      */
     public function addTranslationFile(
         $type,
@@ -518,11 +515,11 @@ class Translator implements TranslatorInterface
     /**
      * Add multiple translations with a file pattern.
      *
-     * @param  string     $type
-     * @param  string     $baseDir
-     * @param  string     $pattern
-     * @param  string     $textDomain
-     * @return Translator
+     * @param  string $type
+     * @param  string $baseDir
+     * @param  string $pattern
+     * @param  string $textDomain
+     * @return $this
      */
     public function addTranslationFilePattern(
         $type,
@@ -546,9 +543,9 @@ class Translator implements TranslatorInterface
     /**
      * Add remote translations.
      *
-     * @param  string     $type
-     * @param  string     $textDomain
-     * @return Translator
+     * @param  string $type
+     * @param  string $textDomain
+     * @return $this
      */
     public function addRemoteTranslations($type, $textDomain = 'default')
     {
@@ -621,7 +618,7 @@ class Translator implements TranslatorInterface
         if (! $messagesLoaded) {
             $discoveredTextDomain = null;
             if ($this->isEventManagerEnabled()) {
-                $until = function ($r) {
+                $until = static function ($r) {
                     return ($r instanceof TextDomain);
                 };
 
@@ -759,9 +756,8 @@ class Translator implements TranslatorInterface
     /**
      * Return all the messages.
      *
-     * @param string $textDomain
-     * @param null   $locale
-     *
+     * @param string      $textDomain
+     * @param string|null $locale
      * @return mixed
      */
     public function getAllMessages($textDomain = 'default', $locale = null)
@@ -778,7 +774,7 @@ class Translator implements TranslatorInterface
     /**
      * Get the event manager.
      *
-     * @return EventManagerInterface|null
+     * @return EventManagerInterface
      */
     public function getEventManager()
     {
@@ -793,7 +789,7 @@ class Translator implements TranslatorInterface
      * Set the event manager instance used by this translator.
      *
      * @param  EventManagerInterface $events
-     * @return Translator
+     * @return $this
      */
     public function setEventManager(EventManagerInterface $events)
     {
@@ -809,7 +805,7 @@ class Translator implements TranslatorInterface
     /**
      * Check whether the event manager is enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEventManagerEnabled()
     {
@@ -819,7 +815,7 @@ class Translator implements TranslatorInterface
     /**
      * Enable the event manager.
      *
-     * @return Translator
+     * @return $this
      */
     public function enableEventManager()
     {
@@ -830,7 +826,7 @@ class Translator implements TranslatorInterface
     /**
      * Disable the event manager.
      *
-     * @return Translator
+     * @return $this
      */
     public function disableEventManager()
     {

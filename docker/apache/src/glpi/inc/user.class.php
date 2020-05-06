@@ -55,6 +55,13 @@ class User extends CommonDBTM {
 
    static $rightname = 'user';
 
+   static $undisclosedFields = [
+      'password',
+      'personal_token',
+      'api_token',
+      'cookie_token',
+   ];
+
    private $entities = null;
 
 
@@ -273,9 +280,6 @@ class User extends CommonDBTM {
       }
    }
 
-   static public function unsetUndisclosedFields(&$fields) {
-      unset($fields['password']);
-   }
 
    function pre_deleteItem() {
       global $DB;
@@ -544,7 +548,7 @@ class User extends CommonDBTM {
          return false;
       }
 
-      if (!Auth::isValidLogin($input['name'])) {
+      if (!Auth::isValidLogin(stripslashes($input['name']))) {
          Session::addMessageAfterRedirect(__('The login is not valid. Unable to add the user.'),
                                           false, ERROR);
          return false;
@@ -711,8 +715,13 @@ class User extends CommonDBTM {
                // Move uploaded file
                $filename     = uniqid($this->fields['id'].'_');
                $sub          = substr($filename, -2); /* 2 hex digit */
-               $tmp          = explode(".", $input["_picture"]);
-               $extension    = Toolbox::strtolower(array_pop($tmp));
+
+               // output images with possible transparency to png, other to jpg
+               $extension = strtolower(pathinfo($fullpath, PATHINFO_EXTENSION));
+               $extension = in_array($extension, ['png', 'gif'])
+                  ? 'png'
+                  : 'jpg';
+
                @mkdir(GLPI_PICTURE_DIR . "/$sub");
                $picture_path = GLPI_PICTURE_DIR  . "/$sub/${filename}.$extension";
                self::dropPictureFiles("$sub/${filename}.$extension");
@@ -2740,7 +2749,7 @@ class User extends CommonDBTM {
                                              false, ERROR);
          }
 
-         if (!Auth::isValidLogin($this->input['name'])) {
+         if (!Auth::isValidLogin(stripslashes($this->input['name']))) {
             $this->fields['name'] = $this->oldvalues['name'];
             unset($this->updates[$key]);
             unset($this->oldvalues['name']);
@@ -3291,10 +3300,6 @@ class User extends CommonDBTM {
          'name'               => __('Responsible'),
          'datatype'           => 'dropdown',
          'massiveaction'      => false,
-         'joinparams'         => [
-            // force complex join generation
-            'condition' => "AND 1=1"
-         ]
       ];
 
       // add objectlock search options

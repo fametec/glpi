@@ -39,6 +39,7 @@ if (!defined('GLPI_ROOT')) {
 use Config;
 use DBConnection;
 use Glpi\Console\Command\ForceNoPluginsOptionCommandInterface;
+use GLPIKey;
 use Toolbox;
 
 use Symfony\Component\Console\Command\Command;
@@ -94,6 +95,13 @@ class InstallCommand extends Command implements ForceNoPluginsOptionCommandInter
     * @var integer
     */
    const ERROR_SCHEMA_CREATION_FAILED = 6;
+
+   /**
+    * Error code returned when failing to create encryption key file.
+    *
+    * @var integer
+    */
+   const ERROR_CANNOT_CREATE_ENCRYPTION_KEY_FILE = 7;
 
    protected function configure() {
       parent::configure();
@@ -234,8 +242,20 @@ class InstallCommand extends Command implements ForceNoPluginsOptionCommandInter
          }
       }
 
+      // Create security key
+      $glpikey = new GLPIKey();
+      if (!$glpikey->keyExists() && !$glpikey->generate()) {
+         $message = __('Security key cannot be generated!');
+         $output->writeln('<error>' . $message . '</error>', OutputInterface::VERBOSITY_QUIET);
+         return self::ERROR_CANNOT_CREATE_ENCRYPTION_KEY_FILE;
+      }
+
       $mysqli = new \mysqli();
-      @$mysqli->connect($db_host, $db_user, $db_pass, null, $db_port);
+      if (intval($db_port) > 0) { // Network port
+          @$mysqli->connect($db_host, $db_user, $db_pass, null, $db_port);
+      } else { // Unix Domain Socket
+          @$mysqli->connect($db_host, $db_user, $db_pass, null, 0, $db_port);
+      }
 
       if (0 !== $mysqli->connect_errno) {
          $message = sprintf(

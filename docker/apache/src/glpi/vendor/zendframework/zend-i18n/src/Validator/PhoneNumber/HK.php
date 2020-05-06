@@ -1,24 +1,22 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
     'code' => '852',
     'patterns' => [
         'national' => [
-            'general' => '/^[235-7]\\d{7}|8\\d{7,8}|9\\d{4,10}$/',
+            'general' => '/^(?:[235-7]\\d{7}|8\\d{7,8}|9\\d{4,10})$/',
             'fixed' => '/^(?:[23]\\d|5[78])\\d{6}$/',
             'mobile' => '/^(?:5[1-69]\\d|6\\d{2}|9(?:0[1-9]|[1-8]\\d))\\d{5}$/',
             'pager' => '/^7\\d{7}$/',
             'tollfree' => '/^800\\d{6}$/',
             'premium' => '/^900(?:[0-24-9]\\d{7}|3\\d{1,4})$/',
             'personal' => '/^8[1-3]\\d{6}$/',
-            'emergency' => '/^112|99[29]$/',
+            'emergency' => '/^(?:112|99[29])$/',
         ],
         'possible' => [
             'general' => '/^\\d{5,11}$/',

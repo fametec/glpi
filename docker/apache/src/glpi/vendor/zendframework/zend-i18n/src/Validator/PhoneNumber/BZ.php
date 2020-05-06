@@ -1,17 +1,15 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-i18n for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-i18n/blob/master/LICENSE.md New BSD License
  */
 
 return [
     'code' => '501',
     'patterns' => [
         'national' => [
-            'general' => '/^[2-8]\\d{6}|0\\d{10}$/',
+            'general' => '/^(?:[2-8]\\d{6}|0\\d{10})$/',
             'fixed' => '/^[234578][02]\\d{5}$/',
             'mobile' => '/^6[0-367]\\d{5}$/',
             'tollfree' => '/^0800\\d{7}$/',
