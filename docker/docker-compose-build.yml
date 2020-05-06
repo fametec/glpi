@@ -6,7 +6,6 @@ services:
     mariadb-glpi: 
         build: mariadb/
         image: fametec/mariadb:glpi-9.4.6
-        # image: mariadb:latest 
         restart: unless-stopped
         # volumes: 
         #  - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -49,25 +48,25 @@ services:
 #
 # CRON
 #
-#    crond: 
-#        build: crond/
-#        image: fametec/crond-glpi:9.4.6
-#        restart: unless-stopped
-#        depends_on: 
-#          - glpi
-#          - mariadb-glpi
-#        environment: 
-#          MARIADB_HOST: mariadb-glpi
-#          MARIADB_PORT: 3306
-#          MARIADB_DATABASE: glpi
-#          MARIADB_USER: glpi-user
-#          MARIADB_PASSWORD: glpi-pass
-#        volumes: 
-#          - glpi-volume-config:/var/www/html/config:ro
-#          - glpi-volume-files:/var/www/html/files:rw
-#          - glpi-volume-plugins:/var/www/html/plugins:rw
-#        networks: 
-#          - glpi-backend
+    crond: 
+        build: crond/
+        image: fametec/crond-glpi:9.4.6
+        restart: unless-stopped
+        depends_on: 
+          - glpi
+          - mariadb-glpi
+        environment: 
+          MARIADB_HOST: mariadb-glpi
+          MARIADB_PORT: 3306
+          MARIADB_DATABASE: glpi
+          MARIADB_USER: glpi-user
+          MARIADB_PASSWORD: glpi-pass
+        # volumes: 
+        #  - glpi-volume-config:/var/www/html/config:ro
+        #  - glpi-volume-files:/var/www/html/files:rw
+        #  - glpi-volume-plugins:/var/www/html/plugins:rw
+        networks: 
+          - glpi-backend
 #
 # VOLUMES
 #
