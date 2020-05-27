@@ -32,7 +32,7 @@ MYSQL="mysql -u root -p${MYSQL_NEW_ROOT_PASSWORD}"
 CURL=`which curl`
 
 
-functionLog () {
+Log () {
 
 cat <<EOF > $LOGS
 

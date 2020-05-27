@@ -58,6 +58,7 @@ RUN yum -y install \
 		php-intl \
 		jq \
 		php-pear-CAS \
+		php-ZendFramework-Cache-Backend-Apc \
 	&& yum -y clean all
 
 ADD php.d /etc/php.d
