@@ -4,7 +4,7 @@ services:
 # MARIADB
 #
     mariadb-glpi: 
-        image: fametec/mariadb:glpi-9.4.6
+        image: fametec/mariadb-glpi:9.4.6
         restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/lib/mysql:rw

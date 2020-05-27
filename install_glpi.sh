@@ -89,12 +89,6 @@ InstallRepo () {
 
   echo "Installing Yum Repo..."
 
-#  curl -sSL 'https://setup.ius.io/' | bash   
-
-#  yum -y install \
-#	epel-release \
-#	expect
-
   yum -y install expect\
   	epel-release \
 	yum-utils
@@ -225,6 +219,7 @@ InstallPhp () {
 	php-opcache \
 	php-apcu \
 	php-xmlrpc \
+	php-ZendFramework-Cache-Backend-Apc \
 	jq \
 	openssl 
   
@@ -246,10 +241,16 @@ session.use_trans_sid = 0 ;
 EOF
 
 
-  cat <<EOF > /etc/php.d/timezone.ini
+  cat <<EOF > /etc/php.d/99-timezone.ini
 [Date]
 date.timezone = $TIMEZONE ; 
 EOF
+
+
+  cat <<EOF > /etc/php.d/99-apcu.ini
+apc.enable_cli = 1 ; 
+EOF
+
 
 } 
 

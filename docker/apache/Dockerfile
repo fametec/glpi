@@ -27,14 +27,14 @@ RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 RUN yum-config-manager --enable remi-php73
 
 RUN yum -y install \
+		bzip2 \
+		httpd \
 		php \
 		php-common \
 		php-mcrypt \
 		php-cli \
 		php-gd \
 		php-mysqlnd \
-		bzip2 \
-		httpd \
 		php-json \
 		php-mbstring \
 		php-mysqli \
@@ -49,8 +49,8 @@ RUN yum -y install \
 		php-apcu \
 		php-xmlrpc \
 		php-intl \
-		jq \
 		php-pear-CAS \
+		php-ZendFramework-Cache-Backend-Apc \
 	&& yum -y clean all
 
 ADD php.d /etc/php.d
@@ -59,7 +59,14 @@ ADD conf.d /etc/httpd/conf.d
 
 COPY --chown=apache:apache src/glpi /var/www/html
 
-VOLUME ["/var/www/html/config", "/var/www/html/files", "/var/www/html/plugins"]
+#ADD https://github.com/glpi-project/glpi/releases/download/9.4.6/glpi-9.4.6.tgz /tmp/
+#
+#RUN tar -zxf /tmp/glpi-9.4.6.tgz -C /tmp/ \
+#	&& mv /tmp/glpi/* /var/www/html/ \
+#	&& chown -R apache:apache /var/www/html \
+#	&& rm -rf /tmp/glpi-9.4.6.tgz
+
+VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 
 ADD scripts/glpi-entrypoint.sh scripts/plugins.sh /
 

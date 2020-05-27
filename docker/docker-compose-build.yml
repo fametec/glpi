@@ -5,7 +5,7 @@ services:
 #
     mariadb-glpi: 
         build: mariadb/
-        image: fametec/mariadb:glpi-9.4.6
+        image: fametec/mariadb-glpi:9.4.6
         restart: unless-stopped
         # volumes: 
         #  - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -26,7 +26,6 @@ services:
         image: fametec/glpi:9.4.6
         restart: unless-stopped
         # volumes: 
-        #  - glpi-volume-config:/var/www/html/config:rw
         #  - glpi-volume-files:/var/www/html/files:rw
         #  - glpi-volume-plugins:/var/www/html/plugins:rw
         environment: 
@@ -62,7 +61,6 @@ services:
           MARIADB_USER: glpi-user
           MARIADB_PASSWORD: glpi-pass
         # volumes: 
-        #  - glpi-volume-config:/var/www/html/config:ro
         #  - glpi-volume-files:/var/www/html/files:rw
         #  - glpi-volume-plugins:/var/www/html/plugins:rw
         networks: 
@@ -71,7 +69,6 @@ services:
 # VOLUMES
 #
 #volumes: 
-#  glpi-volume-config:
 #  glpi-volume-files:
 #  glpi-volume-plugins:
 #  mariadb-glpi-volume: 
