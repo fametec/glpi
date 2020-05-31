@@ -11,7 +11,7 @@
 LOGS="install_glpi.log"
 GLPI_LANG="en_US"
 # GLPI_LANG="pt_BR"
-VERSION="9.4.5"
+VERSION="9.4.6"
 TIMEZONE=Etc/UTC
 # TIMEZONE=America/Fortaleza
 FQDN="glpi.fametec.com.br"
@@ -88,12 +88,6 @@ DisableFirewall () {
 InstallRepo () {
 
   echo "Installing Yum Repo..."
-
-#  curl -sSL 'https://setup.ius.io/' | bash   
-
-#  yum -y install \
-#	epel-release \
-#	expect
 
   yum -y install expect\
   	epel-release \
@@ -225,6 +219,7 @@ InstallPhp () {
 	php-opcache \
 	php-apcu \
 	php-xmlrpc \
+	php-ZendFramework-Cache-Backend-Apc \
 	jq \
 	openssl 
   
@@ -246,10 +241,16 @@ session.use_trans_sid = 0 ;
 EOF
 
 
-  cat <<EOF > /etc/php.d/timezone.ini
+  cat <<EOF > /etc/php.d/99-timezone.ini
 [Date]
 date.timezone = $TIMEZONE ; 
 EOF
+
+
+  cat <<EOF > /etc/php.d/99-apcu.ini
+apc.enable_cli = 1 ; 
+EOF
+
 
 } 
 
@@ -279,7 +280,6 @@ cat <<EOF > /etc/httpd/conf.d/glpi.conf
     </Directory>
 </VirtualHost>
 EOF
-
 
 }
 

@@ -3,34 +3,25 @@ services:
     mariadb-glpi: 
         image: fametec/mariadb-glpi:9.4.6
         restart: unless-stopped
-        volumes: 
+        volumes:
           - mariadb-glpi-volume:/var/lib/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
           MYSQL_USER: glpi-user 
           MYSQL_PASSWORD: glpi-pass 
           MYSQL_RANDOM_ROOT_PASSWORD: 1 
-        ports: 
-          - 3306:3306
+          #        ports:
+          #- 3306:3306
         networks: 
           - glpi-backend
 #
 #
     glpi: 
-        image: fametec/glpi:9.4.6
+        image: fametec/glpi:9.4.6-nginx
         restart: unless-stopped
-        volumes: 
-          - glpi-volume-files:/var/www/html/files:rw
-          - glpi-volume-plugins:/var/www/html/plugins:rw
-        environment: 
-          GLPI_LANG: pt_BR
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
-          VERSION: "9.4.6"
-          PLUGINS: "all"
+        volumes:
+          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
+          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
         depends_on: 
           - mariadb-glpi
           - php-fpm
@@ -39,35 +30,19 @@ services:
         networks: 
           - glpi-frontend
           - glpi-backend
-#
-# CRON
-#
-    crond: 
-        image: fametec/crond-glpi:9.4.6
+
+    php-fpm: 
+        image: fametec/glpi:9.4.6-php-fpm
         restart: unless-stopped
         volumes:
           - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
         depends_on:
           - mariadb-glpi
-        environment: 
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
-        volumes: 
-          - glpi-volume-files:/var/www/html/files:rw
-          - glpi-volume-plugins:/var/www/html/plugins:rw
-        networks: 
+        networks:
           - glpi-backend
-#
-# VOLUMES
-#
-volumes: 
-  glpi-volume-files:
-  glpi-volume-plugins:
-  mariadb-glpi-volume: 
+#        ports:
+#          - 9000:9000
 #
     # cron:
     #     image: fametec/glpi-cron-php-fpm:latest
