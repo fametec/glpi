@@ -12,11 +12,17 @@ ConfigDataBase () {
         echo "   public \$dbdefault  = \"${MARIADB_DATABASE}\";"; \
         echo "}"; \
         echo ; 
-      } > /var/www/html/config/config_db.php
+      } > /usr/share/nginx/html/glpi/config/config_db.php
 
 }
 
+ConfigOwner () {
+
+  chown -R nginx:nginx /usr/share/nginx/html/glpi
+
+}
 
 ConfigDataBase
+ConfigOwner
 
-crond -s -x bit -n /etc/crontab
+php-fpm

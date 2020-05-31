@@ -1,5 +1,7 @@
 ![GLPI Logo](https://raw.githubusercontent.com/glpi-project/glpi/master/pics/logos/logo-GLPI-250-black.png)
 
+# GLPI Docker Container
+
 
 ## About GLPI
 
@@ -79,9 +81,6 @@ contato@fametec.com.br
 
     version: "3.5"
     services:
-    #
-    # MARIADB
-    #
         mariadb-glpi: 
             image: fametec/mariadb:glpi-9.4.6
             restart: unless-stopped
@@ -96,9 +95,6 @@ contato@fametec.com.br
               - 3306:3306
             networks: 
               - glpi-backend
-    #
-    # GLPI
-    #
         glpi: 
             image: fametec/glpi:9.4.6
             restart: unless-stopped
@@ -116,6 +112,7 @@ contato@fametec.com.br
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
+              - php-fpm
             ports: 
               - 30080:80
             networks: 
@@ -127,8 +124,9 @@ contato@fametec.com.br
         crond: 
             image: fametec/crond-glpi:9.4.6
             restart: unless-stopped
-            depends_on: 
-              - glpi
+            volumes:
+              - glpi-volume:/usr/share/nginx/html/glpi:rw
+            depends_on:
               - mariadb-glpi
             environment: 
               MARIADB_HOST: mariadb-glpi
@@ -212,13 +210,10 @@ Edit the script
     
     
 
-## Install
 
-    sh install_glpi.sh
 
 After instalation the script save the credentials and variables in ''install_glpi.log'' for future maintenance. 
 
-Example: 
 
     ====================================================
     ## VARIAVEIS

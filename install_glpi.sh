@@ -281,7 +281,6 @@ cat <<EOF > /etc/httpd/conf.d/glpi.conf
 </VirtualHost>
 EOF
 
-
 }
 
 

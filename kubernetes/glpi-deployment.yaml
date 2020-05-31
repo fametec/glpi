@@ -7,9 +7,11 @@ metadata:
 spec:
   ports: 
     - port: 80
+      targetPort: 80
+      nodePort: 30080
   selector: 
     app: glpi
-  type: LoadBalancer
+  type: NodePort
 
 ---
 apiVersion: apps/v1
