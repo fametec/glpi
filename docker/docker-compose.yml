@@ -33,7 +33,7 @@ services:
           PLUGINS: "all"
         depends_on: 
           - mariadb-glpi
-          - php-fpm
+#         - php-fpm
         ports: 
           - 80:80
         networks: 
@@ -42,25 +42,25 @@ services:
 #
 # CRON
 #
-    crond: 
-        image: fametec/crond-glpi:9.4.6
-        restart: unless-stopped
-        volumes:
-          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
-          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
-        depends_on:
-          - mariadb-glpi
-        environment: 
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
-        volumes: 
-          - glpi-volume-files:/var/www/html/files:rw
-          - glpi-volume-plugins:/var/www/html/plugins:rw
-        networks: 
-          - glpi-backend
+#    crond: 
+#        image: fametec/crond-glpi:9.4.6
+#        restart: unless-stopped
+#        volumes:
+#          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
+#          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+#        depends_on:
+#          - mariadb-glpi
+#        environment: 
+#          MARIADB_HOST: mariadb-glpi
+#          MARIADB_PORT: 3306
+#          MARIADB_DATABASE: glpi
+#          MARIADB_USER: glpi-user
+#          MARIADB_PASSWORD: glpi-pass
+#        volumes: 
+#          - glpi-volume-files:/var/www/html/files:rw
+#          - glpi-volume-plugins:/var/www/html/plugins:rw
+#        networks: 
+#          - glpi-backend
 #
 # VOLUMES
 #
@@ -69,22 +69,8 @@ volumes:
   glpi-volume-plugins:
   mariadb-glpi-volume: 
 #
-    # cron:
-    #     image: fametec/glpi-cron-php-fpm:latest
-    #     restart: unless-stopped
-    #     volumes:
-    #       - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
-    #       - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
-    #     depends_on:
-    #       - mariadb-glpi
-    #     networks:
-    #       - glpi-backend
+# NETWORKS
 #
 networks: 
     glpi-frontend: 
     glpi-backend:
-#
-volumes:
-    glpi-volume-files:
-    glpi-volume-plugins:
-    mariadb-glpi-volume:
