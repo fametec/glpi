@@ -18,7 +18,9 @@ ConfigDataBase () {
 
 ConfigOwner () {
 
-  chown -R nginx:nginx /usr/share/nginx/html/glpi
+  chown -R www-data:www-data /usr/share/nginx/html/glpi
+  chmod g+w /usr/share/nginx/html/glpi/files
+  chmod g+w /usr/share/nginx/html/glpi/plugins
 
 }
 

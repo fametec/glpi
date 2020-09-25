@@ -1,14 +1,14 @@
 version: "3.5"
 services:
     mariadb-glpi: 
-        image: fametec/mariadb-glpi:9.4.6
+        image: fametec/glpi:9.5.1-mariadb
         restart: unless-stopped
-#        volumes:
-#          - mariadb-glpi-volume:/var/lib/mysql:rw
+        volumes:
+          - mariadb-glpi-volume:/var/lib/mysql:rw
         environment: 
           MYSQL_DATABASE: glpi
-          MYSQL_USER: glpi 
-          MYSQL_PASSWORD: glpi 
+          MYSQL_USER: glpi-user 
+          MYSQL_PASSWORD: glpi-pass 
           MYSQL_RANDOM_ROOT_PASSWORD: 1 
 #       ports:
 #         - 3306:3306
@@ -16,13 +16,13 @@ services:
           - glpi-backend
 #
 #
-    glpi: 
+    nginx: 
         build: nginx/
-        image: fametec/glpi:9.4.6-nginx
+        image: fametec/glpi:9.5.1-nginx
         restart: unless-stopped
-#        volumes:
-#          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
-#          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
+        volumes:
+          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
+          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
         depends_on: 
           - mariadb-glpi
           - php-fpm
@@ -34,8 +34,14 @@ services:
 
     php-fpm: 
         build: php/
-        image: fametec/glpi:9.4.6-php-fpm
+        image: fametec/glpi:9.5.1-php-fpm
         restart: unless-stopped
+        environment:
+          MARIADB_HOST: mariadb-glpi
+          MARIADB_PORT: 3306
+          MARIADB_DATABASE: glpi
+          MARIADB_USER: glpi-user
+          MARIADB_PASSWORD: glpi-pass
         volumes:
           - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
           - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
@@ -52,4 +58,4 @@ networks:
 volumes:
     glpi-volume-files:
     glpi-volume-plugins:
-#    mariadb-glpi-volume:
+    mariadb-glpi-volume:

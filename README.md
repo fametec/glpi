@@ -46,7 +46,7 @@ contato@fametec.com.br
     -e MYSQL_PASSWORD=glpi \
     -e MYSQL_RANDOM_ROOT_PASSWORD=1 \
     -p 3306:3306
-    fametec/mariadb:glpi-9.4.6 
+    fametec/glpi:mariadb
 
 
 ### Deploy GLPI
@@ -60,17 +60,17 @@ contato@fametec.com.br
     -e MARIADB_DATABASE=glpi \
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
-    -e VERSION="9.4.5" \
+    -e VERSION="9.5.1" \
     -e PLUGINS="all"
     -p 80:80 \
     -p 443:443 \
-    fametec/glpi:9.4.6
+    fametec/glpi:latest
 
 
 ### Deploy Cron to Schedule jobs
 
 
-    docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi:/var/www/html/glpi fametec/crond-glpi:9.4.6
+    docker run -d --name crond-glpi --link mariadb-glpi:mariadb --volume glpi:/var/www/html/glpi fametec/glpi:crond
 
 
 # Docker Compose
@@ -82,7 +82,7 @@ contato@fametec.com.br
     version: "3.5"
     services:
         mariadb-glpi: 
-            image: fametec/mariadb:glpi-9.4.6
+            image: fametec/glpi:mariadb
             restart: unless-stopped
             volumes: 
               - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -96,7 +96,7 @@ contato@fametec.com.br
             networks: 
               - glpi-backend
         glpi: 
-            image: fametec/glpi:9.4.6
+            image: fametec/glpi:latest
             restart: unless-stopped
             volumes: 
               - glpi-volume-files:/var/www/html/files:rw
@@ -108,7 +108,7 @@ contato@fametec.com.br
               MARIADB_DATABASE: glpi
               MARIADB_USER: glpi-user
               MARIADB_PASSWORD: glpi-pass
-              VERSION: "9.4.6"
+              VERSION: "9.5.1"
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
@@ -122,7 +122,7 @@ contato@fametec.com.br
     # CRON
     #
         crond: 
-            image: fametec/crond-glpi:9.4.6
+            image: fametec/glpi:crond
             restart: unless-stopped
             volumes:
               - glpi-volume:/usr/share/nginx/html/glpi:rw

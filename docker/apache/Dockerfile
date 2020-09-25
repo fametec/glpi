@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.4.6
+ENV VERSION 9.5.1
 
 ENV GLPI_LANG pt_BR
 
@@ -51,6 +51,8 @@ RUN yum -y install \
 		php-intl \
 		php-pear-CAS \
 		php-ZendFramework-Cache-Backend-Apc \
+		php-sodium \
+		php-pecl-zip \
 	&& yum -y clean all
 
 ADD php.d /etc/php.d
@@ -59,12 +61,12 @@ ADD conf.d /etc/httpd/conf.d
 
 # COPY --chown=apache:apache src/glpi /var/www/html
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.4.6/glpi-9.4.6.tgz /tmp/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.1/glpi-9.5.1.tgz /tmp/
 #
-RUN tar -zxf /tmp/glpi-9.4.6.tgz -C /tmp/ \
+RUN tar -zxf /tmp/glpi-9.5.1.tgz -C /tmp/ \
 	&& mv /tmp/glpi/* /var/www/html/ \
 	&& chown -R apache:apache /var/www/html \
-	&& rm -rf /tmp/glpi-9.4.6.tgz
+	&& rm -rf /tmp/glpi-9.5.1.tgz
 
 VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 
