@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.5.1
+ENV VERSION 9.5.2
 
 ENV GLPI_LANG pt_BR
 
