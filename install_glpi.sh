@@ -11,7 +11,7 @@
 LOGS="install_glpi.log"
 GLPI_LANG="en_US"
 # GLPI_LANG="pt_BR"
-VERSION="9.4.6"
+VERSION="9.5.2"
 TIMEZONE=Etc/UTC
 # TIMEZONE=America/Fortaleza
 FQDN="glpi.fametec.com.br"
