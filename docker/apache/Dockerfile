@@ -49,6 +49,7 @@ RUN yum -y install \
 		php-apcu \
 		php-xmlrpc \
 		php-intl \
+		php-zip \
 		php-pear-CAS \
 		php-ZendFramework-Cache-Backend-Apc \
 		php-sodium \
@@ -61,12 +62,12 @@ ADD conf.d /etc/httpd/conf.d
 
 # COPY --chown=apache:apache src/glpi /var/www/html
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.5.1/glpi-9.5.1.tgz /tmp/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.2/glpi-9.5.2.tgz /tmp/
 #
-RUN tar -zxf /tmp/glpi-9.5.1.tgz -C /tmp/ \
+RUN tar -zxf /tmp/glpi-9.5.2.tgz -C /tmp/ \
 	&& mv /tmp/glpi/* /var/www/html/ \
 	&& chown -R apache:apache /var/www/html \
-	&& rm -rf /tmp/glpi-9.5.1.tgz
+	&& rm -rf /tmp/glpi-9.5.2.tgz
 
 VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 
