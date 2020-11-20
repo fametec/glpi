@@ -219,6 +219,9 @@ InstallPhp () {
 	php-opcache \
 	php-apcu \
 	php-xmlrpc \
+	intl \
+	php-zip \
+	php-sodium
 	php-ZendFramework-Cache-Backend-Apc \
 	jq \
 	openssl 
