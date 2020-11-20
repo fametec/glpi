@@ -410,10 +410,10 @@ InstallApache
 InstallPhp
 SetPhpIni
 Install
-SetPermission
 SetHttpConf
 StartHttpd
 DeployDataBase
+SetPermission
 InstallBackupJob
 "
 
