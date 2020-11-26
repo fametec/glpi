@@ -1,13 +1,13 @@
--- MySQL dump 10.14  Distrib 5.5.65-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.18  Distrib 10.4.17-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: mariadb-glpi    Database: glpi
+-- Host: localhost    Database: glpi
 -- ------------------------------------------------------
--- Server version	10.4.14-MariaDB-1:10.4.14+maria~focal
+-- Server version	10.4.17-MariaDB-1:10.4.17+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -115,32 +115,6 @@ LOCK TABLES `glpi_applianceenvironments` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `glpi_appliancerelations`
---
-
-DROP TABLE IF EXISTS `glpi_appliancerelations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glpi_appliancerelations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `appliances_items_id` int(11) NOT NULL DEFAULT 0,
-  `relations_id` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `appliances_items_id` (`appliances_items_id`),
-  KEY `relations_id` (`relations_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `glpi_appliancerelations`
---
-
-LOCK TABLES `glpi_appliancerelations` WRITE;
-/*!40000 ALTER TABLE `glpi_appliancerelations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `glpi_appliancerelations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `glpi_appliances`
 --
 
@@ -162,12 +136,12 @@ CREATE TABLE `glpi_appliances` (
   `users_id_tech` int(11) NOT NULL DEFAULT 0,
   `groups_id` int(11) NOT NULL DEFAULT 0,
   `groups_id_tech` int(11) NOT NULL DEFAULT 0,
-  `relationtype` int(11) NOT NULL DEFAULT 0,
   `date_mod` timestamp NULL DEFAULT NULL,
   `states_id` int(11) NOT NULL DEFAULT 0,
   `externalidentifier` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `serial` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `otherserial` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_helpdesk_visible` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unicity` (`externalidentifier`),
   KEY `entities_id` (`entities_id`),
@@ -183,7 +157,8 @@ CREATE TABLE `glpi_appliances` (
   KEY `groups_id_tech` (`groups_id_tech`),
   KEY `states_id` (`states_id`),
   KEY `serial` (`serial`),
-  KEY `otherserial` (`otherserial`)
+  KEY `otherserial` (`otherserial`),
+  KEY `is_helpdesk_visible` (`is_helpdesk_visible`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -222,6 +197,35 @@ CREATE TABLE `glpi_appliances_items` (
 LOCK TABLES `glpi_appliances_items` WRITE;
 /*!40000 ALTER TABLE `glpi_appliances_items` DISABLE KEYS */;
 /*!40000 ALTER TABLE `glpi_appliances_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glpi_appliances_items_relations`
+--
+
+DROP TABLE IF EXISTS `glpi_appliances_items_relations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glpi_appliances_items_relations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `appliances_items_id` int(11) NOT NULL DEFAULT 0,
+  `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `items_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `appliances_items_id` (`appliances_items_id`),
+  KEY `itemtype` (`itemtype`),
+  KEY `items_id` (`items_id`),
+  KEY `item` (`itemtype`,`items_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glpi_appliances_items_relations`
+--
+
+LOCK TABLES `glpi_appliances_items_relations` WRITE;
+/*!40000 ALTER TABLE `glpi_appliances_items_relations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glpi_appliances_items_relations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1785,7 +1789,7 @@ CREATE TABLE `glpi_configs` (
 
 LOCK TABLES `glpi_configs` WRITE;
 /*!40000 ALTER TABLE `glpi_configs` DISABLE KEYS */;
-INSERT INTO `glpi_configs` VALUES (1,'core','version','9.5.1'),(2,'core','show_jobs_at_login','0'),(3,'core','cut','250'),(4,'core','list_limit','15'),(5,'core','list_limit_max','50'),(6,'core','url_maxlength','30'),(7,'core','event_loglevel','5'),(8,'core','notifications_mailing','0'),(9,'core','admin_email','admsys@localhost'),(10,'core','admin_email_name',''),(11,'core','admin_reply',''),(12,'core','admin_reply_name',''),(13,'core','mailing_signature','SIGNATURE'),(14,'core','use_anonymous_helpdesk','0'),(15,'core','use_anonymous_followups','0'),(16,'core','language','en_GB'),(17,'core','priority_1','#fff2f2'),(18,'core','priority_2','#ffe0e0'),(19,'core','priority_3','#ffcece'),(20,'core','priority_4','#ffbfbf'),(21,'core','priority_5','#ffadad'),(22,'core','priority_6','#ff5555'),(23,'core','date_tax','2005-12-31'),(24,'core','cas_host',''),(25,'core','cas_port','443'),(26,'core','cas_uri',''),(27,'core','cas_logout',''),(28,'core','existing_auth_server_field_clean_domain','0'),(29,'core','planning_begin','08:00:00'),(30,'core','planning_end','20:00:00'),(31,'core','utf8_conv','1'),(32,'core','use_public_faq','0'),(33,'core','url_base','http://192.168.120.65'),(34,'core','show_link_in_mail','0'),(35,'core','text_login',''),(36,'core','founded_new_version',''),(37,'core','dropdown_max','100'),(38,'core','ajax_wildcard','*'),(39,'core','ajax_limit_count','10'),(40,'core','use_ajax_autocompletion','1'),(41,'core','is_users_auto_add','1'),(42,'core','date_format','0'),(43,'core','number_format','0'),(44,'core','csv_delimiter',';'),(45,'core','is_ids_visible','0'),(46,'core','smtp_mode','0'),(47,'core','smtp_host',''),(48,'core','smtp_port','25'),(49,'core','smtp_username',''),(50,'core','proxy_name',''),(51,'core','proxy_port','8080'),(52,'core','proxy_user',''),(53,'core','add_followup_on_update_ticket','1'),(54,'core','keep_tickets_on_delete','0'),(55,'core','time_step','5'),(56,'core','decimal_number','2'),(57,'core','helpdesk_doc_url',''),(58,'core','central_doc_url',''),(59,'core','documentcategories_id_forticket','0'),(60,'core','monitors_management_restrict','2'),(61,'core','phones_management_restrict','2'),(62,'core','peripherals_management_restrict','2'),(63,'core','printers_management_restrict','2'),(64,'core','use_log_in_files','1'),(65,'core','time_offset','0'),(66,'core','is_contact_autoupdate','1'),(67,'core','is_user_autoupdate','1'),(68,'core','is_group_autoupdate','1'),(69,'core','is_location_autoupdate','1'),(70,'core','state_autoupdate_mode','0'),(71,'core','is_contact_autoclean','0'),(72,'core','is_user_autoclean','0'),(73,'core','is_group_autoclean','0'),(74,'core','is_location_autoclean','0'),(75,'core','state_autoclean_mode','0'),(76,'core','use_flat_dropdowntree','0'),(77,'core','use_autoname_by_entity','1'),(78,'core','softwarecategories_id_ondelete','1'),(79,'core','x509_email_field',''),(80,'core','x509_cn_restrict',''),(81,'core','x509_o_restrict',''),(82,'core','x509_ou_restrict',''),(83,'core','default_mailcollector_filesize_max','2097152'),(84,'core','followup_private','0'),(85,'core','task_private','0'),(86,'core','default_software_helpdesk_visible','1'),(87,'core','names_format','0'),(88,'core','default_requesttypes_id','1'),(89,'core','use_noright_users_add','1'),(90,'core','cron_limit','5'),(91,'core','priority_matrix','{\"1\":{\"1\":1,\"2\":1,\"3\":2,\"4\":2,\"5\":2},\"2\":{\"1\":1,\"2\":2,\"3\":2,\"4\":3,\"5\":3},\"3\":{\"1\":2,\"2\":2,\"3\":3,\"4\":4,\"5\":4},\"4\":{\"1\":2,\"2\":3,\"3\":4,\"4\":4,\"5\":5},\"5\":{\"1\":2,\"2\":3,\"3\":4,\"4\":5,\"5\":5}}'),(92,'core','urgency_mask','62'),(93,'core','impact_mask','62'),(94,'core','user_deleted_ldap','0'),(95,'core','auto_create_infocoms','0'),(96,'core','use_slave_for_search','0'),(97,'core','proxy_passwd',''),(98,'core','smtp_passwd',''),(99,'core','transfers_id_auto','0'),(100,'core','show_count_on_tabs','1'),(101,'core','refresh_views','0'),(102,'core','set_default_tech','1'),(103,'core','allow_search_view','2'),(104,'core','allow_search_all','0'),(105,'core','allow_search_global','1'),(106,'core','display_count_on_home','5'),(107,'core','use_password_security','0'),(108,'core','password_min_length','8'),(109,'core','password_need_number','1'),(110,'core','password_need_letter','1'),(111,'core','password_need_caps','1'),(112,'core','password_need_symbol','1'),(113,'core','use_check_pref','0'),(114,'core','notification_to_myself','1'),(115,'core','duedateok_color','#06ff00'),(116,'core','duedatewarning_color','#ffb800'),(117,'core','duedatecritical_color','#ff0000'),(118,'core','duedatewarning_less','20'),(119,'core','duedatecritical_less','5'),(120,'core','duedatewarning_unit','%'),(121,'core','duedatecritical_unit','%'),(122,'core','realname_ssofield',''),(123,'core','firstname_ssofield',''),(124,'core','email1_ssofield',''),(125,'core','email2_ssofield',''),(126,'core','email3_ssofield',''),(127,'core','email4_ssofield',''),(128,'core','phone_ssofield',''),(129,'core','phone2_ssofield',''),(130,'core','mobile_ssofield',''),(131,'core','comment_ssofield',''),(132,'core','title_ssofield',''),(133,'core','category_ssofield',''),(134,'core','language_ssofield',''),(135,'core','entity_ssofield',''),(136,'core','registration_number_ssofield',''),(137,'core','ssovariables_id','0'),(138,'core','ssologout_url',''),(139,'core','translate_kb','0'),(140,'core','translate_dropdowns','0'),(141,'core','translate_reminders','0'),(142,'core','pdffont','helvetica'),(143,'core','keep_devices_when_purging_item','0'),(144,'core','maintenance_mode','0'),(145,'core','maintenance_text',''),(146,'core','attach_ticket_documents_to_mail','0'),(147,'core','backcreated','0'),(148,'core','task_state','1'),(149,'core','layout','lefttab'),(150,'core','palette','auror'),(151,'core','lock_use_lock_item','0'),(152,'core','lock_autolock_mode','1'),(153,'core','lock_directunlock_notification','0'),(154,'core','lock_item_list','[]'),(155,'core','lock_lockprofile_id','8'),(156,'core','set_default_requester','1'),(157,'core','highcontrast_css','0'),(158,'core','smtp_check_certificate','1'),(159,'core','enable_api','0'),(160,'core','enable_api_login_credentials','0'),(161,'core','enable_api_login_external_token','1'),(162,'core','url_base_api','http://192.168.120.65/apirest.php/'),(163,'core','login_remember_time','604800'),(164,'core','login_remember_default','1'),(165,'core','use_notifications','0'),(166,'core','notifications_ajax','0'),(167,'core','notifications_ajax_check_interval','5'),(168,'core','notifications_ajax_sound',NULL),(169,'core','notifications_ajax_icon_url','/pics/glpi.png'),(170,'core','dbversion','9.5.0'),(171,'core','smtp_max_retries','5'),(172,'core','smtp_sender',NULL),(173,'core','from_email',NULL),(174,'core','from_email_name',NULL),(175,'core','instance_uuid',NULL),(176,'core','registration_uuid','dablWFtbDB3V0vU74IFujkoOTiackZpVNLSX1ALI'),(177,'core','smtp_retry_time','5'),(178,'core','purge_addrelation','0'),(179,'core','purge_deleterelation','0'),(180,'core','purge_createitem','0'),(181,'core','purge_deleteitem','0'),(182,'core','purge_restoreitem','0'),(183,'core','purge_updateitem','0'),(184,'core','purge_item_software_install','0'),(185,'core','purge_software_item_install','0'),(186,'core','purge_software_version_install','0'),(187,'core','purge_infocom_creation','0'),(188,'core','purge_profile_user','0'),(189,'core','purge_group_user','0'),(190,'core','purge_adddevice','0'),(191,'core','purge_updatedevice','0'),(192,'core','purge_deletedevice','0'),(193,'core','purge_connectdevice','0'),(194,'core','purge_disconnectdevice','0'),(195,'core','purge_userdeletedfromldap','0'),(196,'core','purge_comments','0'),(197,'core','purge_datemod','0'),(198,'core','purge_all','0'),(199,'core','purge_user_auth_changes','0'),(200,'core','purge_plugins','0'),(201,'core','display_login_source','1'),(202,'core','devices_in_menu','[\"Item_DeviceSimcard\"]'),(203,'core','password_expiration_delay','-1'),(204,'core','password_expiration_notice','-1'),(205,'core','password_expiration_lock_delay','-1'),(206,'core','default_dashboard_central','central'),(207,'core','default_dashboard_assets','assets'),(208,'core','default_dashboard_helpdesk','assistance'),(209,'core','default_dashboard_mini_ticket','mini_tickets'),(210,'core','admin_email_noreply',''),(211,'core','admin_email_noreply_name',''),(212,'core','impact_enabled_itemtypes','[\"Appliance\",\"Cluster\",\"Computer\",\"Datacenter\",\"DCRoom\",\"Domain\",\"Enclosure\",\"Monitor\",\"NetworkEquipment\",\"PDU\",\"Peripheral\",\"Phone\",\"Printer\",\"Rack\",\"Software\"]'),(213,'core','use_timezones','');
+INSERT INTO `glpi_configs` VALUES (1,'core','version','9.5.3'),(2,'core','show_jobs_at_login','0'),(3,'core','cut','250'),(4,'core','list_limit','15'),(5,'core','list_limit_max','50'),(6,'core','url_maxlength','30'),(7,'core','event_loglevel','5'),(8,'core','notifications_mailing','0'),(9,'core','admin_email','admsys@localhost'),(10,'core','admin_email_name',''),(11,'core','admin_reply',''),(12,'core','admin_reply_name',''),(13,'core','mailing_signature','SIGNATURE'),(14,'core','use_anonymous_helpdesk','0'),(15,'core','use_anonymous_followups','0'),(16,'core','language','en_GB'),(17,'core','priority_1','#fff2f2'),(18,'core','priority_2','#ffe0e0'),(19,'core','priority_3','#ffcece'),(20,'core','priority_4','#ffbfbf'),(21,'core','priority_5','#ffadad'),(22,'core','priority_6','#ff5555'),(23,'core','date_tax','2005-12-31'),(24,'core','cas_host',''),(25,'core','cas_port','443'),(26,'core','cas_uri',''),(27,'core','cas_logout',''),(28,'core','existing_auth_server_field_clean_domain','0'),(29,'core','planning_begin','08:00:00'),(30,'core','planning_end','20:00:00'),(31,'core','utf8_conv','1'),(32,'core','use_public_faq','0'),(33,'core','url_base','http://192.168.120.65'),(34,'core','show_link_in_mail','0'),(35,'core','text_login',''),(36,'core','founded_new_version',''),(37,'core','dropdown_max','100'),(38,'core','ajax_wildcard','*'),(39,'core','ajax_limit_count','10'),(40,'core','use_ajax_autocompletion','1'),(41,'core','is_users_auto_add','1'),(42,'core','date_format','0'),(43,'core','number_format','0'),(44,'core','csv_delimiter',';'),(45,'core','is_ids_visible','0'),(46,'core','smtp_mode','0'),(47,'core','smtp_host',''),(48,'core','smtp_port','25'),(49,'core','smtp_username',''),(50,'core','proxy_name',''),(51,'core','proxy_port','8080'),(52,'core','proxy_user',''),(53,'core','add_followup_on_update_ticket','1'),(54,'core','keep_tickets_on_delete','0'),(55,'core','time_step','5'),(56,'core','decimal_number','2'),(57,'core','helpdesk_doc_url',''),(58,'core','central_doc_url',''),(59,'core','documentcategories_id_forticket','0'),(60,'core','monitors_management_restrict','2'),(61,'core','phones_management_restrict','2'),(62,'core','peripherals_management_restrict','2'),(63,'core','printers_management_restrict','2'),(64,'core','use_log_in_files','1'),(65,'core','time_offset','0'),(66,'core','is_contact_autoupdate','1'),(67,'core','is_user_autoupdate','1'),(68,'core','is_group_autoupdate','1'),(69,'core','is_location_autoupdate','1'),(70,'core','state_autoupdate_mode','0'),(71,'core','is_contact_autoclean','0'),(72,'core','is_user_autoclean','0'),(73,'core','is_group_autoclean','0'),(74,'core','is_location_autoclean','0'),(75,'core','state_autoclean_mode','0'),(76,'core','use_flat_dropdowntree','0'),(77,'core','use_autoname_by_entity','1'),(78,'core','softwarecategories_id_ondelete','1'),(79,'core','x509_email_field',''),(80,'core','x509_cn_restrict',''),(81,'core','x509_o_restrict',''),(82,'core','x509_ou_restrict',''),(83,'core','default_mailcollector_filesize_max','2097152'),(84,'core','followup_private','0'),(85,'core','task_private','0'),(86,'core','default_software_helpdesk_visible','1'),(87,'core','names_format','0'),(88,'core','default_requesttypes_id','1'),(89,'core','use_noright_users_add','1'),(90,'core','cron_limit','5'),(91,'core','priority_matrix','{\"1\":{\"1\":1,\"2\":1,\"3\":2,\"4\":2,\"5\":2},\"2\":{\"1\":1,\"2\":2,\"3\":2,\"4\":3,\"5\":3},\"3\":{\"1\":2,\"2\":2,\"3\":3,\"4\":4,\"5\":4},\"4\":{\"1\":2,\"2\":3,\"3\":4,\"4\":4,\"5\":5},\"5\":{\"1\":2,\"2\":3,\"3\":4,\"4\":5,\"5\":5}}'),(92,'core','urgency_mask','62'),(93,'core','impact_mask','62'),(94,'core','user_deleted_ldap','0'),(95,'core','auto_create_infocoms','0'),(96,'core','use_slave_for_search','0'),(97,'core','proxy_passwd','pkh39rEBQROXnMRvDp1ONfocD/vVuWRL45g+6gacbLbZ/FbA02DKMg=='),(98,'core','smtp_passwd','JmX5PDgrDZ02TnhGirUoL+J4ofCueMbUx0fAybCgW1lFoy9QyGMo4w=='),(99,'core','transfers_id_auto','0'),(100,'core','show_count_on_tabs','1'),(101,'core','refresh_views','0'),(102,'core','set_default_tech','1'),(103,'core','allow_search_view','2'),(104,'core','allow_search_all','0'),(105,'core','allow_search_global','1'),(106,'core','display_count_on_home','5'),(107,'core','use_password_security','0'),(108,'core','password_min_length','8'),(109,'core','password_need_number','1'),(110,'core','password_need_letter','1'),(111,'core','password_need_caps','1'),(112,'core','password_need_symbol','1'),(113,'core','use_check_pref','0'),(114,'core','notification_to_myself','1'),(115,'core','duedateok_color','#06ff00'),(116,'core','duedatewarning_color','#ffb800'),(117,'core','duedatecritical_color','#ff0000'),(118,'core','duedatewarning_less','20'),(119,'core','duedatecritical_less','5'),(120,'core','duedatewarning_unit','%'),(121,'core','duedatecritical_unit','%'),(122,'core','realname_ssofield',''),(123,'core','firstname_ssofield',''),(124,'core','email1_ssofield',''),(125,'core','email2_ssofield',''),(126,'core','email3_ssofield',''),(127,'core','email4_ssofield',''),(128,'core','phone_ssofield',''),(129,'core','phone2_ssofield',''),(130,'core','mobile_ssofield',''),(131,'core','comment_ssofield',''),(132,'core','title_ssofield',''),(133,'core','category_ssofield',''),(134,'core','language_ssofield',''),(135,'core','entity_ssofield',''),(136,'core','registration_number_ssofield',''),(137,'core','ssovariables_id','0'),(138,'core','ssologout_url',''),(139,'core','translate_kb','0'),(140,'core','translate_dropdowns','0'),(141,'core','translate_reminders','0'),(142,'core','pdffont','helvetica'),(143,'core','keep_devices_when_purging_item','0'),(144,'core','maintenance_mode','0'),(145,'core','maintenance_text',''),(146,'core','attach_ticket_documents_to_mail','0'),(147,'core','backcreated','0'),(148,'core','task_state','1'),(149,'core','layout','lefttab'),(150,'core','palette','auror'),(151,'core','lock_use_lock_item','0'),(152,'core','lock_autolock_mode','1'),(153,'core','lock_directunlock_notification','0'),(154,'core','lock_item_list','[]'),(155,'core','lock_lockprofile_id','8'),(156,'core','set_default_requester','1'),(157,'core','highcontrast_css','0'),(158,'core','smtp_check_certificate','1'),(159,'core','enable_api','0'),(160,'core','enable_api_login_credentials','0'),(161,'core','enable_api_login_external_token','1'),(162,'core','url_base_api','http://192.168.120.65/apirest.php/'),(163,'core','login_remember_time','604800'),(164,'core','login_remember_default','1'),(165,'core','use_notifications','0'),(166,'core','notifications_ajax','0'),(167,'core','notifications_ajax_check_interval','5'),(168,'core','notifications_ajax_sound',NULL),(169,'core','notifications_ajax_icon_url','/pics/glpi.png'),(170,'core','dbversion','9.5.3'),(171,'core','smtp_max_retries','5'),(172,'core','smtp_sender',NULL),(173,'core','from_email',NULL),(174,'core','from_email_name',NULL),(175,'core','instance_uuid',NULL),(176,'core','registration_uuid','dablWFtbDB3V0vU74IFujkoOTiackZpVNLSX1ALI'),(177,'core','smtp_retry_time','5'),(178,'core','purge_addrelation','0'),(179,'core','purge_deleterelation','0'),(180,'core','purge_createitem','0'),(181,'core','purge_deleteitem','0'),(182,'core','purge_restoreitem','0'),(183,'core','purge_updateitem','0'),(184,'core','purge_item_software_install','0'),(185,'core','purge_software_item_install','0'),(186,'core','purge_software_version_install','0'),(187,'core','purge_infocom_creation','0'),(188,'core','purge_profile_user','0'),(189,'core','purge_group_user','0'),(190,'core','purge_adddevice','0'),(191,'core','purge_updatedevice','0'),(192,'core','purge_deletedevice','0'),(193,'core','purge_connectdevice','0'),(194,'core','purge_disconnectdevice','0'),(195,'core','purge_userdeletedfromldap','0'),(196,'core','purge_comments','0'),(197,'core','purge_datemod','0'),(198,'core','purge_all','0'),(199,'core','purge_user_auth_changes','0'),(200,'core','purge_plugins','0'),(201,'core','display_login_source','1'),(202,'core','devices_in_menu','[\"Item_DeviceSimcard\"]'),(203,'core','password_expiration_delay','-1'),(204,'core','password_expiration_notice','-1'),(205,'core','password_expiration_lock_delay','-1'),(206,'core','default_dashboard_central','central'),(207,'core','default_dashboard_assets','assets'),(208,'core','default_dashboard_helpdesk','assistance'),(209,'core','default_dashboard_mini_ticket','mini_tickets'),(210,'core','admin_email_noreply',''),(211,'core','admin_email_noreply_name',''),(212,'core','impact_enabled_itemtypes','[\"Appliance\",\"Cluster\",\"Computer\",\"Datacenter\",\"DCRoom\",\"Domain\",\"Enclosure\",\"Monitor\",\"NetworkEquipment\",\"PDU\",\"Peripheral\",\"Phone\",\"Printer\",\"Rack\",\"Software\"]'),(213,'core','use_timezones','');
 /*!40000 ALTER TABLE `glpi_configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2211,7 +2215,7 @@ CREATE TABLE `glpi_crontasklogs` (
   KEY `date` (`date`),
   KEY `crontasks_id` (`crontasks_id`),
   KEY `crontasklogs_id_state` (`crontasklogs_id`,`state`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2220,7 +2224,7 @@ CREATE TABLE `glpi_crontasklogs` (
 
 LOCK TABLES `glpi_crontasklogs` WRITE;
 /*!40000 ALTER TABLE `glpi_crontasklogs` DISABLE KEYS */;
-INSERT INTO `glpi_crontasklogs` VALUES (1,33,0,'2020-09-25 11:08:01',0,0,0,'Run mode: CLI'),(2,33,1,'2020-09-25 11:08:01',2,0.291085,0,'Action completed, fully processed'),(3,37,0,'2020-09-25 11:08:01',0,0,0,'Run mode: CLI'),(4,37,3,'2020-09-25 11:08:01',2,0.120468,0,'Action completed, no processing required'),(5,18,0,'2020-09-25 11:36:50',0,0,0,'Run mode: GLPI'),(6,18,5,'2020-09-25 11:36:50',2,0.131301,0,'Action completed, no processing required');
+INSERT INTO `glpi_crontasklogs` VALUES (1,33,0,'2020-09-25 11:08:01',0,0,0,'Run mode: CLI'),(2,33,1,'2020-09-25 11:08:01',2,0.291085,0,'Action completed, fully processed'),(3,37,0,'2020-09-25 11:08:01',0,0,0,'Run mode: CLI'),(4,37,3,'2020-09-25 11:08:01',2,0.120468,0,'Action completed, no processing required'),(5,18,0,'2020-09-25 11:36:50',0,0,0,'Run mode: GLPI'),(6,18,5,'2020-09-25 11:36:50',2,0.131301,0,'Action completed, no processing required'),(7,19,0,'2020-09-25 17:16:25',0,0,0,'Run mode: GLPI'),(8,19,7,'2020-09-25 17:16:25',2,0.119931,0,'Action completed, fully processed'),(9,20,0,'2020-09-25 17:16:35',0,0,0,'Run mode: GLPI'),(10,20,9,'2020-09-25 17:16:35',2,0.098227,0,'Action completed, no processing required'),(11,21,0,'2020-09-25 17:36:51',0,0,0,'Run mode: GLPI'),(12,21,11,'2020-09-25 17:36:51',2,0.121079,0,'Action completed, no processing required'),(13,22,0,'2020-11-26 10:37:35',0,0,0,'Run mode: GLPI'),(14,22,13,'2020-11-26 10:37:35',2,0.121023,0,'Action completed, no processing required'),(15,23,0,'2020-11-26 10:37:54',0,0,0,'Run mode: GLPI'),(16,23,15,'2020-11-26 10:37:54',2,0.207798,0,'Action completed, no processing required');
 /*!40000 ALTER TABLE `glpi_crontasklogs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2253,7 +2257,7 @@ CREATE TABLE `glpi_crontasks` (
   KEY `mode` (`mode`),
   KEY `date_mod` (`date_mod`),
   KEY `date_creation` (`date_creation`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Task run by internal / external cron.';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Task run by internal / external cron.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2262,7 +2266,7 @@ CREATE TABLE `glpi_crontasks` (
 
 LOCK TABLES `glpi_crontasks` WRITE;
 /*!40000 ALTER TABLE `glpi_crontasks` DISABLE KEYS */;
-INSERT INTO `glpi_crontasks` VALUES (2,'CartridgeItem','cartridge',86400,10,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(3,'ConsumableItem','consumable',86400,10,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(4,'SoftwareLicense','software',86400,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(5,'Contract','contract',86400,NULL,1,1,3,0,24,30,'2010-05-06 09:31:02',NULL,NULL,NULL,NULL),(6,'Infocom','infocom',86400,NULL,1,1,3,0,24,30,'2011-01-18 11:40:43',NULL,NULL,NULL,NULL),(7,'CronTask','logs',86400,30,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(9,'MailCollector','mailgate',600,10,1,1,3,0,24,30,'2011-06-28 11:34:37',NULL,NULL,NULL,NULL),(10,'DBconnection','checkdbreplicate',300,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(11,'CronTask','checkupdate',604800,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(12,'CronTask','session',86400,NULL,1,1,3,0,24,30,'2011-08-30 08:22:27',NULL,NULL,NULL,NULL),(13,'CronTask','graph',3600,NULL,1,1,3,0,24,30,'2011-12-06 09:48:42',NULL,NULL,NULL,NULL),(14,'ReservationItem','reservation',3600,NULL,1,1,3,0,24,30,'2012-04-05 20:31:57',NULL,NULL,NULL,NULL),(15,'Ticket','closeticket',43200,NULL,1,1,3,0,24,30,'2012-04-05 20:31:57',NULL,NULL,NULL,NULL),(16,'Ticket','alertnotclosed',43200,NULL,1,1,3,0,24,30,'2014-04-16 15:32:00',NULL,NULL,NULL,NULL),(17,'SlaLevel_Ticket','slaticket',300,NULL,1,1,3,0,24,30,'2014-06-18 08:02:00',NULL,NULL,NULL,NULL),(18,'Ticket','createinquest',86400,NULL,1,1,3,0,24,30,'2020-09-25 11:36:00',NULL,NULL,NULL,NULL),(19,'CronTask','watcher',86400,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(20,'TicketRecurrent','ticketrecurrent',3600,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(21,'PlanningRecall','planningrecall',300,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(22,'QueuedNotification','queuednotification',60,50,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(23,'QueuedNotification','queuednotificationclean',86400,30,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(24,'CronTask','temp',3600,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(25,'MailCollector','mailgateerror',86400,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(26,'CronTask','circularlogs',86400,4,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(27,'ObjectLock','unlockobject',86400,4,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(28,'SavedSearch','countAll',604800,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(29,'SavedSearch_Alert','savedsearchesalerts',86400,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(30,'Telemetry','telemetry',2592000,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(31,'Certificate','certificate',86400,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(32,'OlaLevel_Ticket','olaticket',300,NULL,1,1,3,0,24,30,'2014-06-18 08:02:00',NULL,NULL,NULL,NULL),(33,'PurgeLogs','PurgeLogs',604800,24,1,2,3,0,24,30,'2020-09-25 11:08:00',NULL,NULL,NULL,NULL),(34,'Ticket','purgeticket',43200,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(35,'Document','cleanorphans',43200,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(36,'User','passwordexpiration',86400,100,0,2,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(37,'Glpi\\Marketplace\\Controller','checkAllUpdates',86400,NULL,1,2,3,0,24,30,'2020-09-25 11:08:00',NULL,NULL,NULL,NULL);
+INSERT INTO `glpi_crontasks` VALUES (2,'CartridgeItem','cartridge',86400,10,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(3,'ConsumableItem','consumable',86400,10,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(4,'SoftwareLicense','software',86400,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(5,'Contract','contract',86400,NULL,1,1,3,0,24,30,'2010-05-06 09:31:02',NULL,NULL,NULL,NULL),(6,'Infocom','infocom',86400,NULL,1,1,3,0,24,30,'2011-01-18 11:40:43',NULL,NULL,NULL,NULL),(7,'CronTask','logs',86400,30,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(9,'MailCollector','mailgate',600,10,1,1,3,0,24,30,'2011-06-28 11:34:37',NULL,NULL,NULL,NULL),(10,'DBconnection','checkdbreplicate',300,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(11,'CronTask','checkupdate',604800,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(12,'CronTask','session',86400,NULL,1,1,3,0,24,30,'2011-08-30 08:22:27',NULL,NULL,NULL,NULL),(13,'CronTask','graph',3600,NULL,1,1,3,0,24,30,'2011-12-06 09:48:42',NULL,NULL,NULL,NULL),(14,'ReservationItem','reservation',3600,NULL,1,1,3,0,24,30,'2012-04-05 20:31:57',NULL,NULL,NULL,NULL),(15,'Ticket','closeticket',43200,NULL,1,1,3,0,24,30,'2012-04-05 20:31:57',NULL,NULL,NULL,NULL),(16,'Ticket','alertnotclosed',43200,NULL,1,1,3,0,24,30,'2014-04-16 15:32:00',NULL,NULL,NULL,NULL),(17,'SlaLevel_Ticket','slaticket',300,NULL,1,1,3,0,24,30,'2014-06-18 08:02:00',NULL,NULL,NULL,NULL),(18,'Ticket','createinquest',86400,NULL,1,1,3,0,24,30,'2020-09-25 11:36:00',NULL,NULL,NULL,NULL),(19,'CronTask','watcher',86400,NULL,1,1,3,0,24,30,'2020-09-25 17:16:00',NULL,NULL,NULL,NULL),(20,'TicketRecurrent','ticketrecurrent',3600,NULL,1,1,3,0,24,30,'2020-09-25 17:16:00',NULL,NULL,NULL,NULL),(21,'PlanningRecall','planningrecall',300,NULL,1,1,3,0,24,30,'2020-09-25 17:36:00',NULL,NULL,NULL,NULL),(22,'QueuedNotification','queuednotification',60,50,1,1,3,0,24,30,'2020-11-26 10:37:00',NULL,NULL,NULL,NULL),(23,'QueuedNotification','queuednotificationclean',86400,30,1,1,3,0,24,30,'2020-11-26 10:37:00',NULL,NULL,NULL,NULL),(24,'CronTask','temp',3600,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(25,'MailCollector','mailgateerror',86400,NULL,1,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(26,'CronTask','circularlogs',86400,4,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(27,'ObjectLock','unlockobject',86400,4,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(28,'SavedSearch','countAll',604800,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(29,'SavedSearch_Alert','savedsearchesalerts',86400,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(30,'Telemetry','telemetry',2592000,NULL,1,1,3,0,24,10,NULL,NULL,NULL,'2020-11-26 10:37:17',NULL),(31,'Certificate','certificate',86400,NULL,0,1,3,0,24,10,NULL,NULL,NULL,NULL,NULL),(32,'OlaLevel_Ticket','olaticket',300,NULL,1,1,3,0,24,30,'2014-06-18 08:02:00',NULL,NULL,NULL,NULL),(33,'PurgeLogs','PurgeLogs',604800,24,1,2,3,0,24,30,'2020-09-25 11:08:00',NULL,NULL,NULL,NULL),(34,'Ticket','purgeticket',43200,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(35,'Document','cleanorphans',43200,NULL,0,1,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(36,'User','passwordexpiration',86400,100,0,2,3,0,24,30,NULL,NULL,NULL,NULL,NULL),(37,'Glpi\\Marketplace\\Controller','checkAllUpdates',86400,NULL,1,2,3,0,24,30,'2020-09-25 11:08:00',NULL,NULL,NULL,NULL),(38,'Domain','DomainsAlert',86400,NULL,0,2,3,0,24,30,NULL,NULL,NULL,'2020-11-26 10:37:17','2020-11-26 10:37:17');
 /*!40000 ALTER TABLE `glpi_crontasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4457,7 +4461,7 @@ CREATE TABLE `glpi_events` (
   KEY `date` (`date`),
   KEY `level` (`level`),
   KEY `item` (`type`,`items_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4466,6 +4470,7 @@ CREATE TABLE `glpi_events` (
 
 LOCK TABLES `glpi_events` WRITE;
 /*!40000 ALTER TABLE `glpi_events` DISABLE KEYS */;
+INSERT INTO `glpi_events` VALUES (1,-1,'system','2020-09-25 17:16:28','login',3,'glpi log in from IP 192.168.121.50'),(2,-1,'system','2020-11-26 10:37:38','login',3,'glpi login from IP 192.168.121.50');
 /*!40000 ALTER TABLE `glpi_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7110,7 +7115,7 @@ CREATE TABLE `glpi_logs` (
   KEY `itemtype_link` (`itemtype_link`),
   KEY `item` (`itemtype`,`items_id`),
   KEY `id_search_option` (`id_search_option`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7119,7 +7124,7 @@ CREATE TABLE `glpi_logs` (
 
 LOCK TABLES `glpi_logs` WRITE;
 /*!40000 ALTER TABLE `glpi_logs` DISABLE KEYS */;
-INSERT INTO `glpi_logs` VALUES (1,'Config',1,'',0,'','2020-09-25 10:59:34',1,'version FILLED AT INSTALL','9.5.1'),(2,'Config',1,'',0,'','2020-09-25 10:59:34',1,'dbversion FILLED AT INSTALL','9.5.0'),(3,'PurgeLogs',0,'',12,'cron_PurgeLogs','2020-09-25 11:08:01',0,'2','2'),(4,'Config',1,'',0,'','2020-09-25 11:36:33',1,'registration_uuid ','dablWFtbDB3V0vU74IFujkoOTiackZpVNLSX1ALI');
+INSERT INTO `glpi_logs` VALUES (1,'Config',1,'',0,'','2020-09-25 10:59:34',1,'version FILLED AT INSTALL','9.5.1'),(2,'Config',1,'',0,'','2020-09-25 10:59:34',1,'dbversion FILLED AT INSTALL','9.5.0'),(3,'PurgeLogs',0,'',12,'cron_PurgeLogs','2020-09-25 11:08:01',0,'2','2'),(4,'Config',1,'',0,'','2020-09-25 11:36:33',1,'registration_uuid ','dablWFtbDB3V0vU74IFujkoOTiackZpVNLSX1ALI'),(5,'CronTask',38,'0',20,'','2020-11-26 10:37:17',0,'',''),(6,'Config',1,'',0,'','2020-11-26 10:37:17',1,'version 9.5.1','9.5.3'),(7,'Config',1,'',0,'','2020-11-26 10:37:17',1,'dbversion 9.5.0','9.5.3'),(8,'CronTask',30,'',0,'','2020-11-26 10:37:17',4,'0','1');
 /*!40000 ALTER TABLE `glpi_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7147,6 +7152,7 @@ CREATE TABLE `glpi_mailcollectors` (
   `date_creation` timestamp NULL DEFAULT NULL,
   `requester_field` int(11) NOT NULL DEFAULT 0,
   `add_cc_to_observer` tinyint(1) NOT NULL DEFAULT 0,
+  `collect_only_unread` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `is_active` (`is_active`),
   KEY `date_mod` (`date_mod`),
@@ -10963,7 +10969,7 @@ CREATE TABLE `glpi_rulecriterias` (
 
 LOCK TABLES `glpi_rulecriterias` WRITE;
 /*!40000 ALTER TABLE `glpi_rulecriterias` DISABLE KEYS */;
-INSERT INTO `glpi_rulecriterias` VALUES (2,2,'TYPE',0,'3'),(3,2,'TYPE',0,'2'),(5,3,'subject',6,'/.*/'),(6,4,'x-auto-response-suppress',6,'/\\S+/'),(7,5,'auto-submitted',6,'/^(?!.*no).+$/i'),(9,6,'locations_id',9,'1'),(10,6,'items_locations',8,'1'),(11,7,'locations_id',9,'1'),(12,7,'users_locations',8,'1'),(13,8,'name',0,'*'),(14,9,'_itemtype',0,'Computer'),(15,9,'_auto',0,'1'),(16,9,'contact',6,'/(.*)@/'),(17,10,'_itemtype',0,'Computer'),(18,10,'_auto',0,'1'),(19,10,'contact',6,'/(.*),/'),(20,11,'_itemtype',0,'Computer'),(21,11,'_auto',0,'1'),(22,11,'contact',6,'/(.*)/');
+INSERT INTO `glpi_rulecriterias` VALUES (2,2,'TYPE',0,'3'),(3,2,'TYPE',0,'2'),(5,3,'subject',6,'/.*/'),(6,4,'x-auto-response-suppress',6,'/\\S+/'),(7,5,'auto-submitted',6,'/^(?!.*no).+$/i'),(9,6,'locations_id',9,'1'),(10,6,'_locations_id_of_item',8,'1'),(11,7,'locations_id',9,'1'),(12,7,'_locations_id_of_requester',8,'1'),(13,8,'name',0,'*'),(14,9,'_itemtype',0,'Computer'),(15,9,'_auto',0,'1'),(16,9,'contact',6,'/(.*)@/'),(17,10,'_itemtype',0,'Computer'),(18,10,'_auto',0,'1'),(19,10,'contact',6,'/(.*),/'),(20,11,'_itemtype',0,'Computer'),(21,11,'_auto',0,'1'),(22,11,'contact',6,'/(.*)/');
 /*!40000 ALTER TABLE `glpi_rulecriterias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -11710,6 +11716,7 @@ CREATE TABLE `glpi_states` (
   `is_visible_pdu` tinyint(1) NOT NULL DEFAULT 1,
   `is_visible_cluster` tinyint(1) NOT NULL DEFAULT 1,
   `is_visible_contract` tinyint(1) NOT NULL DEFAULT 1,
+  `is_visible_appliance` tinyint(1) NOT NULL DEFAULT 1,
   `date_mod` timestamp NULL DEFAULT NULL,
   `date_creation` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -11732,7 +11739,8 @@ CREATE TABLE `glpi_states` (
   KEY `is_visible_cluster` (`is_visible_cluster`),
   KEY `is_visible_contract` (`is_visible_contract`),
   KEY `date_mod` (`date_mod`),
-  KEY `date_creation` (`date_creation`)
+  KEY `date_creation` (`date_creation`),
+  KEY `is_visible_appliance` (`is_visible_appliance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -12639,7 +12647,7 @@ CREATE TABLE `glpi_users` (
 
 LOCK TABLES `glpi_users` WRITE;
 /*!40000 ALTER TABLE `glpi_users` DISABLE KEYS */;
-INSERT INTO `glpi_users` VALUES (2,'glpi','$2y$10$rXXzbc2ShaiCldwkw4AZL.n.9QSH7c0c9XJAyyjrbL9BwmWditAYm',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(3,'post-only','$2y$10$dTMar1F3ef5X/H1IjX9gYOjQWBR1K4bERGf4/oTPxFtJE/c3vXILm',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(4,'tech','$2y$10$.xEgErizkp6Az0z.DHyoeOoenuh0RcsX4JapBk2JMD6VI17KtB1lO',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(5,'normal','$2y$10$Z6doq4zVHkSPZFbPeXTCluN1Q/r0ryZ3ZsSJncJqkN3.8cRiN0NV.',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `glpi_users` VALUES (2,'glpi','$2y$10$rXXzbc2ShaiCldwkw4AZL.n.9QSH7c0c9XJAyyjrbL9BwmWditAYm',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,20,1,NULL,0,1,'2020-11-26 10:37:38','2020-11-26 10:37:38',NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'$2y$10$4xMrlD43QcOXzn.2XVgJZOon8Jn73wpvKdVjUWfcsZfSpZrVC0YVS','2020-11-26 10:37:38',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(3,'post-only','$2y$10$dTMar1F3ef5X/H1IjX9gYOjQWBR1K4bERGf4/oTPxFtJE/c3vXILm',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(4,'tech','$2y$10$.xEgErizkp6Az0z.DHyoeOoenuh0RcsX4JapBk2JMD6VI17KtB1lO',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL),(5,'normal','$2y$10$Z6doq4zVHkSPZFbPeXTCluN1Q/r0ryZ3ZsSJncJqkN3.8cRiN0NV.',NULL,NULL,NULL,NULL,NULL,NULL,0,'en_GB',0,20,1,NULL,0,1,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `glpi_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -12865,4 +12873,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-25 11:38:06
+-- Dump completed on 2020-11-26 10:39:58

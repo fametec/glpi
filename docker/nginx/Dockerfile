@@ -1,10 +1,10 @@
-FROM fametec/glpi:9.5.2-php-fpm as PHP
+FROM fametec/glpi:9.5.3-php-fpm as PHP
 
 FROM nginx:alpine
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.5.2
+ENV VERSION 9.5.3
 
 WORKDIR /usr/share/nginx/html
 

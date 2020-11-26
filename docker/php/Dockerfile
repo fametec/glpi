@@ -10,7 +10,7 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
-ENV VERSION 9.5.2
+ENV VERSION 9.5.3
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
@@ -54,9 +54,9 @@ WORKDIR /usr/share/nginx/html/glpi/
 
 # COPY --chown=www-data:www-data src/glpi /usr/share/nginx/html/glpi
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.5.2/glpi-9.5.2.tgz /usr/share/nginx/html/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.3/glpi-9.5.3.tgz /usr/share/nginx/html/
 #
-RUN tar -zxf /usr/share/nginx/html/glpi-9.5.2.tgz -C /usr/share/nginx/html/ \
+RUN tar -zxf /usr/share/nginx/html/glpi-9.5.3.tgz -C /usr/share/nginx/html/ \
 	&& chown -R www-data:www-data /usr/share/nginx/html/glpi 
 
 COPY scripts/glpi-entrypoint.sh /
