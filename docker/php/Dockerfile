@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-alpine
+FROM php:7.4.10-fpm-alpine
 
 ENV MARIADB_HOST mariadb-glpi
 
@@ -10,7 +10,7 @@ ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
 
-ENV VERSION 9.4.6
+ENV VERSION 9.5.3
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
@@ -38,12 +38,13 @@ RUN apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
         && apk del .build-dependencies 
 
 RUN apk add --update --no-cache openldap-dev \
+    icu-dev \
     libpng-dev \
     libxml2-dev \
     krb5-dev \
     imap-dev \
     autoconf \
-  && docker-php-ext-install ldap gd exif xmlrpc mysqli opcache \
+  && docker-php-ext-install intl ldap gd exif xmlrpc mysqli opcache \
   && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
   && docker-php-ext-install imap 
 
@@ -53,12 +54,12 @@ WORKDIR /usr/share/nginx/html/glpi/
 
 # COPY --chown=www-data:www-data src/glpi /usr/share/nginx/html/glpi
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.4.6/glpi-9.4.6.tgz /usr/share/nginx/html/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.3/glpi-9.5.3.tgz /usr/share/nginx/html/
 #
-RUN tar -zxf /usr/share/nginx/html/glpi-9.4.6.tgz -C /usr/share/nginx/html/ \
+RUN tar -zxf /usr/share/nginx/html/glpi-9.5.3.tgz -C /usr/share/nginx/html/ \
 	&& chown -R www-data:www-data /usr/share/nginx/html/glpi 
 
-COPY --chown=www-data:www-data scripts/glpi-entrypoint.sh /
+COPY scripts/glpi-entrypoint.sh /
 
 RUN chmod +x /glpi-entrypoint.sh \
   && rm -rf /usr/share/nginx/html/glpi/install/install.php

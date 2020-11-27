@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     mariadb-glpi: 
-        image: fametec/mariadb-glpi:9.4.6
+        image: fametec/glpi:9.5.3-mariadb
         restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -17,7 +17,7 @@ services:
 #
 #
     glpi: 
-        image: fametec/glpi:9.4.6
+        image: fametec/glpi:9.5.3
         restart: unless-stopped
         volumes: 
           - glpi-volume-files:/var/www/html/files:rw
@@ -29,7 +29,7 @@ services:
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi-user
           MARIADB_PASSWORD: glpi-pass
-          VERSION: "9.4.6"
+          VERSION: "9.5.3"
           PLUGINS: "all"
         depends_on: 
           - mariadb-glpi
@@ -43,11 +43,8 @@ services:
 # CRON
 #
 #    crond: 
-#        image: fametec/crond-glpi:9.4.6
+#        image: fametec/glpi:9.5.3-crond
 #        restart: unless-stopped
-#        volumes:
-#          - glpi-volume-files:/usr/share/nginx/html/glpi/files:rw
-#          - glpi-volume-plugins:/usr/share/nginx/html/glpi/plugins:rw
 #        depends_on:
 #          - mariadb-glpi
 #        environment: 

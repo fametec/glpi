@@ -1,4 +1,4 @@
-FROM fametec/glpi:9.4.6
+FROM fametec/glpi:9.5.3
 
 RUN yum -y install cronie mariadb
  
