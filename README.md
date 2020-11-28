@@ -2,10 +2,17 @@
 
 # GLPI Docker Container
 
+## Demo
+
+https://www.katacoda.com/eduardofraga/scenarios/glpi-playground 
+
 
 ## About GLPI
 
 GLPI stands for **Gestionnaire Libre de Parc Informatique** is a Free Asset and IT Management Software package, that provides ITIL Service Desk features, licenses tracking and software auditing.
+
+https://github.com/glpi-project/glpi
+
 
 ## For Courses e-Learning
 
