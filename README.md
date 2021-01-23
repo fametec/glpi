@@ -52,7 +52,7 @@ contato@fametec.com.br
     -e MYSQL_USER=glpi \
     -e MYSQL_PASSWORD=glpi \
     -e MYSQL_RANDOM_ROOT_PASSWORD=1 \
-    -p 3306:3306
+    -p 3306:3306 \
     fametec/glpi:mariadb
 
 
@@ -68,7 +68,7 @@ contato@fametec.com.br
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
     -e VERSION="9.5.1" \
-    -e PLUGINS="all"
+    -e PLUGINS="all" \
     -p 80:80 \
     -p 443:443 \
     fametec/glpi:latest
