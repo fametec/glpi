@@ -5,7 +5,7 @@ services:
 #
     mariadb-glpi: 
         build: mariadb/
-        image: fametec/glpi:9.5.3-mariadb
+        image: fametec/glpi:9.5.4-mariadb
         restart: unless-stopped
         volumes: 
           - mariadb-glpi-volume:/var/lib/mysql:rw
@@ -23,7 +23,7 @@ services:
 #
     glpi: 
         build: apache/
-        image: fametec/glpi:9.5.3
+        image: fametec/glpi:9.5.4
         restart: unless-stopped
         # volumes: 
         #  - glpi-volume-files:/var/www/html/files:rw
@@ -49,7 +49,7 @@ services:
 #
     crond: 
         build: crond/
-        image: fametec/glpi:9.5.3-crond
+        image: fametec/glpi:9.5.4-crond
         restart: unless-stopped
         depends_on: 
           - glpi
