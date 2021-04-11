@@ -1,0 +1,25 @@
+#A basic idea of cronjob object, this shouldn't be used in a prod env
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mariadb-backup
+spec:
+  schedule: "@daily"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mysql-backup
+            image: fametec/crond-glpi
+          env:
+          - name: MARIADB_HOST
+            value: "mariadb-glpi"
+          - name: MARIADB_PORT
+            value: "3306"
+          - name: MARIADB_USER
+            value: "glpi"
+          - name: MARIADB_PASSWORD
+            value: "glpi"
+          restartPolicy: OnFailure
