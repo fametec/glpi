@@ -33,9 +33,9 @@ PluginModifications() {
 
 	RemoveOldPlugin Mod
 
-	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/1.5.2.tar.gz" | tar -zxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/stdonato/glpi-modifications/archive/2.0.2.tar.gz" | tar -zxf - -C /var/www/html/plugins/
 
-	mv /var/www/html/plugins/glpi-modifications-1.5.2 /var/www/html/plugins/Mod
+	mv /var/www/html/plugins/glpi-modifications-2.0.2 /var/www/html/plugins/Mod
 
 }
 
@@ -54,7 +54,7 @@ PluginPDF() {
 
 	RemoveOldPlugin pdf
 
-	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2293/glpi-pdf-1.6.0.tar.gz" | tar -zxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2335/glpi-pdf-2.0.0.tar.gz" | tar -zxf - -C /var/www/html/plugins/
 
 }
 
@@ -63,7 +63,7 @@ PluginOCS() {
 
 	RemoveOldPlugin ocsinventoryng
 
-    curl --progress-bar -L "https://github.com/pluginsGLPI/ocsinventoryng/releases/download/1.6.0/glpi-ocsinventoryng-1.6.0.tar.gz" | tar -zxf - -C /var/www/html/plugins/
+    curl --progress-bar -L "https://github.com/pluginsGLPI/ocsinventoryng/releases/download/1.7.3/glpi-ocsinventoryng-1.7.3.tar.gz" | tar -zxf - -C /var/www/html/plugins/
 
 }
 
@@ -71,7 +71,7 @@ PluginFusion() {
 
 	RemoveOldPlugin fusioninventory
 
-	curl --progress-bar -L "https://github.com/fusioninventory/fusioninventory-for-glpi/releases/download/glpi9.4%2B2.4/fusioninventory-9.4+2.4.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/fusioninventory/fusioninventory-for-glpi/releases/download/glpi9.5%2B3.0/fusioninventory-9.5+3.0.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
 
 }
 
@@ -80,7 +80,7 @@ PluginDataInjection() {
 
 	RemoveOldPlugin datainjection
 
-    curl --progress-bar -L "https://github.com/pluginsGLPI/datainjection/releases/download/2.7.1/glpi-datainjection-2.7.1.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
+    curl --progress-bar -L "https://github.com/pluginsGLPI/datainjection/releases/download/2.9.0/glpi-datainjection-2.9.0.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
 
 }
 
@@ -88,7 +88,7 @@ PluginFields() {
 
 	RemoveOldPlugin fields
 
-	curl --progress-bar -L "https://github.com/pluginsGLPI/fields/releases/download/1.10.3/glpi-fields-1.10.3.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/pluginsGLPI/fields/releases/download/1.12.4/glpi-fields-1.12.4.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
 
 }
 
@@ -97,7 +97,7 @@ PluginTasklists() {
 
 	RemoveOldPlugin tasklists
 
-	curl --progress-bar -L "https://github.com/InfotelGLPI/tasklists/releases/download/1.5.0/glpi-tasklists.1.5.0.tar.gz" | tar -zxf - -C /var/www/html/plugins/ 
+	curl --progress-bar -L "https://github.com/InfotelGLPI/tasklists/releases/download/1.6.2/glpi-tasklists-1.6.2.tar.gz" | tar -zxf - -C /var/www/html/plugins/ 
 
 }
 
@@ -106,7 +106,7 @@ PluginFormCreator() {
 
 	RemoveOldPlugin formcreator
 
-	curl --progress-bar -L "https://github.com/pluginsGLPI/formcreator/releases/download/v2.9.1/glpi-formcreator-2.9.1.tar.bz2" | tar -jxf - -C /var/www/html/plugins/ 
+	curl --progress-bar -L "https://github.com/pluginsGLPI/formcreator/releases/download/v2.11.2/glpi-formcreator-2.11.2.tar.bz2" | tar -jxf - -C /var/www/html/plugins/ 
 
 }
 
@@ -115,7 +115,7 @@ PluginBehaviors() {
 
 	RemoveOldPlugin behaviors
 
-	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2296/glpi-behaviors-2.2.2.tar.gz" | tar -zxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://forge.glpi-project.org/attachments/download/2333/glpi-behaviors-2.4.2.tar.gz" | tar -zxf - -C /var/www/html/plugins/
 
 }
 
@@ -123,7 +123,7 @@ PluginCosts() {
 
 	RemoveOldPlugin costs
 
-	curl --progress-bar -L "https://github.com/ticgal/costs/releases/download/1.1.0/glpi-costs-1.1.0.tar.gz" | tar -zxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/ticgal/costs/releases/download/1.3.0/glpi-costs-1.3.0.tar.tgz" | tar -zxf - -C /var/www/html/plugins/
 
 }
 
@@ -132,7 +132,7 @@ PluginTag() {
 
 	RemoveOldPlugin tag
 
-	curl --progress-bar -L "https://github.com/pluginsGLPI/tag/releases/download/2.6.0/glpi-tag-2.6.0.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/pluginsGLPI/tag/releases/download/2.8.1/glpi-tag-2.8.1.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
 
 }
 
@@ -140,7 +140,7 @@ PluginGenericObject() {
 
 	RemoveOldPlugin genericobject 
 
-	curl --progress-bar -L "https://github.com/pluginsGLPI/genericobject/releases/download/2.8.0/glpi-genericobject-2.8.0.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
+	curl --progress-bar -L "https://github.com/pluginsGLPI/genericobject/releases/download/2.10.1/glpi-genericobject-2.10.1.tar.bz2" | tar -jxf - -C /var/www/html/plugins/
 
 }
 
