@@ -187,7 +187,7 @@ This script will install the GLPI on Linux Server CentOS 7.6  Minimal.
 Edit the script
 
 
-    VERSION="9.5.5"                      # GLPI Version to install, default=9.5.4
+    VERSION="9.5.5"                      # GLPI Version to install
     TIMEZONE=America/Fortaleza           # Timezone default=Etc/UTC
     FQDN="glpi.fametec.com.br"           # Virtualhost default=glpi.fametec.com.br
     ADMINEMAIL="suporte@fametec.com.br"  # Admin e-mail 
