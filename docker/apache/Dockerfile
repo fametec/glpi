@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.5.4
+ENV VERSION 9.5.5
 
 ENV GLPI_LANG pt_BR
 
@@ -15,8 +15,6 @@ ENV MARIADB_DATABASE glpi
 ENV MARIADB_USER glpi
 
 ENV MARIADB_PASSWORD glpi
-
-ENV PLUGINS all
 
 WORKDIR /var/www/html
 
@@ -62,12 +60,12 @@ ADD conf.d /etc/httpd/conf.d
 
 # COPY --chown=apache:apache src/glpi /var/www/html
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.5.4/glpi-9.5.4.tgz /tmp/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.5/glpi-9.5.5.tgz /tmp/
 #
-RUN tar -zxf /tmp/glpi-9.5.4.tgz -C /tmp/ \
+RUN tar -zxf /tmp/glpi-9.5.5.tgz -C /tmp/ \
 	&& mv /tmp/glpi/* /var/www/html/ \
 	&& chown -R apache:apache /var/www/html \
-	&& rm -rf /tmp/glpi-9.5.4.tgz
+	&& rm -rf /tmp/glpi-9.5.5.tgz
 
 VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 
