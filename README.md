@@ -67,7 +67,7 @@ contato@fametec.com.br
     -e MARIADB_DATABASE=glpi \
     -e MARIADB_USER=glpi \
     -e MARIADB_PASSWORD=glpi \
-    -e VERSION="9.5.4" \
+    -e VERSION="9.5.5" \
     -e PLUGINS="all" \
     -p 80:80 \
     -p 443:443 \
@@ -115,7 +115,7 @@ contato@fametec.com.br
               MARIADB_DATABASE: glpi
               MARIADB_USER: glpi-user
               MARIADB_PASSWORD: glpi-pass
-              VERSION: "9.5.4"
+              VERSION: "9.5.5"
               PLUGINS: "all"
             depends_on: 
               - mariadb-glpi
@@ -187,7 +187,7 @@ This script will install the GLPI on Linux Server CentOS 7.6  Minimal.
 Edit the script
 
 
-    VERSION="9.5.4"                      # GLPI Version to install, default=9.5.4
+    VERSION="9.5.5"                      # GLPI Version to install
     TIMEZONE=America/Fortaleza           # Timezone default=Etc/UTC
     FQDN="glpi.fametec.com.br"           # Virtualhost default=glpi.fametec.com.br
     ADMINEMAIL="suporte@fametec.com.br"  # Admin e-mail 
@@ -209,7 +209,7 @@ After instalation the script save the credentials and variables in ''install_glp
     ====================================================
     ## VARIAVEIS
     
-    VERSION=9.5.4
+    VERSION=9.5.5
     TIMEZONE=America/Fortaleza
     FQDN=glpi.fametec.com.br
     ADMINEMAIL=suporte@fametec.com.br
