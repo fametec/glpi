@@ -19,4 +19,17 @@ ConfigDataBase () {
 
 ConfigDataBase
 
+if [ ! -d /var/www/html/files/_config ]; then
+  mkdir -p /var/www/html/files/_config
+fi
+if [ -e /var/www/html/config/glpicrypt.key ]; then
+  if [ ! -L /var/www/html/config/glpicrypt.key ]; then
+    mv /var/www/html/config/glpicrypt.key /var/www/html/files/_config/glpicrypt.key
+	ln -s /var/www/html/files/_config/glpicrypt.key /var/www/html/config/glpicrypt.key
+  fi
+else
+  ln -s /var/www/html/files/_config/glpicrypt.key /var/www/html/config/glpicrypt.key
+fi
+find /var/www/html -exec chown apache:apache {} \;
+
 httpd -D FOREGROUND
