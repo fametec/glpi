@@ -30,6 +30,6 @@ if [ -e /var/www/html/config/glpicrypt.key ]; then
 else
   ln -s /var/www/html/files/_config/glpicrypt.key /var/www/html/config/glpicrypt.key
 fi
-find /var/www/html -exec chown apache:apache {} \;
+find /var/www/html -exec chown apache:apache {} \; &
 
 httpd -D FOREGROUND
