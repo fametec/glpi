@@ -31,7 +31,7 @@ spec:
         app: glpi
     spec:
       containers:
-      - image: fametec/glpi:9.4.5
+      - image: fametec/glpi:9.5.6
         name: glpi
         env: 
         - name: GLPI_LANG
@@ -47,7 +47,7 @@ spec:
         - name: MARIADB_PASSWORD
           value: "glpi"
         - name: VERSION
-          value: "9.4.5"
+          value: "9.5.6"
         - name: PLUGINS
           value: "all"
         ports:

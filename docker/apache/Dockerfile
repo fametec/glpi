@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER eduardo@fametec.com.br
 
-ENV VERSION 9.5.5
+ENV VERSION 9.5.6
 
 ENV GLPI_LANG pt_BR
 
@@ -60,12 +60,12 @@ ADD conf.d /etc/httpd/conf.d
 
 # COPY --chown=apache:apache src/glpi /var/www/html
 
-ADD https://github.com/glpi-project/glpi/releases/download/9.5.5/glpi-9.5.5.tgz /tmp/
+ADD https://github.com/glpi-project/glpi/releases/download/9.5.6/glpi-9.5.6.tgz /tmp/
 #
-RUN tar -zxf /tmp/glpi-9.5.5.tgz -C /tmp/ \
+RUN tar -zxf /tmp/glpi-9.5.6.tgz -C /tmp/ \
 	&& mv /tmp/glpi/* /var/www/html/ \
 	&& chown -R apache:apache /var/www/html \
-	&& rm -rf /tmp/glpi-9.5.5.tgz
+	&& rm -rf /tmp/glpi-9.5.6.tgz
 
 VOLUME [ "/var/www/html/files", "/var/www/html/plugins" ]
 
