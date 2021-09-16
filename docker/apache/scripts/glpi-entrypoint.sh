@@ -41,10 +41,12 @@ VerifyDir () {
       chown -R apache:apache $i
       echo "done"
     fi
+  done
 }
 
 
-
 ConfigDataBase
+
+VerifyDir
 
 httpd -D FOREGROUND
