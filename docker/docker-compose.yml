@@ -22,6 +22,7 @@ services:
         volumes: 
           - glpi-volume-files:/var/www/html/files:rw
           - glpi-volume-plugins:/var/www/html/plugins:rw
+          - glpi-volume-config:/var/www/html/config:rw
         environment: 
           GLPI_LANG: pt_BR
           MARIADB_HOST: mariadb-glpi
@@ -55,6 +56,7 @@ services:
         volumes: 
           - glpi-volume-files:/var/www/html/files:rw
           - glpi-volume-plugins:/var/www/html/plugins:rw
+          - glpi-volume-config:/var/www/html/config:rw
         networks: 
           - glpi-backend
 #
@@ -63,6 +65,7 @@ services:
 volumes: 
   glpi-volume-files:
   glpi-volume-plugins:
+  glpi-volume-config:
   mariadb-glpi-volume: 
 #
 # NETWORKS
