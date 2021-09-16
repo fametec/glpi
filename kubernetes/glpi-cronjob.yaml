@@ -39,7 +39,8 @@ spec:
              command:
              - /usr/bin/php
              - -c
-             - /etc/php.ini /var/www/html/front/cron.php
+             - /etc/php.ini 
+             - /var/www/html/front/cron.php
              volumeMounts:
              - name: files-glpi-persistent-storage
                mountPath: /var/www/html/files
