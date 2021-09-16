@@ -13,32 +13,14 @@ spec:
           containers:
           - image: fametec/glpi:9.5.6
             imagePullPolicy: Always
-            name: glpi
-            env:
-            - name: GLPI_LANG
-              value: "pt_BR"
-            - name: MARIADB_HOST
-              value: "mariadb-glpi"
-            - name: MARIADB_PORT
-              value: "3306"
-            - name: MARIADB_DATABASE
-              value: "glpi"
-            - name: MARIADB_USER
-              value: "glpi"
-            - name: MARIADB_PASSWORD
-              value: "glpi"
-            - name: VERSION
-              value: "9.5.6"
-            - name: PLUGINS
-              value: "all"
-            ports:
-            - containerPort: 80
-              name: glpi
+            name: glpi-cronjob
             volumeMounts:
             - name: files-glpi-persistent-storage
               mountPath: /var/www/html/files
             - name: plugins-glpi-persistent-storage
               mountPath: /var/www/html/plugins
+            - name: config-glpi-persistent-storage
+              mountPath: /var/www/html/config
             command:
             - /usr/bin/php
             - -c
@@ -52,5 +34,8 @@ spec:
           - name: plugins-glpi-persistent-storage
             persistentVolumeClaim:
               claimName: plugins-glpi-pv-claim
-
+          - name: config-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: config-glpi-pv-claim
           restartPolicy: OnFailure
+
