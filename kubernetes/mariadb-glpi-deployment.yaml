@@ -17,7 +17,7 @@ spec:
         app: mariadb-glpi
     spec:
       containers:
-      - image: fametec/mariadb-glpi:9.5.6
+      - image: fametec/glpi:9.5.6-mariadb
         name: mariadb-glpi
         env: 
           # Use secret in real usage
