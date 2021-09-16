@@ -5,6 +5,7 @@ metadata:
   labels: 
     app: glpi
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: mariadb-glpi
