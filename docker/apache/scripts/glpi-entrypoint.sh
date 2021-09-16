@@ -22,6 +22,7 @@ VerifyDir () {
   DIR="/var/www/html/files/_cron
   /var/www/html/files/_dumps
   /var/www/html/files/_graphs
+  /var/www/html/files/_log
   /var/www/html/files/_lock
   /var/www/html/files/_pictures
   /var/www/html/files/_plugins
