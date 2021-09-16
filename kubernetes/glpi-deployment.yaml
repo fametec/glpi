@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image: fametec/glpi:9.5.6
+        imagePullPolicy: Always
         name: glpi
         env: 
         - name: GLPI_LANG
