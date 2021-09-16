@@ -44,9 +44,17 @@ VerifyDir () {
   done
 }
 
+VerifyKey () {
+
+  if [ ! -e /var/www/html/config/glpicrypt.key ]
+  then
+    php -c /etc/php.ini bin/console glpi:security:change_key --no-interaction
+  fi
 
 ConfigDataBase
 
 VerifyDir
+
+VerifyKey
 
 httpd -D FOREGROUND
