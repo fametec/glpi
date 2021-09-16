@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: glpi-cronjob
+  labels:
+    app: glpi
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: fametec/glpi:9.5.6
+            imagePullPolicy: Always
+            name: glpi-cronjob
+            volumeMounts:
+            - name: files-glpi-persistent-storage
+              mountPath: /var/www/html/files
+            - name: plugins-glpi-persistent-storage
+              mountPath: /var/www/html/plugins
+            - name: config-glpi-persistent-storage
+              mountPath: /var/www/html/config
+            command:
+            - /usr/bin/php
+            - -c
+            - /etc/php.ini
+            - /var/www/html/front/cron.php
+
+          volumes:
+          - name: files-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: files-glpi-pv-claim
+          - name: plugins-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: plugins-glpi-pv-claim
+          - name: config-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: config-glpi-pv-claim
+          restartPolicy: OnFailure
+
