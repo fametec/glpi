@@ -51,6 +51,8 @@ VerifyKey () {
     php -c /etc/php.ini bin/console glpi:security:change_key --no-interaction
   fi
 
+}
+
 ConfigDataBase
 
 VerifyDir
