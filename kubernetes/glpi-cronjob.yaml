@@ -9,48 +9,48 @@ spec:
   jobTemplate:
     spec:
       template:
-        labels: 
-          app: glpi
         spec:
           containers:
-           - image: fametec/glpi:9.5.6
-             imagePullPolicy: Always
-             name: glpi
-             env:
-             - name: GLPI_LANG
-               value: "pt_BR"
-             - name: MARIADB_HOST
-               value: "mariadb-glpi"
-             - name: MARIADB_PORT
-               value: "3306"
-             - name: MARIADB_DATABASE
-               value: "glpi"
-             - name: MARIADB_USER
-               value: "glpi"
-             - name: MARIADB_PASSWORD
-               value: "glpi"
-             - name: VERSION
-               value: "9.5.6"
-             - name: PLUGINS
-               value: "all"
-             ports:
-             - containerPort: 80
-               name: glpi
-             command:
-             - /usr/bin/php
-             - -c
-             - /etc/php.ini 
-             - /var/www/html/front/cron.php
-             volumeMounts:
-             - name: files-glpi-persistent-storage
-               mountPath: /var/www/html/files
-             - name: plugins-glpi-persistent-storage
-               mountPath: /var/www/html/plugins
-             restartPolicy: OnFailure
+          - image: fametec/glpi:9.5.6
+            imagePullPolicy: Always
+            name: glpi
+            env:
+            - name: GLPI_LANG
+              value: "pt_BR"
+            - name: MARIADB_HOST
+              value: "mariadb-glpi"
+            - name: MARIADB_PORT
+              value: "3306"
+            - name: MARIADB_DATABASE
+              value: "glpi"
+            - name: MARIADB_USER
+              value: "glpi"
+            - name: MARIADB_PASSWORD
+              value: "glpi"
+            - name: VERSION
+              value: "9.5.6"
+            - name: PLUGINS
+              value: "all"
+            ports:
+            - containerPort: 80
+              name: glpi
+            volumeMounts:
+            - name: files-glpi-persistent-storage
+              mountPath: /var/www/html/files
+            - name: plugins-glpi-persistent-storage
+              mountPath: /var/www/html/plugins
+            command:
+            - /usr/bin/php
+            - -c
+            - /etc/php.ini
+            - /var/www/html/front/cron.php
+
           volumes:
-           - name: files-glpi-persistent-storage
-             persistentVolumeClaim:
-               claimName: files-glpi-pv-claim
-           - name: plugins-glpi-persistent-storage
-             persistentVolumeClaim:
-               claimName: plugins-glpi-pv-claim
+          - name: files-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: files-glpi-pv-claim
+          - name: plugins-glpi-persistent-storage
+            persistentVolumeClaim:
+              claimName: plugins-glpi-pv-claim
+
+          restartPolicy: OnFailure
