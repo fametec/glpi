@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: glpi
-  labels: 
+  labels:
     app: glpi
 spec:
   replicas: 1
@@ -18,7 +18,7 @@ spec:
       - image: fametec/glpi:9.5.6
         imagePullPolicy: Always
         name: glpi
-        env: 
+        env:
         - name: GLPI_LANG
           value: "pt_BR"
         - name: MARIADB_HOST
@@ -43,6 +43,8 @@ spec:
           mountPath: /var/www/html/files
         - name: plugins-glpi-persistent-storage
           mountPath: /var/www/html/plugins
+        - name: config-glpi-persistent-storage
+          mountPath: /var/www/html/config
       volumes:
       - name: files-glpi-persistent-storage
         persistentVolumeClaim:
@@ -50,6 +52,8 @@ spec:
       - name: plugins-glpi-persistent-storage
         persistentVolumeClaim:
           claimName: plugins-glpi-pv-claim
-
+      - name: config-glpi-persistent-storage
+        persistentVolumeClaim:
+          claimName: config-glpi-pv-claim
 
 
