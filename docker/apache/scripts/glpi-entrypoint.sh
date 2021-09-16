@@ -39,7 +39,6 @@ VerifyDir () {
     then
       echo -n "Creating $i dir... " 
       mkdir -p $i
-      chown -R apache:apache $i
       echo "done"
     fi
   done
@@ -54,10 +53,20 @@ VerifyKey () {
 
 }
 
+SetPermissions () {
+  echo -n "Setting chown in files and plugins... "
+  chown -R apache:apache /var/www/html/files
+  chown -R apache:apache /var/www/html/plugins
+  echo "done"
+
+}
+
 ConfigDataBase
 
 VerifyDir
 
 VerifyKey
+
+SetPermissions
 
 httpd -D FOREGROUND
