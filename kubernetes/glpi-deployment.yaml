@@ -18,6 +18,22 @@ spec:
       - image: fametec/glpi:9.5.6
         imagePullPolicy: Always
         name: glpi
+        env: 
+          - name: MARIADB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-glpi-secret
+                key: MYSQL_DATABASE
+          - name: MARIADB_USER
+            valueFrom: 
+              secretKeyRef: 
+                name: mariadb-glpi-secret
+                key: MYSQL_USER
+          - name: MARIADB_PASSWORD
+            valueFrom: 
+              secretKeyRef: 
+                name: mariadb-glpi-secret
+                key: MYSQL_PASSWORD
         envFrom:
         - configMapRef: 
             name: glpi-config
