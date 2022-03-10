@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix: 
         # context: ["apache", "crond", "mariadb"]
-        context: ["apache"]
+        context: [ "apache", "crond", "mariadb" ]
 
 
     permissions:
@@ -81,7 +81,8 @@ jobs:
         with:
           context: docker/${{ matrix.context }}/
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          # tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.IMAGE_NAME }}-${{ matrix.context }}
           labels: ${{ steps.meta.outputs.labels }}
 
       # Sign the resulting Docker image digest except on PRs.
