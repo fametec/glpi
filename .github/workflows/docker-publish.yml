@@ -76,7 +76,6 @@ jobs:
         with:
           context: docker/apache/
           push: ${{ github.event_name != 'pull_request' }}
-          # tags: ${{ steps.meta.outputs.tags }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -90,7 +89,7 @@ jobs:
           context: docker/crond/
           push: ${{ github.event_name != 'pull_request' }}
           # tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }-crond, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:crond
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-crond, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:crond
           labels: ${{ steps.meta.outputs.labels }}
 
 
@@ -103,7 +102,7 @@ jobs:
           context: docker/mariadb/
           push: ${{ github.event_name != 'pull_request' }}
           # tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }-mariadb, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:mariadb
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-mariadb, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:mariadb
           labels: ${{ steps.meta.outputs.labels }}
 
       # Sign the resulting Docker image digest except on PRs.
