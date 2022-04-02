@@ -22,7 +22,7 @@ RUN yum -y install epel-release yum-utils
 
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-RUN yum-config-manager --enable remi-php73
+RUN yum-config-manager --enable remi-php74
 
 RUN yum -y install \
 		bzip2 \
@@ -57,8 +57,6 @@ RUN yum -y install \
 ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
-
-# COPY --chown=apache:apache src/glpi /var/www/html
 
 ADD https://github.com/glpi-project/glpi/releases/download/10.0.0-rc3/glpi-10.0.0-rc3.tgz /tmp/
 #
