@@ -79,32 +79,6 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
-
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image crond
-        id: build-and-push-crond
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: docker/crond/
-          push: ${{ github.event_name != 'pull_request' }}
-          # tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-crond, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:crond
-          labels: ${{ steps.meta.outputs.labels }}
-
-
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image mariadb
-        id: build-and-push-mariadb
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: docker/mariadb/
-          push: ${{ github.event_name != 'pull_request' }}
-          # tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-mariadb, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:mariadb
-          labels: ${{ steps.meta.outputs.labels }}
-
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
       # repository is public to avoid leaking data.  If you would like to publish
