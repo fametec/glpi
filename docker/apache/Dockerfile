@@ -58,8 +58,6 @@ ADD php.d /etc/php.d
 
 ADD conf.d /etc/httpd/conf.d
 
-# COPY --chown=apache:apache src/glpi /var/www/html
-
 ADD https://github.com/glpi-project/glpi/releases/download/9.5.7/glpi-9.5.7.tgz /tmp/
 #
 RUN tar -zxf /tmp/glpi-9.5.7.tgz -C /tmp/ \
