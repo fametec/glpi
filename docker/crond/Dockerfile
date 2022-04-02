@@ -1,4 +1,4 @@
-FROM fametec/glpi:9.5.6
+FROM fametec/glpi:9.5.7
 
 RUN yum -y install cronie mariadb
  
@@ -9,3 +9,4 @@ ADD crond-entrypoint.sh backup.sh /
 RUN chmod 0644 /etc/crontab && chmod 755 /crond-entrypoint.sh /backup.sh
 
 CMD [ "/crond-entrypoint.sh" ]
+

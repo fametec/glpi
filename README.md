@@ -226,6 +226,6 @@ After instalation the script save the credentials and variables in ''install_glp
     CURL=/usr/bin/curl
     
     ====================================================
-    
-
+     
+ 
 
