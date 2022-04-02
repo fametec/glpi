@@ -66,7 +66,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}
 
 
       # Build and push Docker image with Buildx (don't push on PR)
@@ -77,8 +77,8 @@ jobs:
         with:
           context: docker/crond/
           push: ${{ github.event_name != 'pull_request' }}
-          # tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-crond, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:crond
+          tags: ${{ steps.meta.outputs.tags }}
+          # tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.GITHUB_HEAD_REF }}-crond, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:crond
           labels: ${{ steps.meta.outputs.labels }}
 
       # Sign the resulting Docker image digest except on PRs.
